@@ -15,8 +15,8 @@
 	<?php foreach ($this->reminders as $item) { ?>
 		<tr>
 			<td><?php echo $item->getReminder_type_id(); ?></td>
-			<td><?php echo $this->assetTypes($this->assets($item->getAsset_id())->getAsset_type_id())->getAsset_type(); ?></td>
-			<td><?php echo $this->assets($item->getAsset_id())->getAsset_name(); ?></td>
+			<td><?php echo $this->assetTypes[$this->assets[$item->getAsset_id()]->getAsset_type_id()]->getAsset_type(); ?></td>
+			<td><?php echo $this->assets[$item->getAsset_id()]->getAsset_name(); ?></td>
 			<td><?php echo $item->getDue_date(); ?></td>
 			<td><?php echo $item->getCompleted_date(); ?></td>
 			<td><?php echo $item->getNotes(); ?></td>

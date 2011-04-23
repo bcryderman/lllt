@@ -1,0 +1,43 @@
+<script>
+$(function() {
+
+	$('#cancel').click(function(e) {
+
+		e.preventDefault();
+		window.location = '/assets/view';
+	});
+});
+</script>
+<link rel="stylesheet" href="/css/assets/assets.css" />
+
+<div class="form-header">Are you sure you want to delete the following asset?</div>
+<form id="assets-delete-form" action="/assets/delete/asset_id/<?php echo $this->params['asset_id']; ?>" method="post">
+	<div class="form-wrapper">
+		<label>Asset Type:</label>
+		<?php echo $this->assettypes($this->asset->getAsset_type_id())->getAsset_type(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Asset:</label>
+		<?php echo $this->asset->getAsset_name(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Compartment Count:</label>
+		<?php echo $this->asset->getCompartment_count(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Active:</label>
+		<?php if ($this->asset->getActive() === 1) { echo 'Yes'; } else { echo 'No'; } ?>
+	</div>	
+	<div class="form-wrapper">
+		<label>Customer:</label>
+		<?php echo $this->customers($this->asset->getCustomer_id())->getName(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Navman Vehicle ID:</label>
+		<?php echo $this->asset->getNavman_vehicle_id(); ?>
+	</div>
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="Delete" />
+		<input id="cancel" type="button" value="Cancel" />
+	</div>
+</form>

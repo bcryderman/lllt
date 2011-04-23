@@ -3,17 +3,12 @@
 <form id="assets-entry-form" action="/assets/<?php echo $this->type; ?>" method="post">
 	<?php if ($this->type === 'edit') { ?><input type="hidden" name="asset_id" value="<?php echo $this->assetId; ?>" /><?php } ?>
 	<div class="form-wrapper">
-		<label for="asset_name">Asset Name:</label>
-		<input type="text" name="asset_name" <?php if (isset($this->params['asset_name'])) { echo 'value="' . $this->params['asset_name'] . '"'; } ?> />
-	</div>
-	<?php if (isset($this->errors['asset_name'])) { ?><div class="error-wrapper"><?php echo $this->errors['asset_name']; ?></div><?php } ?>
-	<div class="form-wrapper">
 		<label for="asset_type_id">Asset Type:</label>
 		<select name="asset_type_id">
 			<option></option>
 			<?php 
 			
-			foreach ($this->assetTypes() as $item) {
+			foreach ($this->assettypes() as $item) {
  
 				if (isset($this->params['asset_type_id']) && $this->params['asset_type_id'] === $item->getAsset_type_id()) {
 					
@@ -29,6 +24,50 @@
 		</select>
 	</div>
 	<?php if (isset($this->errors['asset_type_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['asset_type_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="asset_name">Asset Name:</label>
+		<input type="text" name="asset_name" maxlength="256"
+			<?php if (isset($this->params['asset_name'])) { echo 'value="' . $this->params['asset_name'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['asset_name'])) { ?><div class="error-wrapper"><?php echo $this->errors['asset_name']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="asset_name">Compartment Count:</label>
+		<input type="text" name="compartment_count" class="numeric" maxlength="6" size="6"
+			<?php if (isset($this->params['compartment_count'])) { echo 'value="' . $this->params['compartment_count'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['compartment_count'])) { ?><div class="error-wrapper"><?php echo $this->errors['compartment_count']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="active">Active:</label>
+		<input type="checkbox" name="active"
+			<?php if (!isset($this->params) || (isset($this->params['active']) && ($this->params['active'] === 'on' || $this->params['active'] == 1))) { echo 'checked'; } ?> />
+	</div>	
+	<div class="form-wrapper">
+		<label for="customer_id">Customer:</label>
+		<select name="customer_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->customers() as $item) {
+ 
+				if (isset($this->params['customer_id']) && $this->params['customer_id'] === $item->getCustomer_id()) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+				}   		
+    		}
+    		
+    		?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['customer_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['customer_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="navman_vehicle_id">Navman Vehicle ID:</label>
+		<input type="text" name="navman_vehicle_id" size="45"
+			<?php if (isset($this->params['navman_vehicle_id'])) { echo 'value="' . $this->params['navman_vehicle_id'] . '"'; } ?> />
+	</div>
 	<div class="form-wrapper form-controls">
 		<input type="submit" value="<?php echo ucfirst($this->type); ?> Asset" />
 	</div>

@@ -1,0 +1,69 @@
+<script>
+$(function() {
+
+	$('#cancel').click(function(e) {
+
+		e.preventDefault();
+		window.location = '/employees/view';
+	});
+});
+</script>
+<link rel="stylesheet" href="/css/employees/employees.css" />
+
+<div class="form-header">Are you sure you want to delete the following <?php echo strtolower($this->roles($this->emp->getRole_id())->getRole_name()); ?>?</div>
+<form id="employees-delete-form" action="/employees/delete/emp_id/<?php echo $this->params['emp_id']; ?>" method="post">
+	<div class="form-wrapper">
+		<label>Username:</label>
+		<?php if (strlen($this->login->getUsername()) > 0) { echo $this->login->getUsername(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>First Name:</label>
+		<?php if (strlen($this->emp->getFirst_name()) > 0) { echo $this->emp->getFirst_name(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Last Name:</label>
+		<?php if (strlen($this->emp->getLast_name()) > 0) { echo $this->emp->getLast_name(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>E-mail:</label>
+		<?php if (strlen($this->emp->getEmail()) > 0) { echo $this->emp->getEmail(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Address:</label>
+		<?php if (strlen($this->emp->getAddr()) > 0) { echo $this->emp->getAddr(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Address Line 2:</label>
+		<?php if (strlen($this->emp->getAddr2()) > 0) { echo $this->emp->getAddr2(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>City:</label>
+		<?php if (strlen($this->emp->getCity()) > 0) { echo $this->emp->getCity(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>State:</label>
+		<?php if (strlen($this->emp->getState()) > 0) { echo $this->emp->getState(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Zip:</label>
+		<?php if (strlen($this->emp->getZip()) > 0 && strlen($this->emp->getZip4()) > 0) { echo $this->emp->getZip() . '-' . $this->emp->getZip4(); } 
+			  else if (strlen($this->emp->getZip()) > 0) { echo $this->emp->getZip(); } 
+			  else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Navman Vehicle ID:</label>
+		<?php if (strlen($this->emp->getVehicle_id()) > 0) { echo $this->emp->getVehicle_id(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Role:</label>
+		<?php if (strlen($this->emp->getRole_id()) > 0) { echo $this->roles($this->emp->getRole_id())->getRole_name(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Active:</label>
+		<?php if ($this->emp->getActive() === 1) { echo 'Yes'; } else { echo 'No'; } ?>
+	</div>	
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="Delete" />
+		<input id="cancel" type="button" value="Cancel" />
+	</div>
+</form>

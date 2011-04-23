@@ -7,6 +7,8 @@
 			<th>Active</th>
 			<th>Customer</th>
 			<th>Navman Vehicle ID</th>
+			<th></th>
+			<th></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -16,8 +18,10 @@
 			<td><?php echo $this->assetTypes[$item->getAsset_type_id()]->getAsset_type(); ?></td>
 			<td><?php echo $item->getCompartment_count(); ?></td>
 			<td><?php echo $item->getActive(); ?></td>
-			<td><?php /* user view helper to get customer via customer_id */ ?></td>
+			<td><?php echo $this->customers[$item->getCustomer_id()]->getName(); ?></td>
 			<td><?php echo $item->getNavman_vehicle_id(); ?></td>
+			<td><a href="/assets/edit/asset_id/<?php echo $item->getAsset_id(); ?>">Edit</a></td>
+			<td><a href="/assets/delete/asset_id/<?php echo $item->getAsset_id(); ?>">Delete</a></td>
 		</tr>
 	<?php } ?>
 	</tbody>

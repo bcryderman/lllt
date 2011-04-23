@@ -14,11 +14,11 @@ $(function() {
 <form id="reminders-delete-form" action="/reminders/delete/reminder_id/<?php echo $this->params['reminder_id']; ?>" method="post">
 	<div class="form-wrapper">
 		<label>Reminder Type:</label>
-		&nbsp;<?php // get reminder type via reminder_id //if (strlen($this->remType->getReminder_type()) > 0) { echo $this->remType->getReminder_type(); } else { echo '&nbsp;'; } ?>
+		<?php echo $this->remindertypes($this->reminder->getReminder_type_id())->getReminder_type(); ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Asset:</label>
-		&nbsp;<?php // get asset via asset_id //if (strlen($this->remType->getReminder_type()) > 0) { echo $this->remType->getReminder_type(); } else { echo '&nbsp;'; } ?>
+		<?php echo $this->assets($this->reminder->getAsset_id())->getAsset_name(); ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Due Date:</label>
