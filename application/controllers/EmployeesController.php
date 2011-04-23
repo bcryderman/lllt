@@ -122,7 +122,7 @@ class EmployeesController extends Zend_Controller_SecureAction {
 		
     	if ($request->isPost()) {
 
-			//$loginMapper->delete($login);
+			$loginMapper->delete($login);
 			
 			$empCommMapper = new LLLT_Model_EmployeeCommMapper();
 			$empComm = $empCommMapper->fetchAll('emp_id = ' . $params['emp_id'], 'communication_type_id asc');
