@@ -75,8 +75,10 @@
 		<select name="route_type_id">
 			<option></option>
 			<?php 
-			echo '<option value="1">Standard</option>';
-			echo '<option value="2">Backhaul</option>'; 		
+			foreach($this->RouteTypes()as $k => $v)
+				{
+					echo '<option value="'.$k.'">'.$v.'</option>';
+				}						
     		?>
 		</select>
 	</div>

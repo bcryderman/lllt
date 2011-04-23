@@ -75,10 +75,19 @@
 		<select name="route_type_id">
 			<option></option>
 			<?php 
-			echo '<option value="1">Standard</option>';
-			echo '<option value="2">Backhaul</option>'; 		
+				foreach($this->RouteTypes()as $k => $v)
+				{
+					if (isset($this->params['route_type_id']) && $this->params['route_type_id'] == $k) {
+						echo '<option value="'.$k.'" selected>'.$v.'</option>';
+					}
+					else
+					{
+						echo '<option value="'.$k.'">'.$v.'</option>';
+					}
+				}					
     		?>
 		</select>
+
 	</div>
 	<?php if (isset($this->errors['route_type_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['route_type_id']; ?></div><?php } ?>
 	
@@ -95,6 +104,7 @@
 		<input type="text" name="rate" <?php if (isset($this->params['rate'])&&!isset($this->errors)){echo 'value="'.$this->params['rate'].'"';}?>/>
 	
 	</div>
+	<?php if (isset($this->errors['rate'])) { ?><div class="error-wrapper"><?php echo $this->errors['rate']; ?></div><?php } ?>
 	
 	<div class="form-wrapper form-controls">
 		<input type="submit" value="<?php echo ucfirst($this->type); ?> Rate" />

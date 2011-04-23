@@ -1,37 +1,51 @@
+<?php 
+$billtos= $this->billtos(array('return'=>'arrayid'));
+$origins= $this->origins(array('return'=>'arrayid'));
+$destinations =$this->destinations(array('return'=>'arrayid'));
+$routetypes = $this->routetypes();
+?>
+
 <script>
 $(function() {
 
 	$('#cancel').click(function(e) {
 
 		e.preventDefault();
-		window.location = '/reminders/view';
+		window.location = '/rates/view';
 	});
 });
 </script>
 <link rel="stylesheet" href="/css/reminders/reminders.css" />
 
-<div class="form-header">Are you sure you want to delete the following reminder?</div>
-<form id="reminders-delete-form" action="/reminders/delete/reminder_id/<?php echo $this->params['reminder_id']; ?>" method="post">
-	<div class="form-wrapper">
-		<label>Reminder Type:</label>
-		&nbsp;<?php // get reminder type via reminder_id //if (strlen($this->remType->getReminder_type()) > 0) { echo $this->remType->getReminder_type(); } else { echo '&nbsp;'; } ?>
-	</div>
-	<div class="form-wrapper">
-		<label>Asset:</label>
-		&nbsp;<?php // get asset via asset_id //if (strlen($this->remType->getReminder_type()) > 0) { echo $this->remType->getReminder_type(); } else { echo '&nbsp;'; } ?>
-	</div>
-	<div class="form-wrapper">
-		<label>Due Date:</label>
-		<?php echo $this->reminder->getDue_date(); ?>
-	</div>
-	<div class="form-wrapper">
-		<label>Completed Date:</label>
-		<?php if (strlen($this->reminder->getCompleted_date()) > 0) { echo $this->reminder->getCompleted_date(); } else { echo '&nbsp;'; } ?>
-	</div>
-	<div class="form-wrapper">
-		<label>Notes:</label>
-		<?php if (strlen($this->reminder->getNotes()) > 0) { echo $this->reminder->getNotes(); } else { echo '&nbsp;'; } ?>
-	</div>
+<div class="form-header">Are you sure you want to delete the following rate?</div>
+<form id="reminders-delete-form" action="/rates/delete/rate/<?php echo $this->rate->getRate_id(); ?>" method="post">
+
+<table>
+	<thead>
+		<tr>
+			<th>Bill To</th>
+			<th>Origin</th>
+			<th>Destination</th>
+			<th>Route Type</th>
+			<th>Effective Date</th>
+			<th>Rate</th>
+		</tr>
+
+	</thead>
+	<tbody>
+
+		<tr>
+			<td><?php echo $billtos[$this->rate->getBill_to_id()]['name']; ?></td>
+			<td><?php echo $origins[$this->rate->GetOrigin_id()]['name']; ?></td>
+			<td><?php echo $destinations[$this->rate->GetDestination_id()]['name']; ?></td>
+			<td><?php echo $routetypes[$this->rate->getRoute_type_id()]; ?></td>
+			<td><?php echo $this->rate->getStart_date(); ?></td>
+			<td><?php echo $this->rate->getRate(); ?></td>
+		</tr>
+
+	</tbody>
+</table>
+
 	<div class="form-wrapper form-controls">
 		<input type="submit" value="Delete" />
 		<input id="cancel" type="button" value="Cancel" />
