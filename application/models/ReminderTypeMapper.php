@@ -90,7 +90,7 @@ class LLLT_Model_ReminderTypeMapper {
         
         if (0 == count($result)) {
         	
-            return;
+            return 'The reminder type could not be found.';
         }
         
         $row = $result->current();

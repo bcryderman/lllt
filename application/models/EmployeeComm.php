@@ -63,7 +63,7 @@ class LLLT_Model_EmployeeComm {
              
     public function setEmp_id($val) {
     	
-        $this->_emp_id = $val;
+        $this->_emp_id = (int) $val;
         
         return $this;
     }
@@ -75,7 +75,7 @@ class LLLT_Model_EmployeeComm {
      
     public function setCommunication_type_id($val) {
     	
-        $this->_communication_type_id = $val;
+        $this->_communication_type_id = (int) $val;
         
         return $this;
     }
@@ -119,8 +119,15 @@ class LLLT_Model_EmployeeComm {
     }
     
 	public function setPrimary($val) {
-    	
-        $this->_primary = $val;
+    	        
+	    if ($val === 'on' || $val == 1) {
+    		
+    		$this->_primary = 1;
+    	}
+    	else if (is_null($val) || $val == 0) {
+    		
+    		$this->_primary = 0;
+    	}
         
         return $this;
     }

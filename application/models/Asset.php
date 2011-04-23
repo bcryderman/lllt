@@ -113,13 +113,13 @@ class LLLT_Model_Asset {
     
 	public function setActive($val) {
     	
-    	if ($val === 'on') {
+		if ($val === 'on' || $val == 1) {
     		
     		$this->_active = 1;
     	}
-    	else {
+    	else if (is_null($val) || $val == 0) {
     		
-    		$this->_active = $val;
+    		$this->_active = 0;
     	}
         
         return $this;
@@ -197,7 +197,7 @@ class LLLT_Model_Asset {
         return $this;
     }
     
-    public function getLast_udpated_by() {
+    public function getLast_updated_by() {
     	
         return $this->_last_updated_by;
     }

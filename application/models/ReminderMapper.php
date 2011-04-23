@@ -123,7 +123,7 @@ class LLLT_Model_ReminderMapper {
         
         if (0 == count($result)) {
         	
-            return;
+            return 'The reminder could not be found.';
         }
         
         $row = $result->current();

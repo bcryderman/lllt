@@ -82,13 +82,13 @@ class LLLT_Model_AssetType {
 
     public function setActive($val) {
     	
-    	if ($val === 'on') {
+    	if ($val === 'on' || $val == 1) {
     		
     		$this->_active = 1;
     	}
-    	else {
+    	else if (is_null($val) || $val == 0) {
     		
-    		$this->_active = $val;
+    		$this->_active = 0;
     	}
         
         return $this;

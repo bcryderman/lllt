@@ -58,7 +58,7 @@ class LLLT_Model_CommType {
          
     public function setCommunication_type_id($val) {
     	
-        $this->_communication_type_id = $val;
+        $this->_communication_type_id = (int) $val;
         
         return $this;
     }
@@ -82,7 +82,14 @@ class LLLT_Model_CommType {
      	
     public function setActive($val) {
     	
-        $this->_active = $val;
+    	if ($val === 'on' || $val === 1) {
+    		
+    		$this->_active = 1;
+    	}
+    	else if (is_null($val) || $val === 0) {
+    		
+    		$this->_active = 0;
+    	}
         
         return $this;
     }

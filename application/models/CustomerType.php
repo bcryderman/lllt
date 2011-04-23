@@ -82,7 +82,14 @@ class LLLT_Model_CustomerType {
 
     public function setActive($val) {
     	
-        $this->_active = $val;
+    	if ($val === 'on' || $val === 1) {
+    		
+    		$this->_active = 1;
+    	}
+    	else if (is_null($val) || $val === 0) {
+    		
+    		$this->_active = 0;
+    	}
         
         return $this;
     }

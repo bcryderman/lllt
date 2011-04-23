@@ -51,4 +51,25 @@ class LLLT_Model_RoleMapper {
         
         return $entries;
     }
+    
+	public function find($id) {
+    	
+        $result = $this->getDbTable()->find($id);
+        
+        if (0 == count($result)) {
+        	
+            return 'The role could not be found.';
+        }
+        
+        $row = $result->current();
+
+		$role = new LLLT_Model_Role();
+
+        $role->setRole_id($row->role_id)
+        	 ->setRole_name($row->role_name)
+        	 ->setActive($row->active)
+        	 ->setDescription($row->description);
+
+        return $role;
+    }
 }

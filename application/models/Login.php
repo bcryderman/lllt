@@ -62,7 +62,7 @@ class LLLT_Model_Login {
      
     public function setEmp_id($val) {
     	
-        $this->_emp_id = $val;
+        $this->_emp_id = (int) $val;
         
         return $this;
     }

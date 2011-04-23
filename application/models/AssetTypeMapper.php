@@ -77,7 +77,7 @@ class LLLT_Model_AssetTypeMapper {
                   
             $entries[] = $entry;            
         }
-        
+                
         return $entries;
     }
     
@@ -87,7 +87,7 @@ class LLLT_Model_AssetTypeMapper {
         
         if (0 == count($result)) {
         	
-            return;
+            return 'The asset type could not be found.';
         }
         
         $row = $result->current();
