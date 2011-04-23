@@ -150,7 +150,7 @@ class LLLT_Model_RatesMapper {
     
     public function delete(LLLT_Model_Rates $rate) {
     	
-    	$where = $this->getDbTable()->getAdapter()->quoteInto('rate_id = ?', $reminder->getRate_id());
+    	$where = $this->getDbTable()->getAdapter()->quoteInto('rate_id = ?', $rate->getRate_id());
 			
     	$this->getDbTable()->delete($where);
     }
