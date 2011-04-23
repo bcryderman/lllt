@@ -55,17 +55,18 @@ class RatesController extends Zend_Controller_Action {
     	$request = $this->getRequest();
     	$params = $request->getParams();
     	
-    	$remTypeMapper = new LLLT_Model_ReminderTypeMapper();
-	    $remType = $remTypeMapper->find($params['reminder_type_id']);
+    	$ratesMapper = new LLLT_Model_RatesMapper();
+	    $rates = $ratesMapper->find($params['rate']);
 	    	
     	if ($request->isPost()) {
-    		
-    		$remTypeMapper->delete($remType);
+    		$rate = new LLLT_Model_Rates();
+    		$rate->setRate_id($params['rate']);
+    		$ratesMapper->delete($rate);
 	    	
-	    	$this->_redirect('remindertypes/view');
+	    	$this->_redirect('rates/view');
     	}    	
-     	
-    	$this->view->remType = $remType;	
+
+    	$this->view->rate = $rates;	
     	$this->view->params = $params;
     }
     
@@ -164,20 +165,36 @@ class RatesController extends Zend_Controller_Action {
     	
     	$errors = array();
 	    	
-//    	if (empty($params['reminder_type'])) {
-//    		
-//    		$errors['reminder_type'] = 'You must enter a reminder type.';
-//    	}
-//    	
-//    	if (strlen($params['description']) > 1000) {
-//    		
-//    		$errors['description'] = 'Description cannot exceed 1,000 characters.';
-//    	}
-//    	
-//    	if (empty($params['asset_or_employee'])) {
-//    		
-//    		$errors['asset_or_employee'] = 'You must choose either Asset or Employee.';
-//    	}
+    	if (empty($params['bill_to_id'])) {
+    		
+    		$errors['bill_to_id'] = 'You must enter a Bill To.';
+    	}
+    	
+        if (empty($params['origin_id'])) {
+    		
+    		$errors['origin_id'] = 'You must enter a Origin.';
+    	}
+    	
+        if (empty($params['destination_id'])) {
+    		
+    		$errors['destination_id'] = 'You must enter a Destination.';
+    	}
+    	
+        if (empty($params['route_type_id'])) {
+    		
+    		$errors['route_type_id'] = 'You must enter a Route Type.';
+    	}
+    	
+        if (empty($params['start_date'])) {
+    		
+    		$errors['start_date'] = 'You must enter a Effective Date.';
+    	}
+       
+    	if (empty($params['rate'])) {
+    		
+    		$errors['rate'] = 'You must enter a rate.';
+    	}
+
     	
     	return $errors;
     }
