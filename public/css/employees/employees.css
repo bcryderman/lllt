@@ -1,3 +1,36 @@
-#employees-wrapper {
-	margin: 25px;
+#employees-entry-form label {
+	width: 110px;
+}
+
+#employees-entry-form label.no-float {
+	float: none;
+	margin-left: 10px;
+}
+
+#employees-delete-form label {
+	width: 110px;
+}
+
+#employees-entry-form .form-controls,
+#employees-entry-form .error-wrapper,
+#employees-delete-form .form-controls  {
+	padding-left: 120px;
+}
+
+#comm-options-wrapper {
+	padding-top: 25px;
+}
+
+#show-hide-comm-options {
+	cursor: pointer;
+	text-decoration: underline;	
+}
+
+#comm-options {
+	display: none;	
+	padding-top: 25px;
+}
+
+#phone_primary, #cell_phone_primary {
+	vertical-align: middle;	
 }
