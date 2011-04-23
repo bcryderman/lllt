@@ -19,18 +19,18 @@ class AssetsController extends Zend_Controller_Action {
 		    	$auth = Zend_Auth::getInstance()->getIdentity(); 
 	    		$date = date('Y-m-d H:i:s');
 		    			    	
-		    	$asset = new LLLT_Model_Reminder();
-		    	$asset->setReminder_type_id($params['asset_type_id']);
-		    	$asset->setAsset_id($params['asset_id']);
-		    	$asset->setEmployee_id($auth['Employee']->getEmp_id());
-		    	$asset->setDue_date(date('Y-m-d', strtotime($params['due_date'])));
-		    	$asset->setCompleted_date(date('Y-m-d', strtotime($params['completed_date'])));
-		    	$asset->setNotes($params['notes']);	
+		    	$asset = new LLLT_Model_Asset();
+		    	$asset->setAsset_type_id($params['asset_type_id']);
+		    	$asset->setAsset_name($params['asset_name']);
+		    	$asset->setCompartment_count($params['compartment_count']);
+				$asset->setActive($params['active']);
+				$asset->setCustomer_id($params['customer_id']);
+				$asset->setNavman_vehicle_id($params['navman_vehicle_id']);
 		    	$asset->setCreated($date);
 	    		$asset->setCreated_by($auth['Employee']->getEmp_id());
 	    		$asset->setLast_updated($date);
 	    		$asset->setLast_updated_by($auth['Employee']->getEmp_id());
-	    		
+	    			    		
 		    	$assetMapper = new LLLT_Model_AssetMapper();
 		    	$assetMapper->add($asset);
 		    	
@@ -47,9 +47,82 @@ class AssetsController extends Zend_Controller_Action {
     	$this->renderScript('assets/form.phtml');
     }
         
-    public function editAction() {}
+    public function deleteAction() {
     
-    public function deleteAction() {}
+        $request = $this->getRequest();
+    	$params = $request->getParams();
+    	
+    	$assetMapper = new LLLT_Model_AssetMapper();
+	    $asset = $assetMapper->find($params['asset_id']);
+	    	    	
+    	if ($request->isPost()) {
+    		
+    		$assetMapper->delete($asset);
+	    	
+	    	$this->_redirect('assets/view');
+    	}    	
+     	
+    	$this->view->asset = $asset;	
+    	$this->view->params = $params;
+    }
+        
+    public function editAction() {
+    
+    	$request = $this->getRequest();
+    	$params = $request->getParams();
+    	
+	    if ($request->isPost()) {
+	    	
+	    	$errors = $this->validation($params);	    	
+
+		    if (empty($errors)) {
+		    	
+		    	$auth = Zend_Auth::getInstance()->getIdentity(); 
+	    		$date = date('Y-m-d H:i:s');  
+
+	    		$asset = new LLLT_Model_Asset();
+	    		$asset->setAsset_id($params['asset_id']);
+		    	$asset->setAsset_type_id($params['asset_type_id']);
+		    	$asset->setAsset_name($params['asset_name']);
+		    	$asset->setCompartment_count($params['compartment_count']);
+				$asset->setActive($params['active']);
+				$asset->setCustomer_id($params['customer_id']);
+				$asset->setNavman_vehicle_id($params['navman_vehicle_id']);
+	    		$asset->setLast_updated($date);
+	    		$asset->setLast_updated_by($auth['Employee']->getEmp_id());
+		    	
+		    	$assetMapper = new LLLT_Model_AssetMapper();
+		    	$assetMapper->edit($asset);
+		    	
+		    	$this->_redirect('assets/view');
+		    }
+		    else {
+		    	
+		    	$this->view->errors = $errors;
+		    	$this->view->assetId = $params['asset_id'];
+		    	$this->view->params = $params;	
+		    	$this->view->type = 'edit';	    	
+		    }
+		}		
+    	else {
+    		
+	    	$assetMapper = new LLLT_Model_AssetMapper();
+	    	$asset = (array) $assetMapper->find($params['asset_id']);
+	    	    	
+	    	$fields = array();
+	    	
+	    	foreach ($asset as $k => $v) {
+	  
+	    		$fields[substr($k, 4)] = $asset[$k];
+	    	}
+	    	
+	    	$this->view->assetId = $params['asset_id'];
+	    	$this->view->params = $fields;  
+	    	$this->view->type = 'edit';
+    	}    	
+
+    	$this->renderScript('assets/form.phtml');
+    }
     
     public function viewAction() {
     	
@@ -65,34 +138,45 @@ class AssetsController extends Zend_Controller_Action {
     		
     		$assetTypesArr[$item->getAsset_type_id()] = $item;
     	}
+    	
+    	$customerMapper = new LLLT_Model_CustomerMapper();
+    	$customers = $customerMapper->fetchAll(null, 'name asc');
+    	
+   	 	$customersArr = array();
+    	
+    	foreach ($customers as $item) {
+    		
+    		$customersArr[$item->getCustomer_id()] = $item;
+    	}
 
     	$this->view->assets = $assets;
     	$this->view->assetTypes = $assetTypesArr;
+    	$this->view->customers = $customersArr;
     }
     
 	public function validation($params) {
     	
     	$errors = array();
 	    	
-    	/*if (empty($params['reminder_type_id'])) {
+    	if (empty($params['asset_type_id'])) {
     		
-    		$errors['reminder_type_id'] = 'You must select a reminder type.';
+    		$errors['asset_type_id'] = 'You must select an asset type.';
     	}
     	
-		if (empty($params['asset_id'])) {
+		if (empty($params['asset_name'])) {
     		
-    		$errors['asset_id'] = 'You must select an asset type.';
+    		$errors['asset_name'] = 'You must enter an asset name.';
     	}
     	
-		if (empty($params['due_date'])) {
+		if (empty($params['compartment_count'])) {
     		
-    		$errors['due_date'] = 'You must enter a due date.';
+    		$errors['compartment_count'] = 'You must enter a compartment count.';
     	}
     	
-    	if (strlen($params['notes']) > 1000) {
+	    if (empty($params['customer_id'])) {
     		
-    		$errors['notes'] = 'Notes cannot exceed 1,000 characters.';
-    	}*/
+    		$errors['customer_id'] = 'You must select a customer.';
+    	}
     	
     	return $errors;
     }

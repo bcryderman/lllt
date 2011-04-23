@@ -106,8 +106,7 @@ class RemindersController extends Zend_Controller_Action {
     }
     
 	public function deleteAction() {
-	
-	    
+		    
     	$request = $this->getRequest();
     	$params = $request->getParams();
     	

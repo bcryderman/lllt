@@ -1,6 +1,6 @@
 <?php
 
-class AssetTypesController extends Zend_Controller_Action {
+class AssettypesController extends Zend_Controller_Action {
 
     public function init() {}
 
@@ -110,7 +110,7 @@ class AssetTypesController extends Zend_Controller_Action {
     	
     	$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
     	$assetTypes = $assetTypeMapper->fetchAll(null, 'asset_type asc');
-    	
+
     	$this->view->assetTypes = $assetTypes;
     }
     
