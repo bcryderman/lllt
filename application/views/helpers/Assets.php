@@ -4,10 +4,18 @@ class Zend_View_Helper_Assets {
 	
     protected $_assets;
  
-    public function assets() {
+    public function assets($assetId = null) {
     	
     	$assetMapper = new LLLT_Model_AssetMapper();
-    	$this->_assets = $assetMapper->fetchAll('active = 1', 'asset_name asc');
+    	
+    	if (is_null($assetId)) {
+    	
+    		$this->_assets = $assetMapper->fetchAll('active = 1', 'asset_name asc');
+    	}
+    	else {
+    	
+    		$this->_assets = $assetMapper->find($assetId);
+    	}
 
     	return $this->_assets; 
     }
