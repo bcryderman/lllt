@@ -49,6 +49,29 @@ class LLLT_Model_AssetMapper {
 	    return $assetId;
     }
     
+ 	public function delete(LLLT_Model_Asset $asset) {
+    	
+    	$where = $this->getDbTable()->getAdapter()->quoteInto('asset_id = ?', $asset->getAsset_id());
+			
+    	$this->getDbTable()->delete($where);
+    }
+    
+   	public function edit(LLLT_Model_Asset $asset) {
+    	
+	    $data = array('asset_type_id'     => $asset->getAsset_type_id(),
+				      'asset_name'        => $asset->getAsset_name(),
+	    			  'compartment_count' => $asset->getCompartment_count(),
+	    			  'active'            => $asset->getActive(),
+	    			  'customer_id'       => $asset->getCustomer_id(),
+	    			  'navman_vehicle_id' => $asset->getNavman_vehicle_id(),
+	    			  'last_updated'      => $asset->getLast_updated(),
+	    			  'last_updated_by'   => $asset->getLast_updated_by());
+    	 
+		$where = $this->getDbTable()->getAdapter()->quoteInto('asset_id = ?', $asset->getAsset_id());
+
+		$this->getDbTable()->update($data, $where);
+    }
+    
     public function fetchAll($where = null, $order = null) {
     	
         $resultSet = $this->getDbTable()->fetchAll($where, $order);
@@ -83,7 +106,7 @@ class LLLT_Model_AssetMapper {
         
         if (0 == count($result)) {
         	
-            return;
+        	return 'The asset could not be found.';
         }
         
         $row = $result->current();
@@ -103,35 +126,4 @@ class LLLT_Model_AssetMapper {
 	        	
 	    return $assetType;
     }
-    
-    /*public function add(LLLT_Model_ReminderType $remType) {
-    	    			    	
-	    $data = array('reminder_type'     => $remType->getReminder_type(),
-				      'active'            => $remType->getActive(),
-	    			  'description'       => $remType->getDescription(),
-	    			  'asset_or_employee' => $remType->getAsset_or_employee());
-	  	    	    	
-	    $remTypeId = $this->getDbTable()->insert($data);
-	    
-	    return $remTypeId;
-    }
-    
-    public function delete(LLLT_Model_ReminderType $remType) {
-    	
-    	$where = $this->getDbTable()->getAdapter()->quoteInto('reminder_type_id = ?', $remType->getReminder_type_id());
-			
-    	$this->getDbTable()->delete($where);
-    }
-    
-    public function edit(LLLT_Model_ReminderType $remType) {
-    	
-    	$data = array('reminder_type'     => $remType->getReminder_type(),
-				      'active'            => $remType->getActive(),
-	    			  'description'       => $remType->getDescription(),
-	    			  'asset_or_employee' => $remType->getAsset_or_employee());
-    	 
-		$where = $this->getDbTable()->getAdapter()->quoteInto('reminder_type_id = ?', $remType->getReminder_type_id());
-
-		$this->getDbTable()->update($data, $where);
-    }*/
 }

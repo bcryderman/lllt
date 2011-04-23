@@ -31,7 +31,7 @@ class LLLT_Model_EmployeeCommMapper {
         return $this->_dbTable;
     }
      
-	public function create(LLLT_Model_EmployeeComm $empComm) {
+	public function add(LLLT_Model_EmployeeComm $empComm) {
 		    	
     	$data = array('emp_id'                => $empComm->getEmp_id(),
     				  'communication_type_id' => $empComm->getCommunication_type_id(),
@@ -43,10 +43,34 @@ class LLLT_Model_EmployeeCommMapper {
     				  'last_updated'   	 	  => $empComm->getLast_updated(),
     				  'last_updated_by' 	  => $empComm->getLast_updated_by());
     	
-    	$this->getDbTable()->insert($data);
+    	$empId = $this->getDbTable()->insert($data);
+    	
+    	return $empId;
     }
-    
-    /*public function fetchAll($where = null, $order = null) {
+
+ 	public function delete(LLLT_Model_EmployeeComm $empComm) {
+    	
+    	$where = $this->getDbTable()->getAdapter()->quoteInto('emp_id = ?', $empComm->getEmp_id());
+			
+    	$this->getDbTable()->delete($where);
+    }
+
+   	public function edit(LLLT_Model_EmployeeComm $empComm) {
+    	
+	    $data = array('emp_id'                => $empComm->getEmp_id(),
+    				  'communication_type_id' => $empComm->getCommunication_type_id(),
+			          'phone'                 => $empComm->getPhone(),
+			          'phone_ext'    		  => $empComm->getPhone_ext(),
+    				  'primary'        		  => $empComm->getPrimary(),
+    				  'last_updated'   	 	  => $empComm->getLast_updated(),
+    				  'last_updated_by' 	  => $empComm->getLast_updated_by());
+    	 
+		$where = $this->getDbTable()->getAdapter()->quoteInto('emp_id = ?', $empComm->getEmp_id());
+
+		$this->getDbTable()->update($data, $where);
+    }
+
+    public function fetchAll($where = null, $order = null) {
     	
         $resultSet = $this->getDbTable()->fetchAll($where, $order);
         
@@ -54,16 +78,46 @@ class LLLT_Model_EmployeeCommMapper {
         
         foreach ($resultSet as $row) {
         	
-            $entry = new LLLT_Model_CommType();
+            $entry = new LLLT_Model_EmployeeComm();
             
-        	$entry->setCommunication_type_id($row->communication_type_id)
-	        	  ->setCommunication_type($row->communication_type)
-	        	  ->setActive($row->active)
-	        	  ->setDescription($row->description);
+        	$entry->setEmp_id($row->emp_id)  
+	      		  ->setCommunication_type_id($row->communication_type_id)
+			 	  ->setPhone($row->phone)
+				  ->setPhone_ext($row->phone_ext)
+				  ->setPrimary($row->primary)
+		          ->setCreated($row->created)
+		          ->setCreated_by($row->created_by)
+		          ->setLast_updated($row->last_updated)
+			  	  ->setLast_updated_by($row->last_updated_by);
                   
             $entries[] = $entry;            
         }
         
         return $entries;
-    }*/
+    }
+
+	public function find($id) {
+		
+        $result = $this->getDbTable()->find($id);
+        
+        if (0 == count($result)) {
+        	
+        	return 'The employee communication could not be found.';
+        }
+        
+        $row = $result->current();
+        
+        $empComm = new LLLT_Model_EmployeeComm();
+        $empComm->setEmp_id($row->emp_id)  
+      		    ->setCommunication_type_id($row->communication_type_id)
+				->setPhone($row->phone)
+				->setPhone_ext($row->phone_ext)
+				->setPrimary($row->primary)
+	        	->setCreated($row->created)
+	        	->setCreated_by($row->created_by)
+	        	->setLast_updated($row->last_updated)
+		  		->setLast_updated_by($row->last_updated_by);
+	        	
+	    return $empComm;
+    }
 }

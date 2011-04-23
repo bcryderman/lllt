@@ -190,7 +190,7 @@ class LLLT_Model_Employee {
     
     public function setRole_id($val) {
     	
-        $this->_role_id = $val;
+        $this->_role_id = (int) $val;
         
         return $this;
     }
@@ -202,7 +202,14 @@ class LLLT_Model_Employee {
     
     public function setActive($val) {
     	    	
-        $this->_active = $val;
+    	if ($val === 'on' || $val == 1) {
+    		
+    		$this->_active = 1;
+    	}
+    	else if (is_null($val) || $val == 0) {
+    		
+    		$this->_active = 0;
+    	}
         
         return $this;
     }
