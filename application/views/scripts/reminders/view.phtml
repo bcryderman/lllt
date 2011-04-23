@@ -1,0 +1,32 @@
+<h3>Due in the next 30 days:</h3>
+
+<table>
+	<thead>
+		<tr>
+			<th>Reminder Type</th>
+			<th>Asset Type</th>
+			<th>Asset Name</th>
+			<th>Due Date</th>
+			<th>Completed Date</th>
+			<th>Notes</th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->reminders as $item) { ?>
+		<tr>
+			<td><?php echo $item->getReminder_type_id(); ?></td>
+			<td><?php echo $this->assetTypes[$this->assets[$item->getAsset_id()]->getAsset_type_id()]->getAsset_type(); ?></td>
+			<td><?php echo $this->assets[$item->getAsset_id()]->getAsset_name(); ?></td>
+			<td><?php echo $item->getDue_date(); ?></td>
+			<td><?php echo $item->getCompleted_date(); ?></td>
+			<td><?php echo $item->getNotes(); ?></td>
+			<td><a href="/reminders/edit/reminder_id/<?php echo $item->getReminder_id(); ?>">Edit</a></td>
+			<td><a href="/reminders/copy/reminder_id/<?php echo $item->getReminder_id(); ?>">Copy</a></td>
+			<td><a href="/reminders/delete/reminder_id/<?php echo $item->getReminder_id(); ?>">Delete</a></td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>

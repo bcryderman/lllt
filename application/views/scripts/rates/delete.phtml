@@ -1,0 +1,39 @@
+<script>
+$(function() {
+
+	$('#cancel').click(function(e) {
+
+		e.preventDefault();
+		window.location = '/reminders/view';
+	});
+});
+</script>
+<link rel="stylesheet" href="/css/reminders/reminders.css" />
+
+<div class="form-header">Are you sure you want to delete the following reminder?</div>
+<form id="reminders-delete-form" action="/reminders/delete/reminder_id/<?php echo $this->params['reminder_id']; ?>" method="post">
+	<div class="form-wrapper">
+		<label>Reminder Type:</label>
+		&nbsp;<?php // get reminder type via reminder_id //if (strlen($this->remType->getReminder_type()) > 0) { echo $this->remType->getReminder_type(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Asset:</label>
+		&nbsp;<?php // get asset via asset_id //if (strlen($this->remType->getReminder_type()) > 0) { echo $this->remType->getReminder_type(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Due Date:</label>
+		<?php echo $this->reminder->getDue_date(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Completed Date:</label>
+		<?php if (strlen($this->reminder->getCompleted_date()) > 0) { echo $this->reminder->getCompleted_date(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Notes:</label>
+		<?php if (strlen($this->reminder->getNotes()) > 0) { echo $this->reminder->getNotes(); } else { echo '&nbsp;'; } ?>
+	</div>
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="Delete" />
+		<input id="cancel" type="button" value="Cancel" />
+	</div>
+</form>

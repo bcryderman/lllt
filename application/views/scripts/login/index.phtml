@@ -1,0 +1,22 @@
+<div id="login-wrapper">
+	<?php if (isset($this->error)) { echo '<div class="error-header">' . $this->error . '</div>'; } ?>
+	<form id="login-form" action="login" method="post">
+		<div class="form-wrapper">
+			<label for="username">Username:</label>
+			<input type="text" id="username" name="username" class="required" maxlength="20" />
+		</div>
+		<div class="form-wrapper">
+			<label for="password">Password:</label>
+			<input type="password" id="password" name="password" class="required" maxlength="20" />
+		</div>
+		<div class="form-wrapper form-controls">
+			<input type="submit" value="Login" />
+		</div>
+	</form>		
+</div>
+
+<script>
+$(function() {
+	$('#username').focus();
+});
+</script>

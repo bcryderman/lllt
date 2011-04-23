@@ -1,0 +1,24 @@
+<table>
+	<thead>
+		<tr>
+			<th>Asset Name</th>
+			<th>Asset Type</th>
+			<th>Compartment Count</th>
+			<th>Active</th>
+			<th>Customer</th>
+			<th>Navman Vehicle ID</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->assets as $item) { ?>	
+		<tr>
+			<td><?php echo $item->getAsset_name(); ?></td>
+			<td><?php echo $this->assetTypes[$item->getAsset_type_id()]->getAsset_type(); ?></td>
+			<td><?php echo $item->getCompartment_count(); ?></td>
+			<td><?php echo $item->getActive(); ?></td>
+			<td><?php /* user view helper to get customer via customer_id */ ?></td>
+			<td><?php echo $item->getNavman_vehicle_id(); ?></td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>

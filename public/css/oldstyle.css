@@ -1,0 +1,103 @@
+/* UNIVERSAL */
+
+/* FORMS */
+
+/*.success-header {
+	border: 1px solid blue;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	font-size: 12px;
+	font-weight: bold;
+	height: 25px;
+	line-height: 25px;	
+	padding: 5px;
+	margin: 25px;
+	text-align: center;
+	width: inherit;
+}
+*/
+
+/* END OF FORMS */
+
+/*#leftnav {
+	background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#999));	
+	height: 100%;
+	left: 0;
+	padding: 25px;
+	position: fixed;
+	top: 66px;
+	width: 200px;
+}*/
+
+/*#leftnav ul {
+	list-style-type: none;
+}
+
+#leftnav li {
+	padding: 5px 0;
+}
+
+#leftnav .menu-item a {
+	color: #306754;
+	font-weight: bold;
+	letter-spacing: 1px;
+}*/
+
+/*
+.modal {
+	display: none;	
+}*/
+
+/* END OF UNIVERSAL */
+
+/* EMPLOYEES */
+
+/*
+
+#employees-wrapper table th, #employees-wrapper table td {
+	height: 25px;
+	line-height: 25px;
+	padding: 5px 10px;
+	text-align: left;
+}
+
+#employees-edit-form .form-wrapper {
+	margin-bottom: 10px;	
+}
+
+#employees-edit-form label {
+	float: left;
+	margin-right: 10px;
+	text-align: right;
+	width: 75px;
+}
+
+#employees-edit-form .form-controls {
+	padding-left: 85px;	
+}*/
+
+/* MODIFY */
+
+/*#employees-wrapper table th.w100 {
+	width: 100px;	
+}*/
+
+/* END OF MODIFY */
+
+/* END OF EMPLOYEES */
+
+/* STANDARD LOADS */
+
+/*#create-stdload-form label {
+	float: left;
+	margin-right: 10px;
+	text-align: right;
+	width: 100px;
+}
+
+#create-stdload-form .form-controls {
+	padding-left: 110px;	
+}*/
+
+/* END OF STANDARD LOADS */

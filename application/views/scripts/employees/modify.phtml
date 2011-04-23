@@ -1,0 +1,40 @@
+<!-- <div id="employees-wrapper">
+	<table>
+		<thead>
+			<tr>
+				<th>Username</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th class="button"></th>
+				<th class="button"></th>
+				<th class="button"></th>
+			</tr>
+		</thead>
+		<tbody>	-->	
+		<?php foreach ($this->emps as $emps) { ?>
+			
+			<!-- <tr emp_id="<?php echo $emps->getEmp_id(); ?>">
+				<td><?php //$this->usernames[$emps->getEmp_id()]; ?></td>
+				<td><?php echo $emps->getFirst_name(); ?></td>
+				<td><?php echo $emps->getLast_name(); ?></td>
+				<td><?php echo $emps->getEmail(); ?></td>
+				<td><?php echo $emps->getAddr(); ?></td>
+				<td><?php echo $emps->getAddr2(); ?></td><td>
+				<td><?php echo $emps->getCity(); ?></td>
+				<td><?php echo $emps->getState(); ?></td>
+				<td><?php if ($emps->getZip() != 0) { echo $emps->getZip(); } if ($emps->getZip4() != 0) { echo '-' . $emps->getZip4(); } ?></td>
+				<td><?php echo $emps->getVehicle_id(); ?></td>
+				<td><?php echo $emps->getRole_id(); ?></td>
+				<td><?php if ($emps->getActive() == 1) { echo 'Y'; } else { echo 'N'; } ?></td>
+				<td><?php if ($emps->getPhone() != 0) { echo $emps->getPphone(); } ?></td>
+				<td><?php if ($emps->getCell_phone() != 0) { echo $emps->getCell_phone(); } ?></td>
+				<td><?php echo $emps->getCell_phone_carrier(); ?></td> 
+				<td><input class="details" type="button" value="See Details" /></td>
+				<td><input class="edit" type="button" value="Edit" /></td>
+				<td><input class="delete" type="button" value="Delete" /></td>
+			</tr> -->
+	
+		<?php } ?>								
+		<!-- </tbody>
+	</table>
+</div>-->

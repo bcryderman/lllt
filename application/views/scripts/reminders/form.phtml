@@ -1,0 +1,69 @@
+<link rel="stylesheet" href="/css/reminders/reminders.css" />
+
+<form id="reminders-entry-form" action="/reminders/<?php echo $this->type; ?>" method="post">
+	<?php if ($this->type === 'edit') { ?><input type="hidden" name="reminder_id" value="<?php echo $this->reminderId; ?>" /><?php } ?>
+	<div class="form-wrapper">
+		<label for="reminder_type_id">Reminder Type:</label>
+		<select name="reminder_type_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->reminderTypes() as $item) {
+ 
+				if (isset($this->params['reminder_type_id']) && $this->params['reminder_type_id'] === $item->getReminder_type_id()) {
+					
+					echo '<option value="' . $item->getReminder_type_id() . '" selected>' . $item->getReminder_type() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getReminder_type_id() . '">' . $item->getReminder_type() . '</option>';
+				}   		
+    		}
+    		
+    		?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['reminder_type_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['reminder_type_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="asset_id">Asset:</label>
+		<select name="asset_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->assets() as $item) {
+ 
+				if (isset($this->params['asset_id']) && $this->params['asset_id'] === $item->getAsset_id()) {
+					
+					echo '<option value="' . $item->getAsset_id() . '" selected>' . $item->getAsset_name() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getAsset_id() . '">' . $item->getAsset_name() . '</option>';
+				}   		
+    		}
+    		
+    		?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['asset_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['asset_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="due_date">Due Date:</label>
+		<input type="text" name="due_date" class="datepicker" <?php if (isset($this->params['due_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['due_date']) . '"'; } ?>
+															  <?php if (isset($this->params['due_date']) && isset($this->errors)) { echo 'value="' . $this->params['due_date'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['due_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['due_date']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="completed_date">Completed Date:</label>
+		<input type="text" name="completed_date" class="datepicker" <?php if (isset($this->params['completed_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['completed_date']) . '"'; } ?>
+																	<?php if (isset($this->params['completed_date']) && isset($this->errors)) { echo 'value="' . $this->params['completed_date'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['completed_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['completed_date']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="notes">Notes:</label>
+		<textarea name="notes"><?php if (isset($this->params['notes'])) { echo $this->params['notes']; } ?></textarea>
+	</div>
+	<?php if (isset($this->errors['notes'])) { ?><div class="error-wrapper"><?php echo $this->errors['notes']; ?></div><?php } ?>
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="<?php echo ucfirst($this->type); ?> Reminder" />
+	</div>
+</form>

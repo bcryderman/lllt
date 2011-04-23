@@ -1,0 +1,185 @@
+<script src="/js/employees/create.js"></script>
+<link rel="stylesheet" href="/css/employees/employees.css">
+<link rel="stylesheet" href="/css/employees/create.css">
+
+<div id="employees-wrapper">
+	<?php if (isset($this->status['success'])) { ?>
+		<div class="success-header">
+			<?php  echo $this->status['success']; ?>
+		</div>
+	<?php } ?>
+	<?php if (isset($this->status['error'])) { ?>
+		<div class="error-header">
+			<?php  echo $this->status['error']; ?>
+		</div>
+	<?php } ?>
+	<form id="createemp-form" action="/employees/create" method="post">
+		<div class="form-wrapper">
+			<label for="username">Username:</label>
+			<input type="text" id="username" name="username" class="required" 
+				<?php if (isset($this->params['username'])) { echo 'value="' . $this->params['username'] . '"'; }?> maxlength="20" />
+		</div>
+		<div class="form-wrapper">
+			<label for="password">Password:</label>
+			<input type="password" id="password" name="password" class="required" maxlength="20" />
+		</div>
+		<div class="form-wrapper">
+			<label for="confpass">Confirm Password:</label>
+			<input type="password" id="confpass" name="confpass" class="required" maxlength="20" />
+		</div>
+		<div class="form-wrapper">
+			<label for="first_name">First Name:</label>
+			<input type="text" id="first_name" name="first_name" class="required"
+				<?php if (isset($this->params['first_name'])) { echo 'value="' . $this->params['first_name'] . '"'; }?> maxlength="256" />
+		</div>
+		<div class="form-wrapper">
+			<label for="last_name">Last Name:</label>
+			<input type="text" id="last_name" name="last_name" class="required"
+				<?php if (isset($this->params['last_name'])) { echo 'value="' . $this->params['last_name'] . '"'; }?> maxlength="256" />
+		</div>
+		<div class="form-wrapper">
+			<label for="email">E-mail:</label>
+			<input type="text" id="email" name="email" 
+				<?php if (isset($this->params['email'])) { echo 'value="' . $this->params['email'] . '"'; }?> maxlength="256" size="30" />
+		</div>
+		<div class="form-wrapper">
+			<label for="addr">Address:</label>
+			<input type="text" id="addr" name="addr" 
+				<?php if (isset($this->params['addr'])) { echo 'value="' . $this->params['addr'] . '"'; }?> maxlength="256" size="30" />
+		</div>
+		<div class="form-wrapper">
+			<label for="addr">Address Line 2:</label>
+			<input type="text" id="addr2" name="addr2"
+				<?php if (isset($this->params['addr2'])) { echo 'value="' . $this->params['addr'] . '"'; }?> maxlength="256" size="30" />
+		</div>
+		<div class="form-wrapper">
+			<label for="city">City:</label>
+			<input type="text" id="city" name="city" 
+				<?php if (isset($this->params['city'])) { echo 'value="' . $this->params['city'] . '"'; }?> maxlength="60" />
+		</div>
+		<div class="form-wrapper">
+			<label for="state">State:</label>
+			<select id="state" name="state">
+				<option></option>
+				<?php 
+				
+				foreach ($this->states() as $key => $value) {
+ 
+					if (isset($this->params['state']) && $this->params['state'] === $key) {
+						
+						echo '<option value="' . $key . '" selected>' . $value . '</option>';
+					}
+					else if (!isset($this->state) && $key === 'MO') {
+						
+						echo '<option value="' . $key . '" selected>' . $value . '</option>';
+					}
+					else {
+						
+						echo '<option value="' . $key . '">' . $value . '</option>';
+					}
+    			}
+    			    			
+    			?>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="zip">Zip:</label>
+			<input type="text" id="zip" name="zip" class="numeric" 
+				<?php if (isset($this->params['zip'])) { echo 'value="' . $this->params['zip'] . '"'; }?> maxlength="5" size="5" /> -
+			<input type="text" id="zip4" name="zip4" class="numeric" 
+				<?php if (isset($this->params['zip4'])) { echo 'value="' . $this->params['zip4'] . '"'; }?> maxlength="4" size="4" />
+		</div>
+		<div class="form-wrapper">
+			<label for="active">Role:</label>
+			<select id="role_id" name="role_id" class="required">
+				<option></option>
+				<?php 
+				
+				foreach ($this->roles() as $item) {
+ 
+					if (isset($this->params['role_id']) && $this->params['role_id'] === $item->getRole_id()) {
+						
+						echo '<option value="' . $item->getRole_id() . '" selected>' . $item->getRole_name() . '</option>';
+					}
+					else {
+						
+						echo '<option value="' . $item->getRole_id() . '">' . $item->getRole_name() . '</option>';
+					}
+    			}
+    			
+    			?>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="active">User Type:</label>
+			<select id="user_type_id" name="user_type_id" class="required">
+				<option></option>
+				<?php 
+				
+				foreach ($this->userTypes() as $item) {
+ 
+					if (isset($this->params['user_type_id']) && $this->params['user_type_id'] === $item->getUser_type_id()) {
+						
+						echo '<option value="' . $item->getUser_type_id() . '" selected>' . $item->getUser_type() . '</option>';
+					}
+					else {
+						
+						echo '<option value="' . $item->getUser_type_id() . '">' . $item->getUser_type() . '</option>';
+					}
+    			}
+    			
+    			?>
+			</select>
+		</div>
+		<div id="comm-options-wrapper">
+			<div id="show-hide-comm-options">+ Communication Options</div>
+			<div id="comm-options">
+				<div class="form-wrapper">
+					<label for="phone">Phone #:</label>
+					<input type="text" id="phone" name="phone" class="numeric phone" 
+						<?php if (isset($this->params['phone'])) { echo 'value="' . $this->params['phone'] . '"'; }?> />
+					<label for="phone_ext" class="no-float">Ext:</label>
+					<input type="text" id="phone_ext" name="phone_ext" class="numeric" 
+						<?php if (isset($this->params['phone_ext'])) { echo 'value="' . $this->params['phone_ext'] . '"'; }?> maxlength="4" size="4" />
+					<label for="phone_primary" class="no-float">Primary:</label>
+					<input type="checkbox" id="phone_primary" name="phone_primary"
+						<?php if (isset($this->params['phone_primary']) && $this->params['phone_primary'] === true) { echo 'checked'; }?>
+						<?php if (!isset($this->params['phone']) || is_null($this->params['phone'])) { echo 'disabled'; }?> />
+				</div>
+				<div class="form-wrapper">
+					<label for="communication_type_id">Cell Carrier:</label>
+					<select id="communication_type_id" name="communication_type_id">
+						<option></option>
+						<?php 
+						
+						foreach ($this->commTypes() as $item) {
+		 
+							if (isset($this->params['communication_type_id']) && $this->params['communication_type_id'] === $item->getCommunication_type_id()) {
+								
+								echo '<option value="' . $item->getCommunication_type_id() . '" selected>' . $item->getCommunication_type() . '</option>';
+							}
+							else {
+								
+								echo '<option value="' . $item->getCommunication_type_id() . '">' . $item->getCommunication_type() . '</option>';
+							}
+		    			}
+		    		
+		    			?>
+					</select>
+				</div>
+				<div class="form-wrapper">
+					<label for="cell_phone">Cell #:</label>
+					<input type="text" id="cell_phone" name="cell_phone" class="numeric phone" 
+						<?php if (isset($this->params['cell_phone'])) { echo 'value="' . $this->params['cell_phone'] . '"'; }?> />
+					<label for="cell_phone_primary" class="no-float">Primary:</label>
+					<input type="checkbox" id="cell_phone_primary" name="cell_phone_primary"
+						<?php if (isset($this->params['cell_phone_primary']) && $this->params['cell_phone_primary'] === true) { echo 'checked'; }?>					
+						<?php if (!isset($this->params['cell_phone']) || is_null($this->params['cell_phone'])) { echo 'disabled'; }?> />
+				</div>
+			</div>
+		</div>
+		<div class="form-wrapper form-controls">
+			<input type="submit" value="Create Employee" />
+		</div>
+	</form>
+</div>

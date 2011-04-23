@@ -1,0 +1,38 @@
+<?php if (!isset($this->params)) { ?>
+<script>
+$(function() {
+	
+	$('#password').focus();
+});
+</script>
+<?php } ?>
+<link rel="stylesheet" href="/css/myaccount/changepass.css">
+
+<?php if (isset($this->error)) { ?>
+<div class="message error">
+	<?php echo $this->error; ?>
+</div>
+<?php } ?>
+<form id="changepass-form" action="/myaccount/changepass" method="post">
+	<div class="form-wrapper">
+		<label for="password">Current Password:</label>
+		<input type="password" id="password" name="password" maxlength="20"
+			<?php if (isset($this->params['password'])) { echo 'value="' . $this->params['password'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['password'])) { ?><div class="error-wrapper"><?php echo $this->errors['password']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="newpass">New Password:</label>
+		<input type="password" id="newpass" name="newpass" maxlength="20"
+			<?php if (isset($this->params['newpass'])) { echo 'value="' . $this->params['newpass'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['newpass'])) { ?><div class="error-wrapper"><?php echo $this->errors['newpass']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="confnewpass">Confirm New Password:</label>
+		<input type="password" id="confnewpass" name="confnewpass" maxlength="20"
+			<?php if (isset($this->params['confnewpass'])) { echo 'value="' . $this->params['confnewpass'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['confnewpass'])) { ?><div class="error-wrapper"><?php echo $this->errors['confnewpass']; ?></div><?php } ?>
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="Change Password" />
+	</div>
+</form>

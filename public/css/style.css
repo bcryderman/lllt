@@ -1,0 +1,95 @@
+body {
+	background: #fff;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+/* Header */
+
+#header {
+	background-color: #fff;
+	height: 96px;
+	position: fixed;
+	width: 100%;
+}
+
+#header-left {
+	float: left;	
+}
+
+#header-right {
+	float: right;
+	padding: 25px 25px 0 0;
+}
+
+#logo {
+	height: 65px;
+	width: 400px;
+}
+
+/* Content */
+
+#content {
+	padding: 25px;
+	position: absolute;
+	top: 97px;
+	z-index: -1;
+}
+
+/* Forms */
+
+label {
+	float: left;
+	margin-right: 10px;
+	text-align: right;
+}
+
+.form-header {
+	font-weight: bold;
+	margin-bottom: 25px;	
+}
+
+.form-wrapper {
+	margin-bottom: 15px;	
+}
+
+.error-wrapper {
+	color: red;
+	font-weight: bold;
+	margin-bottom: 15px;	
+}
+
+.form-controls {
+	margin-top: 25px;	
+}
+
+.message {
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	font-size: 12px;
+	font-weight: bold;
+	height: 25px;
+	line-height: 25px;	
+	padding: 5px 15px;
+	margin-bottom: 25px;
+	text-align: center;
+	width: inherit;
+}
+
+.message.success {
+	border: 1px solid #306754;
+}
+
+.message.error {
+	border: 1px solid red;
+}
+
+input[type="submit"] {
+	margin-right: 10px;	
+}
+
+textarea {
+	height: 75px;
+	width: 250px;	
+}

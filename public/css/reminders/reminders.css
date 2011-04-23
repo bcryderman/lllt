@@ -1,0 +1,13 @@
+#reminders-entry-form label {
+	width: 95px;
+}
+
+#reminders-delete-form label {
+	width: 95px;
+}
+
+#reminders-entry-form .form-controls,
+#reminders-entry-form .error-wrapper,
+#reminders-delete-form .form-controls  {
+	padding-left: 105px;
+}

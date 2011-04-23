@@ -1,0 +1,8 @@
+#changepass-form label {
+	width: 140px;
+}
+
+#changepass-form .form-controls,
+#changepass-form .error-wrapper {
+	padding-left: 150px;	
+}

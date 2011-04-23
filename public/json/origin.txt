@@ -1,0 +1,1 @@
+[{"customer_id":"870","name":"origin","addr":"","addr2":"","city":"","state":"","zip":"","zip4":"","fein":"","color_code":"","customer_type_id":"4","primary_customer_contact_id":null,"carrier_navman_owner_id":null,"quickbook_print":"0","active":"1","notes":" ","created":"2011-04-20 00:00:00","created_by":"123","last_updated":"2011-04-20 00:00:00","last_updated_by":"123"}]

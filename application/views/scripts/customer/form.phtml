@@ -1,0 +1,43 @@
+<?php
+$page_params = $this->page_params;
+$page_params['customer_type_id']=$this->page_data['customer_type_id'];
+
+$state = '';
+
+if(isset($page_params['cust_data'][0]->state))
+{$state = $page_params['cust_data'][0]->state;}
+
+
+ $this->customerform($page_params,$this->states($state),$this->page_data);
+ ?>
+
+<script>
+function submit_customer_form(){
+
+	return{
+		_build_obj: function(form,action){
+			d=$(form).serializeArray();
+			return d;
+		},
+
+		_submit_post:function(action,data){
+			$.post(action,data,
+					function(data){console.log(data);
+					window.location.reload();
+				});
+		},
+		_destroy_modal:function(){
+			$('#dialog').dialog('close');
+			}
+	}
+}
+
+sub= submit_customer_form();
+$('#customer_form').submit(function(e){
+	e.preventDefault();
+	action=$(this).attr('action');
+	x=sub._submit_post(action,sub._build_obj('#customer_form','insert'));
+});
+
+
+</script>

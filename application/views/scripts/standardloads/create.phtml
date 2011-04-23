@@ -1,0 +1,255 @@
+<div id="stdloads-wrapper">
+	<?php if (isset($this->status['success'])) { echo '<div class="error-header">' . $this->status['success'] . '</div>'; } ?>
+	<?php if (isset($this->status['error'])) { echo '<div class="error-header">' . $this->status['error'] . '</div>'; } ?>
+	<form id="create-stdload-form" action="/standardloads/create" method="post">
+		<div class="form-wrapper">
+			<label for="cancelled">Cancelled:</label>
+			<input type="checkbox" id="cancelled" name="cancelled" <?php if (isset($this->params['cancelled']) && $this->params['cancelled'] === 1) { echo 'checked'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="carrier">Carrier:</label>
+			<select id="carrier" name="carrier">
+				<?php 
+				
+				foreach ($this->carriers() as $item) {
+ 
+					if (isset($this->params['carrier']) && $this->params['carrier'] === $key) {
+						
+						echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+					}
+					else if (!isset($this->params['carrier']) && $item->getCustomer_id() == 1) {
+						
+						echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+					}
+					else {
+						
+						echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+					}
+    			}
+    			
+    			?>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="billto">Bill To:</label>
+			<select id="billto" name="billto">
+				<option></option>
+				<?php 
+				
+				foreach ($this->billTos() as $item) {
+ 
+					if (isset($this->params['billto']) && $this->params['billto'] === $key) {
+						
+						echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+					}
+					else {
+						
+						echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+					}
+    			}
+    			
+    			?>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="shipper">Shipper:</label>
+			<select id="shipper" name="shipper">
+				<option></option>
+				<?php 
+				
+				foreach ($this->shippers() as $item) {
+ 
+					if (isset($this->params['shipper']) && $this->params['shipper'] === $key) {
+						
+						echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+					}
+					else {
+						
+						echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+					}
+    			}
+    			
+    			?>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="origin">Origin:</label>
+			<select id="origin" name="origin">
+				<option></option>
+				<?php 
+				
+				foreach ($this->origins() as $item) {
+ 
+					$displayVal = '';
+					
+					if ($item->getName() !== '') {
+							
+						$displayVal = $item->getCity() . ', ' . $item->getState() . ' - ' . $item->getName();
+					}
+					else {
+							
+						$displayVal = $item->getCity() . ', ' . $item->getState();
+					}
+						
+					if (isset($this->params['origin']) && $this->params['origin'] === $key) {
+																
+						echo '<option value="' . $item->getCustomer_id() . '" selected>' . $displayVal . '</option>';
+					}
+					else {
+						
+						echo '<option value="' . $item->getCustomer_id() . '" selected>' . $displayVal . '</option>';
+					}
+    			}
+    			
+    			?>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="customer">Customer:</label>
+			<select id="customer" name="customer">
+				<option></option>
+				<?php 
+				
+				foreach ($this->customers() as $item) {
+ 
+					if (isset($this->params['customer']) && $this->params['customer'] === $key) {
+																
+						echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+					}
+					else {
+						
+						echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+					}
+    			}
+    			
+    			?>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="destination">Destination:</label>
+			<select id="destination" name="destination">
+				<option></option>
+				<?php 
+				
+				foreach ($this->destinations() as $item) {
+ 
+					$displayVal = '';
+					
+					if ($item->getCity() !== '' && $item->getState() !== '' && $item->getName() !== '') {
+							
+						$displayVal = $item->getCity() . ', ' . $item->getState() . ' - ' . $item->getName();
+					}
+					else if ($item->getCity() !== '' && $item->getState() !== '') {
+							
+						$displayVal = $item->getCity() . ', ' . $item->getState();
+					}
+					else if ($item->getCity() !== '') {
+						
+						$displayVal = $item->getCity();
+					}
+					else if ($item->getState() !== '') {
+						
+						$displayVal = $item->getState();
+					}
+					else if ($item->getName() !== '') {
+						
+						$displayVal = $item->getName();
+					}
+													
+					if (isset($this->params['destination']) && $this->params['destination'] === $key) {
+						
+						echo '<option value="' . $item->getCustomer_id() . '" selected>' . $displayVal . '</option>';
+					}
+					else {
+						
+						echo '<option value="' . $item->getCustomer_id() . '">' . $displayVal . '</option>';
+					}
+    			}
+    			
+    			?>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="product">Product:</label>
+			<select id="product" name="product">
+				<option></option>
+				<?php 
+				
+				foreach ($this->productTypes() as $item) {
+ 
+					if (isset($this->params['product']) && $this->params['product'] === $key) {
+																
+						echo '<option value="' . $item->getProduct_type_id() . '" selected>' . $item->getProduct_type() . '</option>';
+					}
+					else {
+						
+						echo '<option value="' . $item->getProduct_type_id() . '">' . $item->getProduct_type() . '</option>';
+					}
+    			}
+    			
+    			?>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="driver">Driver:</label>
+			<select id="driver" name="driver">
+				<option></option>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="delayed">Delayed Dispatch:</label>
+			<input type="checkbox" id="delayed" name="delayed" <?php if (isset($this->params['delayed']) && $this->params['delayed'] === 1) { echo 'checked'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="loaddate">Load Date:</label>
+			<input type="text" id="loaddate" name="loaddate" <?php if (isset($this->params['loaddate'])) { echo 'value="' . $this->params['loaddate'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="loadtime">Load Time:</label>
+			<input type="text" id="loadtime" name="loadtime" <?php if (isset($this->params['loadtime'])) { echo 'value="' . $this->params['loadtime'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="deliverydate">Delivery Date:</label>
+			<input type="text" id="deliverydate" name="deliverydate" <?php if (isset($this->params['deliverydate'])) { echo 'value="' . $this->params['deliverydate'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="deliverytime">Delivery Time:</label>
+			<input type="text" id="deliverytime" name="deliverytime" <?php if (isset($this->params['deliverytime'])) { echo 'value="' . $this->params['deliverytime'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="ordernum">Order #:</label>
+			<input type="text" id="ordernum" name="ordernum" <?php if (isset($this->params['ordernum'])) { echo 'value="' . $this->params['ordernum'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="billlading">Bill of Lading #:</label>
+			<input type="text" id="billlading" name="billlading" <?php if (isset($this->params['billlading'])) { echo 'value="' . $this->params['billlading'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="netgall">Net Gallons:</label>
+			<input type="text" id="netgall" name="netgall" <?php if (isset($this->params['netgall'])) { echo 'value="' . $this->params['netgall'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="billrate">Bill Rate:</label>
+			<select id="billrate" name="billrate">
+				<option></option>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="fuelsurcharge">Fuel Surcharge:</label>
+			<select id="fuelsurcharge" name="fuelsurcharge">
+				<option></option>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="invoicedate">Invoice Date:</label>
+			<input type="text" id="invoicedate" name="invoicedate" <?php if (isset($this->params['invoicedate'])) { echo 'value="' . $this->params['invoicedate'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="notes">Notes:</label>
+			<textarea id="notes" name="notes"><?php if (isset($this->params['notes'])) { echo $this->params['notes']; }?></textarea>
+		</div>
+		<div class="form-wrapper form-controls">
+			<input type="submit" value="Create" />
+		</div>
+	</form>		
+</div>

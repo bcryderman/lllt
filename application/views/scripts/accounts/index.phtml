@@ -1,0 +1,49 @@
+Accounts
+
+<div id="accounts-wrapper">
+
+	<table>
+		<thead>
+			<tr>
+				<th>Username</th>
+				<th>First Name</th>
+				<th>Last Name</th>
+				<th class="button"></th>
+				<th class="button"></th>
+			</tr>
+		</thead>
+		<tbody>
+			
+			<?php foreach ($this->users as $user) {  ?>
+			
+			<tr userid="<?php echo $user->userid; ?>">
+				<td><?php echo $user->username; ?></td>
+				<td class="fname"><?php echo $user->fname; ?></td>
+				<td class="lname"><?php echo $user->lname; ?></td>
+				<td><input class="edit" type="button" value="Edit" /></td>
+				<td><input class="delete" type="button" value="Delete" /></td>
+			</tr>
+			
+			<?php } ?>
+									
+		</tbody>
+	</table>
+</div>
+
+<div id="accounts-edit-modal" class="modal" title="Edit Account Settings">
+	<form id="accounts-edit-form" action="edit" method="post">
+		<div class="form-wrapper">
+			<label for="fname">First Name:</label>
+			<input type="text" id="fname" name="fname" class="required" <?php if (isset($this->fname)) { echo 'value="' . $this->fname. '"'; }?> maxlength="20" />
+		</div>
+		<div class="form-wrapper">
+			<label for="lname">Last Name:</label>
+			<input type="text" id="lname" name="lname" class="required" <?php if (isset($this->lname)) { echo 'value="' . $this->lname. '"'; }?> maxlength="20" />
+		</div>
+	</form>		
+</div>
+<div id="accounts-delete-modal" class="modal" title="Delete Confirmation" ></div>
+
+<script>
+var users = <?php echo json_encode($this->users); ?>;
+</script>

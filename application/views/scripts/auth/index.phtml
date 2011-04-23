@@ -1,0 +1,32 @@
+<?php if (!isset($this->params)) { ?>
+<script>
+$(function() {
+	
+	$('#username').focus();
+});
+</script>
+<?php } ?>
+<link rel="stylesheet" href="/css/public/auth.css">
+
+<?php if (isset($this->error)) { ?>
+<div class="message error">
+	<?php echo $this->error; ?>
+</div>
+<?php } ?>
+<form id="auth-form" action="auth" method="post">
+	<div class="form-wrapper">
+		<label for="username">Username:</label>
+		<input type="text" id="username" name="username" maxlength="20"
+			<?php if (isset($this->params['username'])) { echo 'value="' . $this->params['username'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['username'])) { ?><div class="error-wrapper"><?php echo $this->errors['username']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="password">Password:</label>
+		<input type="password" id="password" name="password" maxlength="20"
+			<?php if (isset($this->params['password'])) { echo 'value="' . $this->params['password'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['password'])) { ?><div class="error-wrapper"><?php echo $this->errors['password']; ?></div><?php } ?>
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="Login" />
+	</div>
+</form>

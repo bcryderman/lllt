@@ -1,0 +1,39 @@
+<h3><?php echo $this->header;?> Rates</h3>
+<?php 
+$billtos= $this->billtos(array('return'=>'arrayid'));
+$origins= $this->origins(array('return'=>'arrayid'));
+$destinations =$this->destinations(array('return'=>'arrayid'));
+
+?>
+<table>
+	<thead>
+		<tr>
+					<tr>
+			<th>Bill To</th>
+			<th>Origin</th>
+			<th>Destination</th>
+			<th>Route Type</th>
+			<th>Effective Date</th>
+			<th>Rate</th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->rates as $item) { ?>
+		<tr>
+			<td><?php echo $billtos[$item->getBill_to_id()]['name']; ?></td>
+			<td><?php echo $origins[$item->getOrigin_id()]['name']; ?></td>
+			<td><?php echo $destinations[$item->getDestination_id()]['name']; ?></td>
+			<td><?php echo $item->getRoute_type_id(); ?></td>
+			<td><?php echo $item->getStart_date(); ?></td>
+			<td><?php echo $item->getRate(); ?></td>
+			<td><a href="/rates/edit/rate/<?php echo $item->getRate_id(); ?>">Edit</a></td>
+			<td><a href="/rates/delete/rate/<?php echo $item->getRate_id(); ?>">Delete</a></td>
+			<td></td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>

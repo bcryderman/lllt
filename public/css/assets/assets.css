@@ -1,0 +1,13 @@
+#assets-entry-form label {
+	width: 95px;
+}
+
+#assets-delete-form label {
+	width: 95px;
+}
+
+#assets-entry-form .form-controls,
+#assets-entry-form .error-wrapper,
+#assets-delete-form .form-controls  {
+	padding-left: 105px;
+}

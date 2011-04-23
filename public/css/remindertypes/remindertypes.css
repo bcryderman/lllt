@@ -1,0 +1,10 @@
+#remindertypes-entry-form label,
+#remindertypes-delete-form label {
+	width: 110px;
+}
+
+#remindertypes-entry-form .form-controls,
+#remindertypes-entry-form .error-wrapper,
+#remindertypes-delete-form .form-controls  {
+	padding-left: 120px;
+}

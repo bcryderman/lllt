@@ -1,0 +1,24 @@
+<link rel="stylesheet" href="/css/assettypes/assettypes.css" />
+
+<form id="assettypes-entry-form" action="/assettypes/<?php echo $this->type; ?>" method="post">
+	<?php if ($this->type === 'edit') { ?><input type="hidden" name="asset_type_id" value="<?php echo $this->assetTypeId; ?>" /><?php } ?>
+	<div class="form-wrapper">
+		<label for="asset_type">Asset Type:</label>
+		<input type="text" name="asset_type" maxlength="256"
+			<?php if (isset($this->params['asset_type'])) { echo 'value="' . $this->params['asset_type'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['asset_type'])) { ?><div class="error-wrapper"><?php echo $this->errors['asset_type']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="active">Active:</label>
+		<input type="checkbox" name="active"
+			<?php if (!isset($this->params) || (isset($this->params['active']) && ($this->params['active'] === 'on' || $this->params['active'] == 1))) { echo 'checked'; } ?> />
+	</div>	
+	<div class="form-wrapper">
+		<label for="description">Description:</label>
+		<textarea name="description"><?php if (isset($this->params['description'])) { echo $this->params['description']; } ?></textarea>
+	</div>
+	<?php if (isset($this->errors['description'])) { ?><div class="error-wrapper"><?php echo $this->errors['description']; ?></div>	<?php } ?>
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="<?php echo ucfirst($this->type); ?> Asset Type" />
+	</div>
+</form>

@@ -1,0 +1,107 @@
+<link rel="stylesheet" href="/css/reminders/reminders.css" />
+
+<form id="rate-entry-form" action="/rates/view?search" method="post">
+	<?php if ($this->type === 'edit') { ?><input type="hidden" name="rate_id" value="<?php echo $this->rateId; ?>" /><?php } ?>
+	<div class="form-wrapper">
+		<label for="bill_to_id">Bill To:</label>
+		<select name="bill_to_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->billtos() as $item) {
+ 
+				if (isset($this->params['bill_to_id']) && $this->params['bill_to_id'] === $item->getCustomer_id()) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+				}   		
+    		}
+    		
+    		?>
+		</select>
+	</div>
+	
+	
+	<div class="form-wrapper">
+		<label for="origin_id">Origin:</label>
+		<select name="origin_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->Origins() as $item) {
+ 
+				if (isset($this->params['origin_id']) && $this->params['origin_id'] === $item->getCustomer_id()) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+				}   		
+    		}
+    		
+    		?>
+		</select>
+	</div>
+	
+	
+	<div class="form-wrapper">
+		<label for="destination_id">Destination:</label>
+		<select name="destination_id">
+			<option></option>
+			<?php 
+			foreach ($this->Destinations() as $item) {
+				if (isset($this->params['destination_id']) && $this->params['destination_id'] === $item->getCustomer_id()) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+				}   		
+    		}
+
+    		
+    		?>
+		</select>
+	</div>
+	
+
+	<div class="form-wrapper">
+		<label for="route_type_id">Route Type:</label>
+		<select name="route_type_id">
+			<option></option>
+			<?php 
+			echo '<option value="1">Standard</option>';
+			echo '<option value="2">Backhaul</option>'; 		
+    		?>
+		</select>
+	</div>
+	
+	
+	
+	<div class="form-wrapper">
+		<label for="start_date">Effective Date:</label>
+		<input type="text" name="start_date" class="datepicker" <?php if (isset($this->params['start_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['start_date']) . '"'; } ?>
+															  <?php if (isset($this->params['start_date']) && isset($this->errors)) { echo 'value="' . $this->params['start_date'] . '"'; } ?> />
+
+		to
+		<input type="text" name="end_date" class="datepicker" <?php if (isset($this->params['end_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['end_date']) . '"'; } ?>
+															  <?php if (isset($this->params['end_date']) && isset($this->errors)) { echo 'value="' . $this->params['end_date'] . '"'; } ?> />
+	</div>	
+	
+	
+	<div class="form-wrapper">
+		<label for="rate">Rate:</label>
+		<input type="text" name="rate" <?php if (isset($this->params['rate'])&&!isset($this->errors)){echo 'value="'.$this->params['rate'].'"';}?>/>
+	
+	</div>
+	
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="<?php echo ucfirst($this->type); ?> Rate" />
+	</div>
+
+</form>

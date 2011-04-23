@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="/css/assets/assets.css" />
+
+<form id="assets-entry-form" action="/assets/<?php echo $this->type; ?>" method="post">
+	<?php if ($this->type === 'edit') { ?><input type="hidden" name="asset_id" value="<?php echo $this->assetId; ?>" /><?php } ?>
+	<div class="form-wrapper">
+		<label for="asset_name">Asset Name:</label>
+		<input type="text" name="asset_name" <?php if (isset($this->params['asset_name'])) { echo 'value="' . $this->params['asset_name'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['asset_name'])) { ?><div class="error-wrapper"><?php echo $this->errors['asset_name']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="asset_type_id">Asset Type:</label>
+		<select name="asset_type_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->assetTypes() as $item) {
+ 
+				if (isset($this->params['asset_type_id']) && $this->params['asset_type_id'] === $item->getAsset_type_id()) {
+					
+					echo '<option value="' . $item->getAsset_type_id() . '" selected>' . $item->getAsset_type() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getAsset_type_id() . '">' . $item->getAsset_type() . '</option>';
+				}   		
+    		}
+    		
+    		?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['asset_type_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['asset_type_id']; ?></div><?php } ?>
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="<?php echo ucfirst($this->type); ?> Asset" />
+	</div>
+</form>

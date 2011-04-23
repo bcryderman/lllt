@@ -1,0 +1,8 @@
+#auth-form label {
+	width: 75px;
+}
+
+#auth-form .form-controls,
+#auth-form .error-wrapper {
+	padding-left: 85px;	
+}

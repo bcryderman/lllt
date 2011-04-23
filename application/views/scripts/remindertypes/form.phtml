@@ -1,0 +1,33 @@
+<link rel="stylesheet" href="/css/remindertypes/remindertypes.css" />
+
+<form id="remindertypes-entry-form" action="/remindertypes/<?php echo $this->type; ?>" method="post">
+	<?php if ($this->type === 'edit') { ?><input type="hidden" name="reminder_type_id" value="<?php echo $this->reminderTypeId; ?>" /><?php } ?>
+	<div class="form-wrapper">
+		<label for="reminder_type">Reminder Type:</label>
+		<input type="text" name="reminder_type" maxlength="256"
+			<?php if (isset($this->params['reminder_type'])) { echo 'value="' . $this->params['reminder_type'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['reminder_type'])) { ?><div class="error-wrapper"><?php echo $this->errors['reminder_type']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="active">Active:</label>
+		<input type="checkbox" name="active"
+			<?php if (!isset($this->params) || (isset($this->params['active']) && ($this->params['active'] === 'on' || $this->params['active'] == 1))) { echo 'checked'; } ?> />
+	</div>	
+	<div class="form-wrapper">
+		<label for="description">Description:</label>
+		<textarea name="description"><?php if (isset($this->params['description'])) { echo $this->params['description']; } ?></textarea>
+	</div>
+	<?php if (isset($this->errors['description'])) { ?><div class="error-wrapper"><?php echo $this->errors['description']; ?></div>	<?php } ?>
+	<div class="form-wrapper">
+		<label for="asset_or_employee">Asset or Employee:</label>
+		<select name="asset_or_employee">
+			<option></option>
+			<option value="asset" <?php if (isset($this->params['asset_or_employee']) && $this->params['asset_or_employee'] === 'asset') { echo 'selected'; } ?>>Asset</option>
+			<option value="employee" <?php if (isset($this->params['asset_or_employee']) && $this->params['asset_or_employee'] === 'employee') { echo 'selected'; } ?>>Employee</option>
+		</select>
+	</div>
+	<?php if (isset($this->errors['asset_or_employee'])) { ?><div class="error-wrapper"><?php echo $this->errors['asset_or_employee']; ?></div><?php } ?>
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="<?php echo ucfirst($this->type); ?> Reminder Type" />
+	</div>
+</form>

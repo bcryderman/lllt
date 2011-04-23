@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="/css/remindertypes/remindertypes.css" />
+<script src="/js/remindertypes/remindertypes.js"></script>
+
+<table>
+<thead>
+	<tr>
+		<th>Reminder Type</th>
+		<th>Active</th>
+		<th>Description</th>
+		<th>Asset or Employee</th>
+		<th></th>
+		<th></th>
+	</tr>
+</thead>
+<tbody>
+<?php foreach($this->remTypes as $item) { ?>
+	<tr>
+		<td><?php echo $item->getReminder_type(); ?></td>
+		<td><?php echo $item->getActive(); ?></td>
+		<td><?php echo $item->getDescription(); ?></td>
+		<td><?php echo $item->getAsset_or_employee(); ?></td>
+		<td><a href="/remindertypes/edit/reminder_type_id/<?php echo $item->getReminder_type_id(); ?>">Edit</a></td>
+		<td><a href="/remindertypes/delete/reminder_type_id/<?php echo $item->getReminder_type_id(); ?>">Delete</a></td>
+	</tr>
+<?php } ?>
+</tbody>
+</table>

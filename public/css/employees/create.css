@@ -1,0 +1,30 @@
+#createemp-form label {
+	width: 110px;
+}
+
+#createemp-form label.no-float {
+	float: none;
+	margin-left: 10px;	
+}
+
+#createemp-form .form-controls {
+	padding-left: 120px;	
+}
+
+#comm-options-wrapper {
+	padding-top: 25px;
+}
+
+#show-hide-comm-options {
+	cursor: pointer;
+	text-decoration: underline;	
+}
+
+#comm-options {
+	display: none;	
+	padding-top: 25px;
+}
+
+#phone_primary, #cell_phone_primary {
+	vertical-align: middle;	
+}

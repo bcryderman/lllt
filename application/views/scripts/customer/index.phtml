@@ -1,0 +1,223 @@
+<h1><?php echo $this->page_data['Page_Title']?></h1>
+<button class='add_customer'>Add</button>
+<?php
+$this->customerlist(json_decode($this->cust_data,True),$this->page_data);
+?>
+
+
+<script>
+var cust_data = <?php echo $this->cust_data;?>;
+var page_data = <?php echo json_encode($this->page_data);?>;
+console.log(cust_data);
+
+function list_view(){
+
+	return {
+
+		_get_customer_name:function(customer_id){
+			var i= 0;
+			for(i=0;i<=cust_data.length;i++)
+			{
+				if(cust_data[i].customer_id == customer_id)
+				{
+					customer_name = cust_data[i].name;
+					break;
+				}
+			}
+			return customer_name;
+		},
+		_edit_link:function(){
+			_this = this;
+			$('.cust_edit_link').bind('click',function(e){
+				e.preventDefault();
+				_this._load_form($(this).attr('href'),$(this).attr('cust_id'),'update');
+				_this._modal();
+				});
+		},
+
+		_query_params:function(url){
+			var z = url.substr(url.indexOf('?')+1);
+			var urlParams = {};
+			(function () {
+			    var e,
+			        a = /\+/g,  // Regex for replacing addition symbol with a space
+			        r = /([^&=]+)=?([^&]*)/g,
+			        d = function (s) { return decodeURIComponent(s.replace(a, " ")); },
+			        q = z;
+
+			    while (e = r.exec(q))
+			       urlParams[d(e[1])] = d(e[2]);
+			})();
+
+			return urlParams;
+		},
+
+		_show_contacts_link:function(){
+			_this = this;
+			$('.contact_edit_link').bind('click',function(e){
+				e.preventDefault();
+				z = _this._query_params($(this).attr('href'));
+				x = $('#cust_id'+ z._customer_id + ' .cust_name').html();
+				_this._load_contacts(z._customer_id);
+				});
+		},
+
+		_load_contacts:function(customer_id){
+			_this= this;
+			$.post('customercontact',{_method:'customer',_customer_id:customer_id},
+					function(data){
+					_this._load_form_container();
+					$('#dialog').append(data);
+					_this._edit_contacts_link();
+					_this._add_contact_link(customer_id);
+					_this._delete_contact();
+					_this._modal(
+							{title:'Contacts for '+ _this._get_customer_name(customer_id),
+							 width:550}
+							);
+				});
+		},
+		
+		_edit_contacts_link:function(){
+			_this = this;
+			$('.edit-customercontact').bind('click',function(e){
+				$.post($(this).attr('href'),
+						function(data){
+						$('#contact-list').remove();
+						$('#dialog').append(data);
+						
+						_this._update_contacts();
+				});
+				e.preventDefault();
+			});
+		},
+
+
+
+		_update_contacts:function(){
+			_this = this;
+			contact_name = $('#contact_form #first_name').val()+$('#contact_form #last_name').val();
+			$('.ui-dialog-title').append('--Edit contact '+contact_name);
+			$('#contact_form').submit(function(e){
+				x=$(this).serializeArray();
+				var i=0;
+				for(i=0;i<=x.length;i++)
+				{
+					if (x[i].name=='customer_id')
+					{
+						var customer_id = x[i].value;
+						break;
+					}
+				}
+				
+				$.post('customercontact?_method=update',x,
+						function(data){
+					$('#contact-form-container').remove();
+					$('#dialog').append(data);
+					$('.ui-dialog-title').html('Contacts for '+_this._get_customer_name(customer_id));
+					_this._edit_contacts_link();
+					_this._delete_contact();
+				});
+				e.preventDefault();
+			});
+			
+		},
+
+		_add_contact_link:function(customer_id){
+			_this = this;
+			$('#add-contact-button').bind('click',function(e){
+				$.post('customercontact?_method=add&_customer_id='+customer_id,
+						function(data){
+					$('#contact-list').remove();
+					$('#dialog').append(data);
+					_this._add_contact(customer_id);
+				});
+				
+			});
+		},
+
+		_add_contact:function(customer_id){
+			_this = this;
+			$('.ui-dialog-title').append('--Add Contact');
+			$('#contact_form').submit(function(e){
+				x=$(this).serializeArray();
+				$.post('customercontact?_method=add',x,
+					function(data){
+					$.post('customercontact',{_method:'customer',_customer_id:customer_id},
+							function(data){
+							$('#contact-form-container').remove();
+							$('#dialog').append(data);
+							_this._edit_contacts_link();
+							_this._add_contact_link(customer_id);
+							_this._delete_contact();
+						});
+					});
+				e.preventDefault();
+			});
+		},
+
+		_delete_contact:function(){
+			_this=this;
+			$('.delete-customercontact').bind('click',function(e){
+				z = _this._query_params($(this).attr('href'));
+				x= z._contact_id;
+				$.post('customercontact?_method=delete',{formtype:'delete',contact_id:x,active:0},
+						function(data){
+
+				});
+				e.preventDefault();
+			});
+		},
+
+		_add_link:function(){
+			_this = this;
+			$('.add_customer').bind('click',function(e){
+				e.preventDefault;
+				_this._load_form('/customer','','add');
+				_this._modal();
+			});
+		},
+
+		_load_form:function(url,customer_id,mode){
+			this._load_form_container();
+			$.post(url,{_page:'form',_mode:mode,customer_id:customer_id,_cust_type:page_data.customer_type_id},
+					function(data){
+					$('#dialog').append(data);
+					});
+
+
+		},
+
+		_load_form_container:function(){
+			$('body').append('<div id="dialog"></div>');
+			
+		},
+
+		_modal:function(options){
+			_this = this;
+			var modal_settings={
+				modal:true,
+				width:500,
+				height:420,
+				title:'My Modal',
+				close:function(){_this._remove_form_container('#dialog');}
+			}
+			 if ( options ) { 
+			        $.extend( modal_settings, options );
+			      }
+			
+			$('#dialog').dialog(modal_settings);
+		},
+
+		_remove_form_container:function(element){
+			$(element).remove();
+		}
+
+	}
+}
+
+x= list_view();
+x._edit_link();
+x._add_link();
+x._show_contacts_link();
+</script>

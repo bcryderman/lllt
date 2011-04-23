@@ -1,0 +1,53 @@
+<states>
+	<state desc="Alabama" abbr="AL"></state>
+	<state desc="Alaska" abbr="AK"></state>
+	<state desc="Arizona" abbr="AZ"></state>
+	<state desc="Arkansas" abbr="AR"></state>
+	<state desc="California" abbr="CA"></state>
+	<state desc="Colorado" abbr="CO"></state>
+	<state desc="Connecticut" abbr="CT"></state>
+	<state desc="Delaware" abbr="DE"></state>
+	<state desc="District of Columbia" abbr="DC"></state>
+	<state desc="Florida" abbr="FL"></state>
+	<state desc="Georgia" abbr="GA"></state>
+	<state desc="Hawaii" abbr="HI"></state>
+	<state desc="Idaho" abbr="ID"></state>
+	<state desc="Illinois" abbr="IL"></state>
+	<state desc="Indiana" abbr="IN"></state>
+	<state desc="Iowa" abbr="IA"></state>
+	<state desc="Kansas" abbr="KS"></state>
+	<state desc="Kentucky" abbr="KY"></state>
+	<state desc="Louisiana" abbr="LA"></state>
+	<state desc="Maine" abbr="ME"></state>
+	<state desc="Montana" abbr="MT"></state>
+	<state desc="Nebraska" abbr="NE"></state>
+	<state desc="Nevada" abbr="NV"></state>
+	<state desc="New Hampshire" abbr="NH"></state>
+	<state desc="New Jersey" abbr="NJ"></state>
+	<state desc="New Mexico" abbr="NM"></state>
+	<state desc="New York" abbr="NY"></state>
+	<state desc="North Carolina" abbr="NC"></state>
+	<state desc="North Dakota" abbr="ND"></state>
+	<state desc="Ohio" abbr="OH"></state>
+	<state desc="Oklahoma" abbr="OK"></state>
+	<state desc="Oregon" abbr="OR"></state>
+	<state desc="Maryland" abbr="MD"></state>
+	<state desc="Massachusetts" abbr="MA"></state>
+	<state desc="Michigan" abbr="MI"></state>
+	<state desc="Minnesota" abbr="MN"></state>
+	<state desc="Mississippi" abbr="MS"></state>
+	<state desc="Missouri" abbr="MO"></state>
+	<state desc="Pennsylvania" abbr="PA"></state>
+	<state desc="Rhode Island" abbr="RI"></state>
+	<state desc="South Carolina" abbr="SC"></state>
+	<state desc="South Dakota" abbr="SD"></state>
+	<state desc="Tennessee" abbr="TN"></state>
+	<state desc="Texas" abbr="TX"></state>
+	<state desc="Utah" abbr="UT"></state>
+	<state desc="Vermont" abbr="VT"></state>
+	<state desc="Virginia" abbr="VA"></state>
+	<state desc="Washington" abbr="WA"></state>
+	<state desc="West Virginia" abbr="WV"></state>
+	<state desc="Wisconsin" abbr="WI"></state>
+	<state desc="Wyoming" abbr"WY"></state>
+</states>
