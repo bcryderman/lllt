@@ -3,12 +3,12 @@
 <form id="fuelsurcharge-entry-form" action="/fuelsurcharge/view?search" method="post">
 	<?php if ($this->type === 'edit') { ?><input type="hidden" name="id" value="<?php echo $this->Id; ?>" /><?php } ?>
 	<div class="form-wrapper">
-		<label for="customer_id">Customer:</label>
+		<label for="customer_id">Bill To:</label>
 		<select name="customer_id">
 			<option></option>
 			<?php 
 			
-			foreach ($this->customers() as $item) {
+			foreach ($this->billtos() as $item) {
  
 				if (isset($this->params['customer_id']) && $this->params['customer_id'] === $item->getCustomer_id()) {
 					

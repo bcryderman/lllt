@@ -1,12 +1,12 @@
 <h3><?php echo $this->header;?> Fuel Surcharges</h3>
 <?php 
-$customers= $this->customers(array('return'=>'arrayid'));
+$customers= $this->billtos(array('return'=>'arrayid'));
 ?>
 <table>
 	<thead>
 		<tr>
 					<tr>
-			<th>Customer</th>
+			<th>Bill To</th>
 			<th>Effective Date</th>
 			<th>Fuel Surcharge</th>
 			<th></th>
