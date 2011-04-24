@@ -1,0 +1,30 @@
+<h3><?php echo $this->header;?> Fuel Surcharges</h3>
+<?php 
+$customers= $this->customers(array('return'=>'arrayid'));
+?>
+<table>
+	<thead>
+		<tr>
+					<tr>
+			<th>Customer</th>
+			<th>Effective Date</th>
+			<th>Fuel Surcharge</th>
+			<th></th>
+			<th></th>
+			<th></th>
+		</tr>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->rates as $item) { ?>
+		<tr>
+			<td><?php echo $customers[$item->getCustomer_id()]['name']; ?></td>
+			<td><?php echo $item->getStart_date(); ?></td>
+			<td><?php echo $item->getFuel_Surcharge(); ?></td>
+			<td><a href="/fuelsurcharge/edit/fuelsurcharge/<?php echo $item->getId(); ?>">Edit</a></td>
+			<td><a href="/fuelsurcharge/delete/fuelsurcharge/<?php echo $item->getId(); ?>">Delete</a></td>
+			<td></td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>

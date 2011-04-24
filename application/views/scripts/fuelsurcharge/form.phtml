@@ -1,0 +1,47 @@
+<link rel="stylesheet" href="/css/reminders/reminders.css" />
+
+<form id="fuelsurcharge-form" action="/fuelsurcharge/<?php echo $this->type; ?>" method="post">
+	<?php if ($this->type === 'edit') { ?><input type="hidden" name="id" value="<?php echo $this->id; ?>" /><?php } ?>
+	<div class="form-wrapper">
+		<label for="customer_id">Customer:</label>
+		<select name="customer_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->customers() as $item) {
+ 
+				if (isset($this->params['customer_id']) && $this->params['customer_id'] === $item->getCustomer_id()) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+				}   		
+    		}
+    		
+    		?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['customer_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['customer_id']; ?></div><?php } ?>
+	
+	
+	<div class="form-wrapper">
+		<label for="start_date">Effective Date:</label>
+		<input type="text" name="start_date" class="datepicker" <?php if (isset($this->params['start_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['start_date']) . '"'; } ?>
+															  <?php if (isset($this->params['start_date']) && isset($this->errors)) { echo 'value="' . $this->params['start_date'] . '"'; } ?> />
+	</div>	
+	<?php if (isset($this->errors['start_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['start_date']; ?></div><?php } ?>
+	
+	<div class="form-wrapper">
+		<label for="fuel_surcharge">Fuel Surcharge:</label>
+		<input type="text" name="fuel_surcharge" <?php if (isset($this->params['fuel_surcharge'])&&!isset($this->errors)){echo 'value="'.$this->params['fuel_surcharge'].'"';}?>/>
+	
+	</div>
+	<?php if (isset($this->errors['fuel_surcharge'])) { ?><div class="error-wrapper"><?php echo $this->errors['fuel_surcharge']; ?></div><?php } ?>
+	
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="<?php echo ucfirst($this->type); ?> Fuel Surcharge" />
+	</div>
+
+</form>

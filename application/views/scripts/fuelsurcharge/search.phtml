@@ -1,0 +1,48 @@
+<link rel="stylesheet" href="/css/reminders/reminders.css" />
+
+<form id="fuelsurcharge-entry-form" action="/fuelsurcharge/view?search" method="post">
+	<?php if ($this->type === 'edit') { ?><input type="hidden" name="id" value="<?php echo $this->Id; ?>" /><?php } ?>
+	<div class="form-wrapper">
+		<label for="customer_id">Customer:</label>
+		<select name="customer_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->customers() as $item) {
+ 
+				if (isset($this->params['customer_id']) && $this->params['customer_id'] === $item->getCustomer_id()) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+				}   		
+    		}
+    		
+    		?>
+		</select>
+	</div>	
+	
+	<div class="form-wrapper">
+		<label for="start_date">Effective Date:</label>
+		<input type="text" name="start_date" class="datepicker" <?php if (isset($this->params['start_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['start_date']) . '"'; } ?>
+															  <?php if (isset($this->params['start_date']) && isset($this->errors)) { echo 'value="' . $this->params['start_date'] . '"'; } ?> />
+
+		to
+		<input type="text" name="end_date" class="datepicker" <?php if (isset($this->params['end_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['end_date']) . '"'; } ?>
+															  <?php if (isset($this->params['end_date']) && isset($this->errors)) { echo 'value="' . $this->params['end_date'] . '"'; } ?> />
+	</div>	
+	
+	
+	<div class="form-wrapper">
+		<label for="fuel_surcharge">Fuel Surcharge:</label>
+		<input type="text" name="fuel_surcharge" <?php if (isset($this->params['fuel_surcharge'])&&!isset($this->errors)){echo 'value="'.$this->params['fuel_surcharge'].'"';}?>/>
+	
+	</div>
+	
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="<?php echo ucfirst($this->type); ?> Search" />
+	</div>
+
+</form>

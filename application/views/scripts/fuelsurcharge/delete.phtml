@@ -1,0 +1,44 @@
+<?php 
+$customers= $this->customers(array('return'=>'arrayid'));
+?>
+
+<script>
+$(function() {
+
+	$('#cancel').click(function(e) {
+
+		e.preventDefault();
+		window.location = '/fuelsurcharge/view';
+	});
+});
+</script>
+<link rel="stylesheet" href="/css/reminders/reminders.css" />
+
+<div class="form-header">Are you sure you want to delete the following fuel surcharge?</div>
+<form id="fuelsurcharge-delete-form" action="/fuelsurcharge/delete/fuelsurcharge/<?php echo $this->data->getId(); ?>" method="post">
+
+<table>
+	<thead>
+		<tr>
+			<th>Customer</th>
+			<th>Effective Date</th>
+			<th>Fuel Surcharge</th>
+		</tr>
+
+	</thead>
+	<tbody>
+
+		<tr>
+			<td><?php echo $customers[$this->data->getCustomer_id()]['name']; ?></td>
+			<td><?php echo $this->data->getStart_date(); ?></td>
+			<td><?php echo $this->data->getFuel_surcharge(); ?></td>
+		</tr>
+
+	</tbody>
+</table>
+
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="Delete" />
+		<input id="cancel" type="button" value="Cancel" />
+	</div>
+</form>
