@@ -61,8 +61,6 @@ class LLLT_Model_CarrierDiscountMapper {
 	    			  'start_date'      => $carDisc->getStart_date(),
 	    			  'end_date'        => $carDisc->getEnd_date(),
 	    			  'discount'        => $carDisc->getDiscount(),
-	    			  'created'         => $carDisc->getCreated(),
-	    			  'created_by'      => $carDisc->getCreated_by(),
 	    			  'last_updated'    => $carDisc->getLast_updated(),
 	    			  'last_updated_by' => $carDisc->getLast_updated_by());
     	 
@@ -110,7 +108,6 @@ class LLLT_Model_CarrierDiscountMapper {
         
         $carDisc = new LLLT_Model_CarrierDiscount();
 
-            
        	$carDisc->setId($row->id)        		  
         	  	->setCompany_id($row->company_id)
         	  	->setStart_date($row->start_date)
