@@ -28,7 +28,7 @@ class LLLT_Model_Asset {
         
         if (('mapper' == $name) || !method_exists($this, $method)) {
         	
-            throw new Exception('Invalid asset type property');
+            throw new Exception('Invalid asset property');
         }
         
         $this->$method($value);
@@ -40,7 +40,7 @@ class LLLT_Model_Asset {
         
         if (('mapper' == $name) || !method_exists($this, $method)) {
         	
-            throw new Exception('Invalid asset type property');
+            throw new Exception('Invalid asset property');
         }
         
         return $this->$method();

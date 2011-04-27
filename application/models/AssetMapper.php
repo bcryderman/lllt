@@ -111,19 +111,19 @@ class LLLT_Model_AssetMapper {
         
         $row = $result->current();
         
-        $assetType = new LLLT_Model_Asset();
-        $assetType->setAsset_id($row->asset_id)        		
-	        	  ->setAsset_type_id($row->asset_type_id)
-	        	  ->setAsset_name($row->asset_name)
-	        	  ->setCompartment_count($row->compartment_count)
-	        	  ->setActive($row->active)
-	        	  ->setCustomer_id($row->customer_id)
-	        	  ->setNavman_vehicle_id($row->navman_vehicle_id)
-	        	  ->setCreated($row->created)
-	        	  ->setCreated_by($row->created_by)
-	        	  ->setLast_updated($row->last_updated)
-	        	  ->setLast_updated_by($row->last_updated_by);
+        $asset = new LLLT_Model_Asset();
+        $asset->setAsset_id($row->asset_id)        		
+	          ->setAsset_type_id($row->asset_type_id)
+	          ->setAsset_name($row->asset_name)
+	          ->setCompartment_count($row->compartment_count)
+	          ->setActive($row->active)
+	          ->setCustomer_id($row->customer_id)
+	          ->setNavman_vehicle_id($row->navman_vehicle_id)
+	          ->setCreated($row->created)
+	          ->setCreated_by($row->created_by)
+	       	  ->setLast_updated($row->last_updated)
+	       	  ->setLast_updated_by($row->last_updated_by);
 	        	
-	    return $assetType;
+	    return $asset;
     }
 }
