@@ -1,0 +1,35 @@
+<script>
+$(function() {
+
+	$('#cancel').click(function(e) {
+
+		e.preventDefault();
+		window.location = '/carrierdiscounts/view';
+	});
+});
+</script>
+<link rel="stylesheet" href="/css/carrierdiscounts/carrierdiscounts.css" />
+
+<div class="form-header">Are you sure you want to delete the following carrier discount?</div>
+<form id="carrierdiscounts-delete-form" action="/carrierdiscounts/delete/id/<?php echo $this->params['id']; ?>" method="post">
+	<div class="form-wrapper">
+		<label>Company:</label>
+		<?php echo $this->company->getName(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Start Date:</label>
+		<?php echo $this->formatDate($this->carrierDiscount->getStart_date()); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>End Date:</label>
+		<?php echo $this->formatDate($this->carrierDiscount->getEnd_date()); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Discount:</label>
+		<?php echo $this->carrierDiscount->getDiscount(); ?>
+	</div>	
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="Delete" />
+		<input id="cancel" type="button" value="Cancel" />
+	</div>
+</form>

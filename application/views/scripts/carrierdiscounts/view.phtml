@@ -1,0 +1,24 @@
+<table>
+	<thead>
+		<tr>
+			<th>Company</th>
+			<th>State Date</th>
+			<th>End Date</th>
+			<th>Discount</th>
+			<th></th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php foreach ($this->carrierDiscounts as $item) { ?>	
+		<tr>
+			<td><?php echo $this->customers[$item->getCompany_id()]->getName(); ?></td>
+			<td><?php echo $item->getStart_date(); ?></td>
+			<td><?php echo $item->getEnd_date(); ?></td>
+			<td><?php echo $item->getDiscount(); ?></td>
+			<td><a href="/carrierdiscounts/edit/id/<?php echo $item->getId(); ?>">Edit</a></td>
+			<td><a href="/carrierdiscounts/delete/id/<?php echo $item->getId(); ?>">Delete</a></td>
+		</tr>
+	<?php } ?>
+	</tbody>
+</table>
