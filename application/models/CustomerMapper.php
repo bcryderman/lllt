@@ -39,32 +39,69 @@ class LLLT_Model_CustomerMapper {
         
         foreach ($resultSet as $row) {
         	
-            $entry = new LLLT_Model_Customer2();
+            $customer = new LLLT_Model_Customer2();
             
-            $entry->setCustomer_id($row->customer_id)
-            	  ->setName($row->name)
-            	  ->setAddr($row->addr)
-        		  ->setAddr2($row->addr2)
-        		  ->setCity($row->city)
-        		  ->setState($row->state)
-        		  ->setZip($row->zip)
-        		  ->setZip4($row->zip4)
-        		  ->setFein($row->fein)
-        		  ->setColor_code($row->color_code)
-            	  ->setCustomer_type_id($row->customer_type_id)
-            	  ->setPrimary_customer_contact_id($row->primary_customer_contact_id)
-            	  ->setCarrier_navman_owner_id($row->carrier_navman_owner_id)
-            	  ->setQuickbook_print($row->quickbook_print)            	  
-        		  ->setActive($row->active)
-        		  ->setNotes($row->notes)
-        		  ->setCreated($row->created)
-        		  ->setCreated_by($row->created_by)
-        		  ->setLast_updated($row->last_updated)
-        		  ->setLast_updated_by($row->last_updated_by);
+            $customer->setCustomer_id($row->customer_id)
+            	  	 ->setName($row->name)
+            	     ->setAddr($row->addr)
+        		     ->setAddr2($row->addr2)
+        		  	 ->setCity($row->city)
+        		  	 ->setState($row->state)
+        		  	 ->setZip($row->zip)
+        		  	 ->setZip4($row->zip4)
+        		  	 ->setFein($row->fein)
+        		  	 ->setColor_code($row->color_code)
+            	  	 ->setCustomer_type_id($row->customer_type_id)
+            	  	 ->setPrimary_customer_contact_id($row->primary_customer_contact_id)
+            	  	 ->setCarrier_navman_owner_id($row->carrier_navman_owner_id)
+            	  	 ->setQuickbook_print($row->quickbook_print)            	  
+        		  	 ->setActive($row->active)
+        		  	 ->setNotes($row->notes)
+        		  	 ->setCreated($row->created)
+        		  	 ->setCreated_by($row->created_by)
+        		  	 ->setLast_updated($row->last_updated)
+        		  	 ->setLast_updated_by($row->last_updated_by);
                   
-            $entries[] = $entry;
+            $entries[] = $customer;
         }
         
         return $entries;
+    }
+
+	public function find($id) {
+		
+        $result = $this->getDbTable()->find($id);
+        
+        if (0 == count($result)) {
+        	
+        	return 'The customer could not be found.';
+        }
+        
+        $row = $result->current();
+        
+        $customer = new LLLT_Model_Customer2();
+
+        $customer->setCustomer_id($row->customer_id)
+        	  	 ->setName($row->name)
+        	     ->setAddr($row->addr)
+    		     ->setAddr2($row->addr2)
+    		  	 ->setCity($row->city)
+    		  	 ->setState($row->state)
+    		  	 ->setZip($row->zip)
+    		  	 ->setZip4($row->zip4)
+    		  	 ->setFein($row->fein)
+    		  	 ->setColor_code($row->color_code)
+        	  	 ->setCustomer_type_id($row->customer_type_id)
+        	  	 ->setPrimary_customer_contact_id($row->primary_customer_contact_id)
+        	  	 ->setCarrier_navman_owner_id($row->carrier_navman_owner_id)
+        	  	 ->setQuickbook_print($row->quickbook_print)            	  
+    		  	 ->setActive($row->active)
+    		  	 ->setNotes($row->notes)
+    		  	 ->setCreated($row->created)
+    		  	 ->setCreated_by($row->created_by)
+    		  	 ->setLast_updated($row->last_updated)
+    		  	 ->setLast_updated_by($row->last_updated_by);
+	        	
+	    return $customer;
     }
 }
