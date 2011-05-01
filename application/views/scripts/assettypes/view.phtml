@@ -1,21 +1,34 @@
+<script src="/js/tableh.js"></script>
+<script>
+$(document).ready(function() {
+	
+	$('.tableh').tableh();
+});
+</script>
 <link rel="stylesheet" href="/css/assettypes/assettypes.css" />
-<script src="/js/assettypes/assettypes.js"></script>
+<link rel="stylesheet" href="/css/tableh.css" />
 
-<table>
+<table class="tableh">
 <thead>
 	<tr>
-		<th>Asset Type</th>
-		<th>Active</th>
-		<th>Description</th>
-		<th></th>
-		<th></th>
+		<th column="asset_type">
+			<div class="header">Asset Type</div>
+			<div class="sort asc"></div></th>
+		<th column="active">
+			<div class="header">Active</div>
+			<div class="sort"></div></th>
+		<th column="description">
+			<div class="header">Description</div>
+			<div class="sort"></div></th>
+		<th class="edit"></th>
+		<th class="delete"></th>
 	</tr>
 </thead>
 <tbody>
 <?php foreach($this->assetTypes as $item) { ?>
 	<tr>
 		<td><?php echo $item->getAsset_type(); ?></td>
-		<td><?php echo $item->getActive(); ?></td>
+		<td><?php if ($item->getActive() === 1) { echo 'Y'; } else { echo 'N'; } ?></td>
 		<td><?php echo $item->getDescription(); ?></td>
 		<td><a href="/assettypes/edit/asset_type_id/<?php echo $item->getAsset_type_id(); ?>">Edit</a></td>
 		<td><a href="/assettypes/delete/asset_type_id/<?php echo $item->getAsset_type_id(); ?>">Delete</a></td>
