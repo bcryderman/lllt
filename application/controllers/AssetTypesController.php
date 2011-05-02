@@ -114,7 +114,8 @@ class AssettypesController extends Zend_Controller_Action {
     	$params = $request->getParams();
 				
 		$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
-    	$assetTypes = $assetTypeMapper->fetchAll(null, $params['column'] . ' ' . $params['sort']);
+    	$assetTypes = $assetTypeMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'],
+														     'asset_type ' . $params['sort']));
 
     	$this->view->assetTypes = $assetTypes;
 

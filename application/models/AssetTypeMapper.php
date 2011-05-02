@@ -37,16 +37,20 @@ class LLLT_Model_AssetTypeMapper {
 				      'active'      => $assetType->getActive(),
 	    			  'description' => $assetType->getDescription());
 	    	  	    	    	
-	    $assetTypeId = $this->getDbTable()->insert($data);
+	    $assetTypeId = $this->getDbTable()
+							->insert($data);
 	    
 	    return $assetTypeId;
     }
     
 	public function delete(LLLT_Model_AssetType $assetType) {
     	
-    	$where = $this->getDbTable()->getAdapter()->quoteInto('asset_type_id = ?', $assetType->getAsset_type_id());
+    	$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('asset_type_id = ?', $assetType->getAsset_type_id());
 			
-    	$this->getDbTable()->delete($where);
+    	$this->getDbTable()
+			 ->delete($where);
     }
     
     public function edit(LLLT_Model_AssetType $assetType) {
@@ -55,35 +59,39 @@ class LLLT_Model_AssetTypeMapper {
 				      'active'      => $assetType->getActive(),
 	    			  'description' => $assetType->getDescription());
     	 
-		$where = $this->getDbTable()->getAdapter()->quoteInto('asset_type_id = ?', $assetType->getAsset_type_id());
+		$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('asset_type_id = ?', $assetType->getAsset_type_id());
 
 		$this->getDbTable()->update($data, $where);
     }
     
-    public function fetchAll($where = null, $order = null) {
+    public function fetchAll($where, $order = null) {
     	
-        $resultSet = $this->getDbTable()->fetchAll($where, $order);
+        $resultSet = $this->getDbTable()
+						  ->fetchAll($where, $order);
         
-        $entries = array();
+        $assetTypes = array();
         
         foreach ($resultSet as $row) {
         	
-            $entry = new LLLT_Model_AssetType();
+            $assetType = new LLLT_Model_AssetType();
             
-        	$entry->setAsset_type_id($row->asset_type_id)
-        		  ->setAsset_type($row->asset_type)
-	        	  ->setActive($row->active)
-	        	  ->setDescription($row->description);
+        	$assetType->setAsset_type_id($row->asset_type_id)
+        		  	  ->setAsset_type($row->asset_type)
+	        	  	  ->setActive($row->active)
+	        	  	  ->setDescription($row->description);
                   
-            $entries[] = $entry;            
+            $assetTypes[] = $assetType;            
         }
                 
-        return $entries;
+        return $assetTypes;
     }
     
 	public function find($id) {
 		
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()
+					   ->find($id);
         
         if (0 == count($result)) {
         	
@@ -93,6 +101,7 @@ class LLLT_Model_AssetTypeMapper {
         $row = $result->current();
         
         $assetType = new LLLT_Model_AssetType();
+
         $assetType->setAsset_type_id($row->asset_type_id)
         		  ->setAsset_type($row->asset_type)
 	        	  ->setActive($row->active)

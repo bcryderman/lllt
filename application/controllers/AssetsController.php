@@ -143,7 +143,7 @@ class AssetsController extends Zend_Controller_Action {
     public function viewAction() {
     	
     	$assetMapper = new LLLT_Model_AssetMapper();
-    	$assets = $assetMapper->fetchAll(null, 'asset_name ASC');
+    	$assets = $assetMapper->fetchAll(null, 'asset_name asc');
 
     	$this->view->assets = $assets;
     }
