@@ -11,6 +11,17 @@
 		$('.desc').removeClass('desc');
 	}
 	
+	function returnSortedData(obj, column, sort) {
+		
+		$.post(settings.url + '/column/' + column + '/sort/' + sort, function(data) {
+			
+			var data = $(data);
+			
+			data.children('tr:even').css('background-color', '#cef6e3');
+			obj.children('tbody').replaceWith(data);			
+		});
+	}
+	
 	var methods = {
 		
 		init: function (options) { 
@@ -18,27 +29,28 @@
 			if (options) {
 				
 				$.extend(settings, options);
-				console.log(options);
 			}		
 			
 			return this.each(function() {
 				
 				var $this = $(this);
 				
-				$(this).find('th').css('cursor', 'pointer');
+				$(this).find('th:not(.edit):not(.delete)').css('cursor', 'pointer');
 				
-				$(this).find('th').click(function () {
+				$(this).find('th:not(.edit):not(.delete)').click(function () {
 				
 					if ($(this).children('.sort').hasClass('asc')) {
 						
-						removeSort();
-						$(this).children('.sort').addClass('desc');
+						var sortMethod = 'desc';
 					}
 					else {
 						
-						removeSort();
-						$(this).children('.sort').addClass('asc');
+						var sortMethod = 'asc';
 					}
+					
+					removeSort();
+					$(this).children('.sort').addClass(sortMethod);
+					returnSortedData($this, $(this).attr('column'), sortMethod);
 				});
 			});	
 		}
@@ -59,4 +71,4 @@
 			$.error('Method ' +  method + ' does not exist on jQuery.tableh');
 	    }    
  	};
-})(jQuery);
+}) (jQuery);
