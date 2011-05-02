@@ -1,28 +1,43 @@
-<table>
+<script src="/js/tableh.js"></script>
+<script>
+$(document).ready(function() {
+	
+	$('.tableh').tableh({ 'url': '/assets/tabulardata' });
+});
+</script>
+<link rel="stylesheet" href="/css/assets/assets.css" />
+<link rel="stylesheet" href="/css/tableh.css" />
+
+<table class="tableh">
 	<thead>
 		<tr>
-			<th>Asset Name</th>
-			<th>Asset Type</th>
-			<th>Compartment Count</th>
-			<th>Active</th>
-			<th>Customer</th>
-			<th>Navman Vehicle ID</th>
-			<th></th>
-			<th></th>
+			<th column="a.asset_name">
+				<div class="header">Asset Name</div>
+				<div class="sort asc"></div>
+			</th>
+			<th column="at.asset_type">
+				<div class="header">Asset Type</div>
+				<div class="sort"></div>
+			</th>
+			<th column="a.compartment_count">
+				<div class="header">Compartment Count</div>
+				<div class="sort"></div>
+			</th>
+			<th column="a.active">
+				<div class="header">Active</div>
+				<div class="sort"></div>
+			</th>
+			<th column="c.name">
+				<div class="header">Customer</div>
+				<div class="sort"></div>
+			</th>
+			<th column="a.navman_vehicle_id">
+				<div class="header">Navman Vehicle ID</div>
+				<div class="sort"></div>
+			</th>
+			<th class="edit"></th>
+			<th class="delete"></th>
 		</tr>
 	</thead>
-	<tbody>
-	<?php foreach ($this->assets as $item) { ?>	
-		<tr>
-			<td><?php echo $item->getAsset_name(); ?></td>
-			<td><?php echo $this->assetTypes[$item->getAsset_type_id()]->getAsset_type(); ?></td>
-			<td><?php echo $item->getCompartment_count(); ?></td>
-			<td><?php echo $item->getActive(); ?></td>
-			<td><?php echo $this->customers[$item->getCustomer_id()]->getName(); ?></td>
-			<td><?php echo $item->getNavman_vehicle_id(); ?></td>
-			<td><a href="/assets/edit/asset_id/<?php echo $item->getAsset_id(); ?>">Edit</a></td>
-			<td><a href="/assets/delete/asset_id/<?php echo $item->getAsset_id(); ?>">Delete</a></td>
-		</tr>
-	<?php } ?>
-	</tbody>
+	<?php echo $this->partial('/assets/tabulardata.phtml', array('assets' => $this->assets)); ?>
 </table>
