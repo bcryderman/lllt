@@ -123,35 +123,29 @@ class AssetsController extends Zend_Controller_Action {
 
     	$this->renderScript('assets/form.phtml');
     }
+
+	public function tabulardataAction() {
+		
+		$this->_helper->layout()->disableLayout();
+		
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+
+    	$assetMapper = new LLLT_Model_AssetMapper();
+    	$assets = $assetMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'], 
+													 'asset_name ' . $params['sort']));
+
+    	$this->view->assets = $assets;
+
+		$this->renderScript('assets/tabulardata.phtml');
+	}
     
     public function viewAction() {
     	
     	$assetMapper = new LLLT_Model_AssetMapper();
     	$assets = $assetMapper->fetchAll(null, 'asset_name ASC');
 
-    	$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
-    	$assetTypes = $assetTypeMapper->fetchAll('active = 1', 'asset_type asc');
-    	
-    	$assetTypesArr = array();
-    	
-    	foreach ($assetTypes as $item) {
-    		
-    		$assetTypesArr[$item->getAsset_type_id()] = $item;
-    	}
-    	
-    	$customerMapper = new LLLT_Model_CustomerMapper();
-    	$customers = $customerMapper->fetchAll(null, 'name asc');
-    	
-   	 	$customersArr = array();
-    	
-    	foreach ($customers as $item) {
-    		
-    		$customersArr[$item->getCustomer_id()] = $item;
-    	}
-
     	$this->view->assets = $assets;
-    	$this->view->assetTypes = $assetTypesArr;
-    	$this->view->customers = $customersArr;
     }
     
 	public function validation($params) {
