@@ -2,7 +2,10 @@
 
 class AssetsController extends Zend_Controller_Action {
 
-    public function init() {}
+    public function init() {
+	
+		$this->view->title = 'Assets';
+	}
 
 	public function addAction() {
     	
@@ -21,11 +24,11 @@ class AssetsController extends Zend_Controller_Action {
 		    			    	
 		    	$asset = new LLLT_Model_Asset();
 		    	$asset->setAsset_type_id($params['asset_type_id']);
-		    	$asset->setAsset_name($params['asset_name']);
+		    	$asset->setAsset_name(trim($params['asset_name']));
 		    	$asset->setCompartment_count($params['compartment_count']);
 				$asset->setActive($params['active']);
 				$asset->setCustomer_id($params['customer_id']);
-				$asset->setNavman_vehicle_id($params['navman_vehicle_id']);
+				$asset->setNavman_vehicle_id(trim($params['navman_vehicle_id']));
 		    	$asset->setCreated($date);
 	    		$asset->setCreated_by($auth['Employee']->getEmp_id());
 	    		$asset->setLast_updated($date);
@@ -83,11 +86,11 @@ class AssetsController extends Zend_Controller_Action {
 	    		$asset = new LLLT_Model_Asset();
 	    		$asset->setAsset_id($params['asset_id']);
 		    	$asset->setAsset_type_id($params['asset_type_id']);
-		    	$asset->setAsset_name($params['asset_name']);
+		    	$asset->setAsset_name(trim($params['asset_name']));
 		    	$asset->setCompartment_count($params['compartment_count']);
 				$asset->setActive($params['active']);
 				$asset->setCustomer_id($params['customer_id']);
-				$asset->setNavman_vehicle_id($params['navman_vehicle_id']);
+				$asset->setNavman_vehicle_id(trim($params['navman_vehicle_id']));
 	    		$asset->setLast_updated($date);
 	    		$asset->setLast_updated_by($auth['Employee']->getEmp_id());
 		    	

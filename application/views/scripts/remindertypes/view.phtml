@@ -1,27 +1,35 @@
-<link rel="stylesheet" href="/css/remindertypes/remindertypes.css" />
-<script src="/js/remindertypes/remindertypes.js"></script>
+<script src="/js/tableh.js"></script>
+<script>
+$(document).ready(function() {
+	
+	$('.tableh').tableh({ 'url': '/remindertypes/tabulardata' });
+});
+</script>
+<link rel="stylesheet" href="/css/tableh.css" />
 
-<table>
-<thead>
-	<tr>
-		<th>Reminder Type</th>
-		<th>Active</th>
-		<th>Description</th>
-		<th>Asset or Employee</th>
-		<th></th>
-		<th></th>
-	</tr>
-</thead>
-<tbody>
-<?php foreach($this->remTypes as $item) { ?>
-	<tr>
-		<td><?php echo $item->getReminder_type(); ?></td>
-		<td><?php echo $item->getActive(); ?></td>
-		<td><?php echo $item->getDescription(); ?></td>
-		<td><?php echo $item->getAsset_or_employee(); ?></td>
-		<td><a href="/remindertypes/edit/reminder_type_id/<?php echo $item->getReminder_type_id(); ?>">Edit</a></td>
-		<td><a href="/remindertypes/delete/reminder_type_id/<?php echo $item->getReminder_type_id(); ?>">Delete</a></td>
-	</tr>
-<?php } ?>
-</tbody>
+
+<table class="tableh">
+	<thead>
+		<tr>
+			<th column="reminder_type">
+				<div class="header">Reminder Type</div>
+				<div class="sort asc"></div>
+			</th>
+			<th column="active">
+				<div class="header">Active</div>
+				<div class="sort"></div>
+			</th>
+			<th column="description">
+				<div class="header">Description</div>
+				<div class="sort"></div>
+			</th>
+			<th column="asset_or_employee">
+				<div class="header">Asset or Employee</div>
+				<div class="sort"></div>
+			</th>
+			<th class="edit"></th>
+			<th class="delete"></th>
+		</tr>
+	</thead>
+	<?php echo $this->partial('/remindertypes/tabulardata.phtml', array('reminderTypes' => $this->reminderTypes)); ?>
 </table>

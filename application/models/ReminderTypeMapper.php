@@ -31,62 +31,71 @@ class LLLT_Model_ReminderTypeMapper {
         return $this->_dbTable;
     }
     
-    public function add(LLLT_Model_ReminderType $remType) {
+    public function add(LLLT_Model_ReminderType $reminderType) {
     	    			    	
-	    $data = array('reminder_type'     => $remType->getReminder_type(),
-				      'active'            => $remType->getActive(),
-	    			  'description'       => $remType->getDescription(),
-	    			  'asset_or_employee' => $remType->getAsset_or_employee());
+	    $data = array('reminder_type'     => $reminderType->getReminder_type(),
+				      'active'            => $reminderType->getActive(),
+	    			  'description'       => $reminderType->getDescription(),
+	    			  'asset_or_employee' => $reminderType->getAsset_or_employee());
 	  	    	    	
-	    $remTypeId = $this->getDbTable()->insert($data);
+	    $reminderTypeId = $this->getDbTable()
+							   ->insert($data);
 	    
-	    return $remTypeId;
+	    return $reminderTypeId;
     }
     
-    public function delete(LLLT_Model_ReminderType $remType) {
+    public function delete(LLLT_Model_ReminderType $reminderType) {
     	
-    	$where = $this->getDbTable()->getAdapter()->quoteInto('reminder_type_id = ?', $remType->getReminder_type_id());
+    	$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('reminder_type_id = ?', $reminderType->getReminder_type_id());
 			
-    	$this->getDbTable()->delete($where);
+    	$this->getDbTable()
+			 ->delete($where);
     }
     
-    public function edit(LLLT_Model_ReminderType $remType) {
+    public function edit(LLLT_Model_ReminderType $reminderType) {
     	
-    	$data = array('reminder_type'     => $remType->getReminder_type(),
-				      'active'            => $remType->getActive(),
-	    			  'description'       => $remType->getDescription(),
-	    			  'asset_or_employee' => $remType->getAsset_or_employee());
+    	$data = array('reminder_type'     => $reminderType->getReminder_type(),
+				      'active'            => $reminderType->getActive(),
+	    			  'description'       => $reminderType->getDescription(),
+	    			  'asset_or_employee' => $reminderType->getAsset_or_employee());
     	 
-		$where = $this->getDbTable()->getAdapter()->quoteInto('reminder_type_id = ?', $remType->getReminder_type_id());
+		$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('reminder_type_id = ?', $reminderType->getReminder_type_id());
 
-		$this->getDbTable()->update($data, $where);
+		$this->getDbTable()
+			 ->update($data, $where);
     }
      
-    public function fetchAll($where = null, $order = null) {
+    public function fetchAll($where, $order = null) {
     	
-        $resultSet = $this->getDbTable()->fetchAll($where, $order);
+        $resultSet = $this->getDbTable()
+						  ->fetchAll($where, $order);
         
-        $entries = array();
+        $reminderTypes = array();
         
         foreach ($resultSet as $row) {
         	
-            $entry = new LLLT_Model_ReminderType();
+            $reminderType = new LLLT_Model_ReminderType();
             
-        	$entry->setReminder_type_id($row->reminder_type_id)
-        		  ->setReminder_type($row->reminder_type)
-	        	  ->setActive($row->active)
-	        	  ->setDescription($row->description)
-	        	  ->setAsset_or_employee($row->asset_or_employee);
+        	$reminderType->setReminder_type_id($row->reminder_type_id)
+        		  		 ->setReminder_type($row->reminder_type)
+	        	  		 ->setActive($row->active)
+	        	  		 ->setDescription($row->description)
+	        	  		 ->setAsset_or_employee($row->asset_or_employee);
                   
-            $entries[] = $entry;            
+            $reminderTypes[] = $reminderType;            
         }
         
-        return $entries;
+        return $reminderTypes;
     }
     
 	public function find($id) {
 		
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()
+					   ->find($id);
         
         if (0 == count($result)) {
         	
@@ -95,13 +104,14 @@ class LLLT_Model_ReminderTypeMapper {
         
         $row = $result->current();
         
-        $remType = new LLLT_Model_ReminderType();
-        $remType->setReminder_type_id($row->reminder_type_id)
-        		->setReminder_type($row->reminder_type)
-	        	->setActive($row->active)
-	        	->setDescription($row->description)
-	        	->setAsset_or_employee($row->asset_or_employee);
+        $reminderType = new LLLT_Model_ReminderType();
+
+        $reminderType->setReminder_type_id($row->reminder_type_id)
+        			 ->setReminder_type($row->reminder_type)
+	        		 ->setActive($row->active)
+	        		 ->setDescription($row->description)
+	        		 ->setAsset_or_employee($row->asset_or_employee);
 	        	
-	    return $remType;
+	    return $reminderType;
     }
 }

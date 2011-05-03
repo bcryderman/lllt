@@ -10,19 +10,19 @@ $(function() {
 </script>
 <link rel="stylesheet" href="/css/assettypes/assettypes.css" />
 
-<div class="form-header">Are you sure you want to delete the following asset type?</div>
-<form id="assettypes-delete-form" action="/assettypes/delete/asset_type_id/<?php echo $this->params['asset_type_id']; ?>" method="post">
+<div class="form-header">Are you sure you want to delete the following Asset Type?</div>
+<form id="assettypes-delete-form" class="delete" action="/assettypes/delete/asset_type_id/<?php echo $this->params['asset_type_id']; ?>" method="post">
 	<div class="form-wrapper">
 		<label>Asset Type:</label>
 		<?php echo $this->assetType->getAsset_type(); ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Active:</label>
-		<?php if ($this->assetType->getActive() === 1) { echo 'Yes'; } else { echo 'No'; } ?>
+		<?php echo $this->assetType->getActive(); ?>
 	</div>	
 	<div class="form-wrapper">
 		<label>Description:</label>
-		<?php if (strlen($this->assetType->getDescription()) > 0) { echo $this->assetType->getDescription(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->assetType->getDescription()) > 0) { echo $this->assetType->getDescription(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper form-controls">
 		<input type="submit" value="Delete" />

@@ -10,23 +10,23 @@ $(function() {
 </script>
 <link rel="stylesheet" href="/css/remindertypes/remindertypes.css" />
 
-<div class="form-header">Are you sure you want to delete the following reminder type?</div>
-<form id="remindertypes-delete-form" action="/remindertypes/delete/reminder_type_id/<?php echo $this->params['reminder_type_id']; ?>" method="post">
+<div class="form-header">Are you sure you want to delete the following Reminder Type?</div>
+<form id="remindertypes-delete-form" class="delete" action="/remindertypes/delete/reminder_type_id/<?php echo $this->params['reminder_type_id']; ?>" method="post">
 	<div class="form-wrapper">
 		<label>Reminder Type:</label>
-		<?php echo $this->remType->getReminder_type(); ?>
+		<?php echo $this->reminderType->getReminder_type(); ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Active:</label>
-		<?php if ($this->remType->getActive() === 1) { echo 'Yes'; } else { echo 'No'; } ?>
+		<?php echo $this->reminderType->getActive(); ?>
 	</div>	
 	<div class="form-wrapper">
 		<label>Description:</label>
-		<?php if (strlen($this->remType->getDescription()) > 0) { echo $this->remType->getDescription(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->reminderType->getDescription()) > 0) { echo $this->reminderType->getDescription(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Asset or Employee:</label>
-		<?php echo ucfirst($this->remType->getAsset_or_employee()); ?>
+		<?php echo ucfirst($this->reminderType->getAsset_or_employee()); ?>
 	</div>
 	<div class="form-wrapper form-controls">
 		<input type="submit" value="Delete" />

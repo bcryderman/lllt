@@ -2,9 +2,9 @@
 <?php foreach ($this->assets as $item) { ?>	
 	<tr>
 		<td><?php echo $item->getAsset_name(); ?></td>
-		<td><?php echo $item->getAsset_type_name(); ?></td>
+		<td><?php echo $item->getAsset_type(); ?></td>
 		<td><?php echo $item->getCompartment_count(); ?></td>
-		<td><?php if ($item->getActive()) { echo 'Y'; } else { echo 'N'; } ?></td>
+		<td><?php echo $item->getActive(); ?></td>
 		<td><?php echo $item->getCustomer_name(); ?></td>
 		<td><?php echo $item->getNavman_vehicle_id(); ?></td>
 		<td><a href="/assets/edit/asset_id/<?php echo $item->getAsset_id(); ?>">Edit</a></td>

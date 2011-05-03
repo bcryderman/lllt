@@ -5,24 +5,23 @@ $(document).ready(function() {
 	$('.tableh').tableh({ 'url': '/assettypes/tabulardata' });
 });
 </script>
-<link rel="stylesheet" href="/css/assettypes/assettypes.css" />
 <link rel="stylesheet" href="/css/tableh.css" />
 
 <table class="tableh">
-<thead>
-	<tr>
-		<th column="asset_type">
-			<div class="header">Asset Type</div>
-			<div class="sort asc"></div></th>
-		<th column="active">
-			<div class="header">Active</div>
-			<div class="sort"></div></th>
-		<th column="description">
-			<div class="header">Description</div>
-			<div class="sort"></div></th>
-		<th class="edit"></th>
-		<th class="delete"></th>
-	</tr>
-</thead>
-<?php echo $this->partial('/assettypes/tabulardata.phtml', array('assetTypes' => $this->assetTypes)); ?>
+	<thead>
+		<tr>
+			<th column="asset_type">
+				<div class="header">Asset Type</div>
+				<div class="sort asc"></div></th>
+			<th column="active">
+				<div class="header">Active</div>
+				<div class="sort"></div></th>
+			<th column="description">
+				<div class="header">Description</div>
+				<div class="sort"></div></th>
+			<th class="edit"></th>
+			<th class="delete"></th>
+		</tr>
+	</thead>
+	<?php echo $this->partial('/assettypes/tabulardata.phtml', array('assetTypes' => $this->assetTypes)); ?>
 </table>

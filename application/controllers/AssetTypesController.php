@@ -2,7 +2,10 @@
 
 class AssettypesController extends Zend_Controller_Action {
 
-    public function init() {}
+    public function init() {
+	
+		$this->view->title = 'Asset Types';
+	}
 
     public function addAction() {
     	

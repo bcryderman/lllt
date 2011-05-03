@@ -3,8 +3,11 @@
 class LLLT_Model_Reminder {
 
 	protected $_reminder_id;	 	 	 	 	 	 	
-	protected $_reminder_type_id;	 	 	 	 	 	 	
-	protected $_asset_id;		 	 	 	 	 	 	
+	protected $_reminder_type_id;
+	protected $_reminder_type;
+	protected $_asset_type;	 	 	 	 	 	 	
+	protected $_asset_id;	
+	protected $_asset_name;	 	 	 	 	 	 	
 	protected $_employee_id; 	 	 	
 	protected $_due_date;	 	 	 	 	 	 	
 	protected $_completed_date;	 	 	
@@ -86,6 +89,30 @@ class LLLT_Model_Reminder {
     	
         return $this->_reminder_type_id;
     }
+
+    public function setReminder_type($val) {
+    	
+        $this->_reminder_type = $val;
+        
+        return $this;
+    }
+ 
+    public function getReminder_type() {
+    	
+        return $this->_reminder_type;
+    }
+
+    public function setAsset_type($val) {
+    	
+        $this->_asset_type = $val;
+        
+        return $this;
+    }
+ 
+    public function getAsset_type() {
+    	
+        return $this->_asset_type;
+    }
      	
     public function setAsset_id($val) {
     	
@@ -97,6 +124,18 @@ class LLLT_Model_Reminder {
     public function getAsset_id() {
     	
         return $this->_asset_id;
+    }
+
+    public function setAsset_name($val) {
+    	
+        $this->_asset_name = $val;
+        
+        return $this;
+    }
+ 
+    public function getAsset_name() {
+    	
+        return $this->_asset_name;
     }
         
     public function setEmployee_id($val) {

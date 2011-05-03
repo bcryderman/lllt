@@ -9,31 +9,28 @@ class IndexController extends Zend_Controller_SecureAction {
     	$auth = Zend_Auth::getInstance()->getIdentity(); 
     	
     	$reminderMapper = new LLLT_Model_ReminderMapper();
-    	$reminders = $reminderMapper->fetchAll('employee_id = ' . $auth['Employee']->getEmp_id(), 'due_date ASC');
+    	$reminders = $reminderMapper->fetchAll('employee_id = ' . $auth['Employee']->getEmp_id(), 
+											   array('due_date asc', 'reminder_type asc'));
 
-    	$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
-    	$assetTypes = $assetTypeMapper->fetchAll('active = 1', 'asset_type asc');
-    	
-    	$assetTypesArr = array();
-    	
-    	foreach ($assetTypes as $item) {
-    		
-    		$assetTypesArr[$item->getAsset_type_id()] = $item;
-    	}
-    	
-    	$assetMapper = new LLLT_Model_AssetMapper();
-    	$assets = $assetMapper->fetchAll('active = 1', 'asset_name ASC');
-    	
-   	 	$assetsArr = array();
-    	
-    	foreach ($assets as $item) {
-    		
-    		$assetsArr[$item->getAsset_id()] = $item;
-    	}
-    	    	
-    	$this->view->assetTypes = $assetTypesArr;
-    	$this->view->assets = $assetsArr;
     	$this->view->reminders = $reminders;
     }
+
+	public function tabulardataAction() {
+		
+		$this->_helper->layout()->disableLayout();
+		
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+
+		$auth = Zend_Auth::getInstance()->getIdentity();
+
+    	$reminderMapper = new LLLT_Model_ReminderMapper();
+    	$reminders = $reminderMapper->fetchAll('employee_id = ' . $auth['Employee']->getEmp_id(), 
+											   array($params['column'] . ' ' . $params['sort'], 'due_date asc'));
+
+    	$this->view->reminders = $reminders;
+
+		$this->renderScript('index/tabulardata.phtml');
+	}
 }
 

@@ -4,7 +4,7 @@ class LLLT_Model_Asset {
 
 	protected $_asset_id; 	 	 	 	 	 	
 	protected $_asset_type_id;	 
-	protected $_asset_type_name;
+	protected $_asset_type;
 	protected $_asset_name; 	 	 	 	 	
 	protected $_compartment_count; 	 	 	 	 	 	
 	protected $_active;
@@ -67,7 +67,7 @@ class LLLT_Model_Asset {
     
  	public function setAsset_id($val) {
     	
-        $this->_asset_id = $val;
+        $this->_asset_id = (int) $val;
         
         return $this;
     }
@@ -89,16 +89,16 @@ class LLLT_Model_Asset {
         return $this->_asset_type_id;
     }
 
- 	public function setAsset_type_name($val) {
+ 	public function setAsset_type($val) {
     	
-        $this->_asset_type_name = $val;
+        $this->_asset_type = $val;
         
         return $this;
     }
  
-    public function getAsset_type_name() {
+    public function getAsset_type() {
     	
-        return $this->_asset_type_name;
+        return $this->_asset_type;
     }
         
  	public function setAsset_name($val) {
