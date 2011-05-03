@@ -1,26 +1,42 @@
-<h3>Due in the next 30 days:</h3>
+<script src="/js/tableh.js"></script>
+<script>
+$(document).ready(function() {
+	
+	$('.tableh').tableh({ 'url': '/index/tabulardata' });
+});
+</script>
+<link rel="stylesheet" href="/css/tableh.css" />
 
-<table>
+<h3>Due in the next 30 days:</h3>
+<br />
+<table class="tableh">
 	<thead>
 		<tr>
-			<th>Reminder Type</th>
-			<th>Asset Type</th>
-			<th>Asset Name</th>
-			<th>Due Date</th>
-			<th>Completed Date</th>
-			<th>Notes</th>
+			<th column="rt.reminder_type">
+				<div class="header">Reminder Type</div>
+				<div class="sort"></div>
+			</th>
+			<th column="at.asset_type">
+				<div class="header">Asset Type</div>
+				<div class="sort"></div>
+			</th>
+			<th column="a.asset_name">
+				<div class="header">Asset Name</div>
+				<div class="sort"></div>
+			</th>
+			<th column="r.due_date">
+				<div class="header">Due Date</div>
+				<div class="sort asc"></div>
+			</th>
+			<th column="r.completed_date">
+				<div class="header">Completed Date</div>
+				<div class="sort"></div>
+			</th>
+			<th column="r.notes">
+				<div class="header">Notes</div>
+				<div class="sort"></div>
+			</th>
 		</tr>
 	</thead>
-	<tbody>
-	<?php foreach ($this->reminders as $item) { ?>
-		<tr>
-			<td><?php echo $item->getReminder_type_id(); ?></td>
-			<td><?php echo $this->assetTypes[$this->assets[$item->getAsset_id()]->getAsset_type_id()]->getAsset_type(); ?></td>
-			<td><?php echo $this->assets[$item->getAsset_id()]->getAsset_name(); ?></td>
-			<td><?php echo $item->getDue_date(); ?></td>
-			<td><?php echo $item->getCompleted_date(); ?></td>
-			<td><?php echo $item->getNotes(); ?></td>
-		</tr>
-	<?php } ?>
-	</tbody>
+	<?php echo $this->partial('/index/tabulardata.phtml', array('reminders' => $this->reminders)); ?>
 </table>

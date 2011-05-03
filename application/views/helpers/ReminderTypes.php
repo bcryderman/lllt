@@ -6,15 +6,15 @@ class Zend_View_Helper_Remindertypes {
  
     public function remindertypes($reminderTypeId = null) {
     	
-    	$remTypeMapper = new LLLT_Model_ReminderTypeMapper();
+    	$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
     	
     	if (is_null($reminderTypeId)) {
     		    		
-    		$this->_reminderTypes = $remTypeMapper->fetchAll('active = 1', 'reminder_type asc');
+    		$this->_reminderTypes = $reminderTypeMapper->fetchAll('active = 1', 'reminder_type asc');
     	}
     	else {
     	
-    		$this->_reminderTypes = $remTypeMapper->find($reminderTypeId);
+    		$this->_reminderTypes = $reminderTypeMapper->find($reminderTypeId);
     	}
 
     	return $this->_reminderTypes; 

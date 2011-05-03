@@ -1,0 +1,12 @@
+<tbody>
+<?php foreach($this->reminderTypes as $item) { ?>
+	<tr>
+		<td><?php echo $item->getReminder_type(); ?></td>
+		<td><?php echo $item->getActive(); ?></td>
+		<td><?php echo $item->getDescription(); ?></td>
+		<td><?php echo $item->getAsset_or_employee(); ?></td>
+		<td><a href="/remindertypes/edit/reminder_type_id/<?php echo $item->getReminder_type_id(); ?>">Edit</a></td>
+		<td><a href="/remindertypes/delete/reminder_type_id/<?php echo $item->getReminder_type_id(); ?>">Delete</a></td>
+	</tr>
+<?php } ?>
+</tbody>

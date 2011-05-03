@@ -10,7 +10,7 @@
 			
 			foreach ($this->reminderTypes() as $item) {
  
-				if (isset($this->params['reminder_type_id']) && $this->params['reminder_type_id'] === $item->getReminder_type_id()) {
+				if (isset($this->params['reminder_type_id']) && $this->params['reminder_type_id'] == $item->getReminder_type_id()) {
 					
 					echo '<option value="' . $item->getReminder_type_id() . '" selected>' . $item->getReminder_type() . '</option>';
 				}
@@ -32,7 +32,7 @@
 			
 			foreach ($this->assets() as $item) {
  
-				if (isset($this->params['asset_id']) && $this->params['asset_id'] === $item->getAsset_id()) {
+				if (isset($this->params['asset_id']) && $this->params['asset_id'] == $item->getAsset_id()) {
 					
 					echo '<option value="' . $item->getAsset_id() . '" selected>' . $item->getAsset_name() . '</option>';
 				}
@@ -40,7 +40,7 @@
 					
 					echo '<option value="' . $item->getAsset_id() . '">' . $item->getAsset_name() . '</option>';
 				}   		
-    		}
+    		} 
     		
     		?>
 		</select>
@@ -48,14 +48,16 @@
 	<?php if (isset($this->errors['asset_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['asset_id']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="due_date">Due Date:</label>
-		<input type="text" name="due_date" class="datepicker" <?php if (isset($this->params['due_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['due_date']) . '"'; } ?>
-															  <?php if (isset($this->params['due_date']) && isset($this->errors)) { echo 'value="' . $this->params['due_date'] . '"'; } ?> />
+		<input type="text" name="due_date" class="datepicker" 
+			<?php if (isset($this->params['due_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['due_date']) . '"'; } ?>
+			<?php if (isset($this->params['due_date']) && isset($this->errors)) { echo 'value="' . $this->params['due_date'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['due_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['due_date']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="completed_date">Completed Date:</label>
-		<input type="text" name="completed_date" class="datepicker" <?php if (isset($this->params['completed_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['completed_date']) . '"'; } ?>
-																	<?php if (isset($this->params['completed_date']) && isset($this->errors)) { echo 'value="' . $this->params['completed_date'] . '"'; } ?> />
+		<input type="text" name="completed_date" class="datepicker" 
+			<?php if (isset($this->params['completed_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['completed_date']) . '"'; } ?>
+			<?php if (isset($this->params['completed_date']) && isset($this->errors)) { echo 'value="' . $this->params['completed_date'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['completed_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['completed_date']; ?></div><?php } ?>
 	<div class="form-wrapper">

@@ -6,7 +6,6 @@ class LLLT_Model_RouteType {
  	protected $_route_type;
  	protected $_active;
  	protected $_description;
-
  	
     public function __construct(array $options = null) {
         

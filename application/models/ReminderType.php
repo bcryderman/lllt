@@ -22,7 +22,7 @@ class LLLT_Model_ReminderType {
         
         if (('mapper' == $name) || !method_exists($this, $method)) {
         	
-            throw new Exception('Invalid login property');
+            throw new Exception('Invalid reminder type property');
         }
         
         $this->$method($value);
@@ -34,7 +34,7 @@ class LLLT_Model_ReminderType {
         
         if (('mapper' == $name) || !method_exists($this, $method)) {
         	
-            throw new Exception('Invalid login property');
+            throw new Exception('Invalid reminder type property');
         }
         
         return $this->$method();

@@ -1,15 +1,10 @@
 <div id="header">
 	<div id="header-left">
-		<div id="logo">
-			<a href="/">
-				<img src="/images/logo.jpg"/>
-			</a>
-		</div>					
+		<div id="logo"><a href="/"><img src="/images/logo.jpg"/></a></div>	
+		<div id="title"><?php echo $this->title; ?>	</div>			
 		<?php echo $this->render('nav.phtml') ?>	
 	</div>
 	<div id="header-right">
-		<div>
-			<a href="/auth/logout">Logout</a>
-		</div>
+		<div><a href="/auth/logout">Logout</a></div>
 	</div>	
 </div>

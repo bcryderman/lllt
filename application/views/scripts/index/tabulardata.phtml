@@ -1,0 +1,12 @@
+<tbody>
+<?php foreach ($this->reminders as $item) { ?>
+	<tr>
+		<td><?php echo $item->getReminder_type(); ?></td>
+		<td><?php echo $item->getAsset_type(); ?></td>
+		<td><?php echo $item->getAsset_name() ?></td>
+		<td><?php echo $item->getDue_date(); ?></td>
+		<td><?php echo $item->getCompleted_date(); ?></td>
+		<td><?php echo $item->getNotes(); ?></td>
+	</tr>
+<?php } ?>
+</tbody>

@@ -44,7 +44,8 @@ class LLLT_Model_ReminderMapper {
 	    			  'last_updated'     => $reminder->getLast_updated(),
 	    			  'last_updated_by'  => $reminder->getLast_updated_by());
 	  	    	    	
-	    $reminderId = $this->getDbTable()->insert($data);
+	    $reminderId = $this->getDbTable()
+						   ->insert($data);
 	    
 	    return $reminderId;
     }
@@ -62,16 +63,20 @@ class LLLT_Model_ReminderMapper {
 	    			  'last_updated'     => $reminder->getLast_updated(),
 	    			  'last_updated_by'  => $reminder->getLast_updated_by());
 	  	    	    	
-	    $reminderId = $this->getDbTable()->insert($data);
+	    $reminderId = $this->getDbTable()
+						   ->insert($data);
 	    
 	    return $reminderId;
     }
     
     public function delete(LLLT_Model_Reminder $reminder) {
     	
-    	$where = $this->getDbTable()->getAdapter()->quoteInto('reminder_id = ?', $reminder->getReminder_id());
+    	$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('reminder_id = ?', $reminder->getReminder_id());
 			
-    	$this->getDbTable()->delete($where);
+    	$this->getDbTable()
+			 ->delete($where);
     }
     
     public function edit(LLLT_Model_Reminder $reminder) {
@@ -84,62 +89,119 @@ class LLLT_Model_ReminderMapper {
 	    			  'last_updated'     => $reminder->getLast_updated(),
 	    			  'last_updated_by'  => $reminder->getLast_updated_by());
     	 
-		$where = $this->getDbTable()->getAdapter()->quoteInto('reminder_id = ?', $reminder->getReminder_id());
+		$where = $this->getDbTable()
+				      ->getAdapter()
+					  ->quoteInto('reminder_id = ?', $reminder->getReminder_id());
 
-		$this->getDbTable()->update($data, $where);
+		$this->getDbTable()
+			 ->update($data, $where);
     }
      
-    public function fetchAll($where = null, $order = null) {
+    public function fetchAll($where, $order) {
     	
-        $resultSet = $this->getDbTable()->fetchAll($where, $order);
+		if ($where === null) {
+			
+			$resultSet = $this->getDbTable()
+							  ->fetchAll($this->getDbTable()
+											  ->select()
+											  ->setIntegrityCheck(false)
+											  ->from(array('r' => 'tbl_reminder'))											
+											  ->order($order)
+											  ->join(array('rt' => 'tbl_reminder_type'),
+													 'r.reminder_type_id = rt.reminder_type_id',
+													 array('reminder_type'))
+											  ->join(array('a' => 'tbl_asset'),
+													 'r.asset_id = a.asset_id',
+													 array('asset_name'))
+											  ->join(array('at' => 'tbl_asset_type'),
+													 'a.asset_type_id = at.asset_type_id',
+													 array('asset_type')));
+		}
+		else {
+			
+			$resultSet = $this->getDbTable()
+							  ->fetchAll($this->getDbTable()
+											  ->select()
+											  ->setIntegrityCheck(false)
+											  ->from(array('r' => 'tbl_reminder'))
+											  ->where($where)
+											  ->order($order)
+											  ->join(array('rt' => 'tbl_reminder_type'),
+													 'r.reminder_type_id = rt.reminder_type_id',
+													 array('reminder_type'))
+											  ->join(array('a' => 'tbl_asset'),
+													 'r.asset_id = a.asset_id',
+													 array('asset_name'))
+											  ->join(array('at' => 'tbl_asset_type'),
+													 'a.asset_type_id = at.asset_type_id',
+													 array('asset_type')));
+		}
         
-        $entries = array();
+        $reminders = array();
         
         foreach ($resultSet as $row) {
         	
-            $entry = new LLLT_Model_Reminder();
+            $reminder = new LLLT_Model_Reminder();
             
-        	$entry->setReminder_id($row->reminder_id)
-	        	  ->setReminder_type_id($row->reminder_type_id)
-	        	  ->setAsset_id($row->asset_id)
-	        	  ->setEmployee_id($row->employee_id)
-	        	  ->setDue_date($row->due_date)
-	        	  ->setCompleted_date($row->completed_date)
-	        	  ->setNotes($row->notes)
-	        	  ->setCreated($row->created)
-	        	  ->setCreated_by($row->created_by)
-	        	  ->setLast_updated($row->last_updated)
-	        	  ->setLast_updated_by($row->last_updated_by);
+        	$reminder->setReminder_id($row->reminder_id)
+	        	  	 ->setReminder_type_id($row->reminder_type_id)
+					 ->setReminder_type($row->reminder_type)
+					 ->setAsset_type($row->asset_type)
+	        	  	 ->setAsset_id($row->asset_id)
+					 ->setAsset_name($row->asset_name)
+	        	  	 ->setEmployee_id($row->employee_id)
+		        	 ->setDue_date($row->due_date)
+		        	 ->setCompleted_date($row->completed_date)
+		        	 ->setNotes($row->notes)
+		        	 ->setCreated($row->created)
+		        	 ->setCreated_by($row->created_by)
+		        	 ->setLast_updated($row->last_updated)
+		        	 ->setLast_updated_by($row->last_updated_by);
                   
-            $entries[] = $entry;            
+            $reminders[] = $reminder;            
         }
         
-        return $entries;
+        return $reminders;
     }
     
 	public function find($id) {
 		
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()->fetchRow($this->getDbTable()
+													 ->select()
+													 ->setIntegrityCheck(false)
+												     ->from(array('r' => 'tbl_reminder'))
+												     ->where('reminder_id = ?', $id)	
+													 ->join(array('rt' => 'tbl_reminder_type'),
+															'r.reminder_type_id = rt.reminder_type_id',
+															array('reminder_type'))
+													 ->join(array('a' => 'tbl_asset'),
+															'r.asset_id = a.asset_id',
+															array('asset_name'))
+													 ->join(array('at' => 'tbl_asset_type'),
+															'a.asset_type_id = at.asset_type_id',
+															array('asset_type')));
         
         if (0 == count($result)) {
         	
             return 'The reminder could not be found.';
         }
-        
-        $row = $result->current();
-        
-        $reminder = new LLLT_Model_Reminder();
-        $reminder->setReminder_id($row->reminder_id);
-	    $reminder->setReminder_type_id($row->reminder_type_id);
-	    $reminder->setAsset_id($row->asset_id);
-	    $reminder->setEmployee_id($row->employee_id);
-	    $reminder->setDue_date($row->due_date);
-	    $reminder->setCompleted_date($row->completed_date);
-	    $reminder->setNotes($row->notes);	
-	    $reminder->setCreated($row->created);
-    	$reminder->setCreated_by($row->created_by);
-    	$reminder->setLast_updated($row->last_updated);
-    	$reminder->setLast_updated_by($row->last_updated_by);
+                
+		$reminder = new LLLT_Model_Reminder();
+
+    	$reminder->setReminder_id($result->reminder_id)
+        	  	 ->setReminder_type_id($result->reminder_type_id)
+				 ->setReminder_type($result->reminder_type)
+				 ->setAsset_type($result->asset_type)
+        	  	 ->setAsset_id($result->asset_id)
+				 ->setAsset_name($result->asset_name)
+        	  	 ->setEmployee_id($result->employee_id)
+	        	 ->setDue_date($result->due_date)
+	        	 ->setCompleted_date($result->completed_date)
+	        	 ->setNotes($result->notes)
+	        	 ->setCreated($result->created)
+	        	 ->setCreated_by($result->created_by)
+	        	 ->setLast_updated($result->last_updated)
+	        	 ->setLast_updated_by($result->last_updated_by);
 	        	
 	    return $reminder;
     }

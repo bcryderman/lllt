@@ -4,10 +4,12 @@ class LLLT_Model_Asset {
 
 	protected $_asset_id; 	 	 	 	 	 	
 	protected $_asset_type_id;	 
+	protected $_asset_type;
 	protected $_asset_name; 	 	 	 	 	
 	protected $_compartment_count; 	 	 	 	 	 	
 	protected $_active;
 	protected $_customer_id;
+	protected $_customer_name;
 	protected $_navman_vehicle_id;
 	protected $_created;
 	protected $_created_by;
@@ -28,7 +30,7 @@ class LLLT_Model_Asset {
         
         if (('mapper' == $name) || !method_exists($this, $method)) {
         	
-            throw new Exception('Invalid asset type property');
+            throw new Exception('Invalid asset property');
         }
         
         $this->$method($value);
@@ -40,7 +42,7 @@ class LLLT_Model_Asset {
         
         if (('mapper' == $name) || !method_exists($this, $method)) {
         	
-            throw new Exception('Invalid asset type property');
+            throw new Exception('Invalid asset property');
         }
         
         return $this->$method();
@@ -65,7 +67,7 @@ class LLLT_Model_Asset {
     
  	public function setAsset_id($val) {
     	
-        $this->_asset_id = $val;
+        $this->_asset_id = (int) $val;
         
         return $this;
     }
@@ -85,6 +87,18 @@ class LLLT_Model_Asset {
     public function getAsset_type_id() {
     	
         return $this->_asset_type_id;
+    }
+
+ 	public function setAsset_type($val) {
+    	
+        $this->_asset_type = $val;
+        
+        return $this;
+    }
+ 
+    public function getAsset_type() {
+    	
+        return $this->_asset_type;
     }
         
  	public function setAsset_name($val) {
@@ -142,6 +156,18 @@ class LLLT_Model_Asset {
         return $this->_customer_id;
     }
     
+    public function setCustomer_name($val) {
+    	
+        $this->_customer_name = $val;
+        
+        return $this;
+    }
+ 
+    public function getCustomer_name() {
+    	
+        return $this->_customer_name;
+    }
+
     public function setNavman_vehicle_id($val) {
     	
         $this->_navman_vehicle_id = $val;

@@ -10,11 +10,11 @@ $(function() {
 </script>
 <link rel="stylesheet" href="/css/assets/assets.css" />
 
-<div class="form-header">Are you sure you want to delete the following asset?</div>
-<form id="assets-delete-form" action="/assets/delete/asset_id/<?php echo $this->params['asset_id']; ?>" method="post">
+<div class="form-header">Are you sure you want to delete the following Asset?</div>
+<form id="assets-delete-form" class="delete" action="/assets/delete/asset_id/<?php echo $this->params['asset_id']; ?>" method="post">
 	<div class="form-wrapper">
 		<label>Asset Type:</label>
-		<?php echo $this->assettypes($this->asset->getAsset_type_id())->getAsset_type(); ?>
+		<?php echo $this->asset->getAsset_type(); ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Asset:</label>
@@ -26,15 +26,15 @@ $(function() {
 	</div>
 	<div class="form-wrapper">
 		<label>Active:</label>
-		<?php if ($this->asset->getActive() === 1) { echo 'Yes'; } else { echo 'No'; } ?>
+		<?php echo $this->asset->getActive(); ?>
 	</div>	
 	<div class="form-wrapper">
 		<label>Customer:</label>
-		<?php echo $this->customers($this->asset->getCustomer_id())->getName(); ?>
+		<?php echo $this->asset->getCustomer_name(); ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Navman Vehicle ID:</label>
-		<?php echo $this->asset->getNavman_vehicle_id(); ?>
+		<?php if (strlen($this->asset->getNavman_vehicle_id()) > 0) { echo $this->asset->getNavman_vehicle_id(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper form-controls">
 		<input type="submit" value="Delete" />

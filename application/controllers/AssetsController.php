@@ -2,7 +2,10 @@
 
 class AssetsController extends Zend_Controller_Action {
 
-    public function init() {}
+    public function init() {
+	
+		$this->view->title = 'Assets';
+	}
 
 	public function addAction() {
     	
@@ -21,11 +24,11 @@ class AssetsController extends Zend_Controller_Action {
 		    			    	
 		    	$asset = new LLLT_Model_Asset();
 		    	$asset->setAsset_type_id($params['asset_type_id']);
-		    	$asset->setAsset_name($params['asset_name']);
+		    	$asset->setAsset_name(trim($params['asset_name']));
 		    	$asset->setCompartment_count($params['compartment_count']);
 				$asset->setActive($params['active']);
 				$asset->setCustomer_id($params['customer_id']);
-				$asset->setNavman_vehicle_id($params['navman_vehicle_id']);
+				$asset->setNavman_vehicle_id(trim($params['navman_vehicle_id']));
 		    	$asset->setCreated($date);
 	    		$asset->setCreated_by($auth['Employee']->getEmp_id());
 	    		$asset->setLast_updated($date);
@@ -83,11 +86,11 @@ class AssetsController extends Zend_Controller_Action {
 	    		$asset = new LLLT_Model_Asset();
 	    		$asset->setAsset_id($params['asset_id']);
 		    	$asset->setAsset_type_id($params['asset_type_id']);
-		    	$asset->setAsset_name($params['asset_name']);
+		    	$asset->setAsset_name(trim($params['asset_name']));
 		    	$asset->setCompartment_count($params['compartment_count']);
 				$asset->setActive($params['active']);
 				$asset->setCustomer_id($params['customer_id']);
-				$asset->setNavman_vehicle_id($params['navman_vehicle_id']);
+				$asset->setNavman_vehicle_id(trim($params['navman_vehicle_id']));
 	    		$asset->setLast_updated($date);
 	    		$asset->setLast_updated_by($auth['Employee']->getEmp_id());
 		    	
@@ -123,35 +126,29 @@ class AssetsController extends Zend_Controller_Action {
 
     	$this->renderScript('assets/form.phtml');
     }
+
+	public function tabulardataAction() {
+		
+		$this->_helper->layout()->disableLayout();
+		
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+
+    	$assetMapper = new LLLT_Model_AssetMapper();
+    	$assets = $assetMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'], 
+													 'asset_name ' . $params['sort']));
+
+    	$this->view->assets = $assets;
+
+		$this->renderScript('assets/tabulardata.phtml');
+	}
     
     public function viewAction() {
     	
     	$assetMapper = new LLLT_Model_AssetMapper();
-    	$assets = $assetMapper->fetchAll(null, 'asset_name ASC');
-
-    	$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
-    	$assetTypes = $assetTypeMapper->fetchAll('active = 1', 'asset_type asc');
-    	
-    	$assetTypesArr = array();
-    	
-    	foreach ($assetTypes as $item) {
-    		
-    		$assetTypesArr[$item->getAsset_type_id()] = $item;
-    	}
-    	
-    	$customerMapper = new LLLT_Model_CustomerMapper();
-    	$customers = $customerMapper->fetchAll(null, 'name asc');
-    	
-   	 	$customersArr = array();
-    	
-    	foreach ($customers as $item) {
-    		
-    		$customersArr[$item->getCustomer_id()] = $item;
-    	}
+    	$assets = $assetMapper->fetchAll(null, 'asset_name asc');
 
     	$this->view->assets = $assets;
-    	$this->view->assetTypes = $assetTypesArr;
-    	$this->view->customers = $customersArr;
     }
     
 	public function validation($params) {

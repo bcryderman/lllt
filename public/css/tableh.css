@@ -1,0 +1,57 @@
+.tableh {
+	border: solid 1px #999;	
+}
+
+.tableh th {
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.1, rgb(199, 199, 199)),
+	    color-stop(0.55, rgb(242, 242, 242))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(199, 199, 199) 10%,
+	    rgb(242, 242, 242) 55%
+	);	
+	border-left: solid 1px #999;
+	border-right: solid 1px #999;
+	border-top: solid 1px #999;
+}
+
+.tableh td {	
+	border-left: solid 1px #999;
+	border-right: solid 1px #999;
+	border-top: solid 1px #999;
+}
+
+.tableh th.edit, .tableh th.delete, .tableh th.copy {
+	border: none;
+}
+
+.tableh th, .tableh td {
+	height: 25px;
+	line-height: 25px;
+	padding: 0 10px;
+}
+
+.tableh .header {
+	float: left;
+}
+
+.tableh .sort {
+	float: left;
+	height: 25px;
+	line-height: 25px;
+	margin-left: 8px;
+	width: 12px;	
+}
+
+.tableh .sort.asc {
+	background: url('/images/arrow-up.gif') 50% no-repeat;
+}
+
+.tableh .sort.desc {
+	background: url('/images/arrow-down.gif') 50% no-repeat;
+}

@@ -10,15 +10,15 @@ $(function() {
 </script>
 <link rel="stylesheet" href="/css/reminders/reminders.css" />
 
-<div class="form-header">Are you sure you want to delete the following reminder?</div>
-<form id="reminders-delete-form" action="/reminders/delete/reminder_id/<?php echo $this->params['reminder_id']; ?>" method="post">
+<div class="form-header">Are you sure you want to delete the following Reminder?</div>
+<form id="reminders-delete-form" class="delete" action="/reminders/delete/reminder_id/<?php echo $this->params['reminder_id']; ?>" method="post">
 	<div class="form-wrapper">
 		<label>Reminder Type:</label>
-		<?php echo $this->remindertypes($this->reminder->getReminder_type_id())->getReminder_type(); ?>
+		<?php echo $this->reminder->getReminder_type(); ?>
 	</div>
 	<div class="form-wrapper">
-		<label>Asset:</label>
-		<?php echo $this->assets($this->reminder->getAsset_id())->getAsset_name(); ?>
+		<label>Asset Name:</label>
+		<?php echo $this->reminder->getAsset_name(); ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Due Date:</label>
@@ -26,11 +26,11 @@ $(function() {
 	</div>
 	<div class="form-wrapper">
 		<label>Completed Date:</label>
-		<?php if (strlen($this->reminder->getCompleted_date()) > 0) { echo $this->reminder->getCompleted_date(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->reminder->getCompleted_date()) > 0) { echo $this->reminder->getCompleted_date(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Notes:</label>
-		<?php if (strlen($this->reminder->getNotes()) > 0) { echo $this->reminder->getNotes(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->reminder->getNotes()) > 0) { echo $this->reminder->getNotes(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper form-controls">
 		<input type="submit" value="Delete" />

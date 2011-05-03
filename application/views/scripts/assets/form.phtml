@@ -31,7 +31,7 @@
 	</div>
 	<?php if (isset($this->errors['asset_name'])) { ?><div class="error-wrapper"><?php echo $this->errors['asset_name']; ?></div><?php } ?>
 	<div class="form-wrapper">
-		<label for="asset_name">Compartment Count:</label>
+		<label for="compartment_count">Compartment Count:</label>
 		<input type="text" name="compartment_count" class="numeric" maxlength="6" size="6"
 			<?php if (isset($this->params['compartment_count'])) { echo 'value="' . $this->params['compartment_count'] . '"'; } ?> />
 	</div>

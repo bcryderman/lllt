@@ -2,7 +2,10 @@
 
 class RemindertypesController extends Zend_Controller_Action {
 
-    public function init() {}
+    public function init() {
+	
+		$this->view->title = 'Reminder Types';
+	}
 
     public function addAction() {
     	
@@ -16,14 +19,14 @@ class RemindertypesController extends Zend_Controller_Action {
 
 		    if (empty($errors)) {
 		    	
-		    	$remType = new LLLT_Model_ReminderType();
-		    	$remType->setReminder_type(trim($params['reminder_type']));
-		    	$remType->setActive($params['active']);
-		    	$remType->setDescription(trim($params['description']));
-		    	$remType->setAsset_or_employee($params['asset_or_employee']);		    	
+		    	$reminderType = new LLLT_Model_ReminderType();
+		    	$reminderType->setReminder_type(trim($params['reminder_type']));
+		    	$reminderType->setActive($params['active']);
+		    	$reminderType->setDescription(trim($params['description']));
+		    	$reminderType->setAsset_or_employee($params['asset_or_employee']);		    	
 		    	
-		    	$remTypeMapper = new LLLT_Model_ReminderTypeMapper();
-		    	$remTypeMapper->add($remType);
+		    	$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
+		    	$reminderTypeMapper->add($reminderType);
 		    	
 		    	$this->_redirect('remindertypes/view');
 		    }
@@ -43,17 +46,17 @@ class RemindertypesController extends Zend_Controller_Action {
     	$request = $this->getRequest();
     	$params = $request->getParams();
     	
-    	$remTypeMapper = new LLLT_Model_ReminderTypeMapper();
-	    $remType = $remTypeMapper->find($params['reminder_type_id']);
+    	$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
+	    $reminderType = $reminderTypeMapper->find($params['reminder_type_id']);
 	    	
     	if ($request->isPost()) {
     		
-    		$remTypeMapper->delete($remType);
+    		$reminderTypeMapper->delete($reminderType);
 	    	
 	    	$this->_redirect('remindertypes/view');
     	}    	
      	
-    	$this->view->remType = $remType;	
+    	$this->view->reminderType = $reminderType;	
     	$this->view->params = $params;
     }
     
@@ -68,15 +71,15 @@ class RemindertypesController extends Zend_Controller_Action {
 
 		    if (empty($errors)) {
 		    	
-		    	$remType = new LLLT_Model_ReminderType();
-		    	$remType->setReminder_type_id($params['reminder_type_id']);
-		    	$remType->setReminder_type(trim($params['reminder_type']));
-		    	$remType->setActive($params['active']);
-		    	$remType->setDescription(trim($params['description']));
-		    	$remType->setAsset_or_employee($params['asset_or_employee']);		    	
+		    	$reminderType = new LLLT_Model_ReminderType();
+		    	$reminderType->setReminder_type_id($params['reminder_type_id']);
+		    	$reminderType->setReminder_type(trim($params['reminder_type']));
+		    	$reminderType->setActive($params['active']);
+		    	$reminderType->setDescription(trim($params['description']));
+		    	$reminderType->setAsset_or_employee($params['asset_or_employee']);		    	
 		    	
-		    	$remTypeMapper = new LLLT_Model_ReminderTypeMapper();
-		    	$remTypeMapper->edit($remType);
+		    	$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
+		    	$reminderTypeMapper->edit($reminderType);
 		    	
 		    	$this->_redirect('remindertypes/view');
 		    }
@@ -90,14 +93,14 @@ class RemindertypesController extends Zend_Controller_Action {
 		}		
     	else {
     		
-	    	$remTypeMapper = new LLLT_Model_ReminderTypeMapper();
-	    	$remType = (array) $remTypeMapper->find($params['reminder_type_id']);
+	    	$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
+	    	$reminderType = (array) $reminderTypeMapper->find($params['reminder_type_id']);
 	    	    	
 	    	$fields = array();
 	    	
-	    	foreach ($remType as $k => $v) {
+	    	foreach ($reminderType as $k => $v) {
 	  
-	    		$fields[substr($k, 4)] = $remType[$k];
+	    		$fields[substr($k, 4)] = $reminderType[$k];
 	    	}
 	    	
 	    	$this->view->reminderTypeId = $params['reminder_type_id'];
@@ -107,13 +110,29 @@ class RemindertypesController extends Zend_Controller_Action {
 
     	$this->renderScript('remindertypes/form.phtml');
     }
+
+	public function tabulardataAction() {
+		
+		$this->_helper->layout()->disableLayout();
+		
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+
+		$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
+    	$reminderTypes = $reminderTypeMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'],
+																   'reminder_type ' . $params['sort']));
+    	
+    	$this->view->reminderTypes = $reminderTypes;
+
+		$this->renderScript('remindertypes/tabulardata.phtml');
+	}
     
     public function viewAction() {
     	
-    	$remTypeMapper = new LLLT_Model_ReminderTypeMapper();
-    	$remTypes = $remTypeMapper->fetchAll(null, 'reminder_type asc');
+    	$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
+    	$reminderTypes = $reminderTypeMapper->fetchAll(null, 'reminder_type asc');
     	
-    	$this->view->remTypes = $remTypes;
+    	$this->view->reminderTypes = $reminderTypes;
     }
     
     public function validation($params) {

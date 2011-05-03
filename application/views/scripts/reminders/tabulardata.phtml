@@ -1,0 +1,15 @@
+<tbody>
+<?php foreach ($this->reminders as $item) { ?>
+	<tr>
+		<td><?php echo $item->getReminder_type(); ?></td>
+		<td><?php echo $item->getAsset_type(); ?></td>
+		<td><?php echo $item->getAsset_name() ?></td>
+		<td><?php echo $item->getDue_date(); ?></td>
+		<td><?php echo $item->getCompleted_date(); ?></td>
+		<td><?php echo $item->getNotes(); ?></td>
+		<td><a href="/reminders/edit/reminder_id/<?php echo $item->getReminder_id(); ?>">Edit</a></td>
+		<td><a href="/reminders/copy/reminder_id/<?php echo $item->getReminder_id(); ?>">Copy</a></td>
+		<td><a href="/reminders/delete/reminder_id/<?php echo $item->getReminder_id(); ?>">Delete</a></td>
+	</tr>
+<?php } ?>
+</tbody>

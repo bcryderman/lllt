@@ -2,7 +2,10 @@
 
 class AssettypesController extends Zend_Controller_Action {
 
-    public function init() {}
+    public function init() {
+	
+		$this->view->title = 'Asset Types';
+	}
 
     public function addAction() {
     	
@@ -103,8 +106,24 @@ class AssettypesController extends Zend_Controller_Action {
 	    	$this->view->type = 'edit';
     	}    	
 
-    	$this->renderScript('Assettypes/form.phtml');
+    	$this->renderScript('assettypes/form.phtml');
     }
+
+	public function tabulardataAction() {
+		
+		$this->_helper->layout()->disableLayout();
+		
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+				
+		$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
+    	$assetTypes = $assetTypeMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'],
+														     'asset_type ' . $params['sort']));
+
+    	$this->view->assetTypes = $assetTypes;
+
+		$this->renderScript('assettypes/tabulardata.phtml');
+	}
     
     public function viewAction() {
     	
