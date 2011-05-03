@@ -1,149 +1,242 @@
 <?php
 class CustomercontactController extends Zend_Controller_Action {
 	
-	public function init()
-	{
-	}
-	
-	public function indexAction(){
-		
-		$contact_id= 123;
-		
-		$post_params = $this->_request->getPost();
-		
-    	$page_params = $this->_request->getParams();
-    	//_method options form,contact,customer,add,update or delete
-    	if(!isset($page_params['_method']))
+public $auth;
+    
+	public function init() {
+    $this->auth = Zend_Auth::getInstance()->getIdentity();
+    }
+    
+
+    public function addAction() {
+    	
+    	$request = $this->getRequest();
+    	$params = $request->getParams();
+	    if ($request->isPost()) {
+	    	
+	    	$errors = $this->validation($params);	    	
+
+		    if (empty($errors)) {
+		    	$date = date('Y-m-d H:i:s');
+		    	
+		    	$data = new LLLT_Model_Customer2();
+		    	$data->setActive(1);
+		    	$data->setName($params['name']);
+		    	$data->setAddr($params['addr']);
+		    	$data->setAddr2($params['addr2']);
+		    	$data->setCity($params['city']);
+		    	$data->setState($params['state']);
+		    	$data->setZip($params['zip']);
+		    	$data->setZip4($params['zip4']);
+		    	$data->setFein($params['fein']);
+		    	$data->setColor_code(str_replace('#','',$params['color_code']));
+		    	$data->setCustomer_type_id($params['customer_type_id']);
+		    	$data->setNotes(trim($params['notes']));
+		    	$data->setCreated($date);
+	    		$data->setCreated_by($this->auth['Employee']->getEmp_id());
+	    		$data->setLast_updated($date);
+	    		$data->setlast_updated_by($this->auth['Employee']->getEmp_id());
+		    			    	
+		    	$dataMapper = new LLLT_Model_CustomerMapper();
+		    	$dataMapper->add($data);
+		    	
+		    	$this->_redirect('customer2/view/customertype/'.$params['customer_type_id']);
+		    }
+		    else {
+		    	
+		    	$this->view->errors = $errors;
+		    	$this->view->params = $params;		    	
+		    }
+		}
+		$params['customer_type_id']=$params['customertype'];
+		$this->view->params = $params;
+		$this->view->type = 'add';
+		$this->renderScript('customer2/form.phtml');
+    }
+    
+ public function activeAction() {
+    	
+        $request = $this->getRequest();
+    	$params = $request->getParams();
+    	$this->_helper->layout->disableLayout();	
+    	if (isset($params['active'])) {
+
+		    	
+		    	$data = new LLLT_Model_Customer2();
+		    	$data->setCustomer_id($params['customerid']);
+		    	$data->setActive($params['active']);
+		    	$data->setLast_updated($date);
+	    		$data->setlast_updated_by($this->auth['Employee']->getEmp_id());		    	
+		    	
+		    	$dataMapper = new LLLT_Model_CustomerMapper();
+		    	$dataMapper->active($data);
+		    	$this->_redirect('customer2/view/customertype/'.$params['customertype']);
+		}		
+
+    }
+    
+    public function deleteAction() { 
+//	    
+//    	$request = $this->getRequest();
+//    	$params = $request->getParams();
+//    	
+//    	$dataMapper = new LLLT_Model_FuelsurchargeMapper();
+//	    $data = $dataMapper->find($params['fuelsurcharge']);
+//	    	
+//    	if ($request->isPost()) {
+//    		$fs = new LLLT_Model_Fuelsurcharge();
+//    		$fs->setId($params['fuelsurcharge']);
+//    		$dataMapper->delete($fs);
+//	    	
+//	    	$this->_redirect('fuelsurcharge/view');
+//    	}    	
+//
+//    	$this->view->data = $data;	
+//    	$this->view->params = $params;
+    }
+    
+    public function editAction() {
+    	
+        $request = $this->getRequest();
+    	$params = $request->getParams();
+    	
+	    if ($request->isPost()) {
+	    	
+	    	$errors = $this->validation($params);	    	
+
+		    if (empty($errors)) {
+		    	
+		    	$date = date('Y-m-d H:i:s');
+		    	
+		    	$data = new LLLT_Model_Customer2();
+		    	$data->setCustomer_id($params['customer_id']);
+		    	$data->setName($params['name']);
+		    	$data->setAddr($params['addr']);
+		    	$data->setAddr2($params['addr2']);
+		    	$data->setCity($params['city']);
+		    	$data->setState($params['state']);
+		    	$data->setZip($params['zip']);
+		    	$data->setZip4($params['zip4']);
+		    	$data->setFein($params['state']);
+		    	$data->setColor_code(str_replace('#','',$params['color_code']));
+		    	$data->setNotes(trim($params['notes']));
+	    		$data->setLast_updated($date);
+	    		$data->setlast_updated_by($this->auth['Employee']->getEmp_id());		    	
+		    	
+		    	$dataMapper = new LLLT_Model_CustomerMapper();
+		    	$dataMapper->edit($data);
+		    	
+		    	$this->_redirect('customer2/view/customertype/'.$params['customer_type_id']);
+		    }
+		    else {
+		    	
+		    	$this->view->errors = $errors;
+		    	$this->view->params = $params;	
+		    	$this->view->type = 'edit';	    	
+		    }
+		}		
+    	else {
+    		
+	    	$dataMapper = new LLLT_Model_CustomerMapper();
+			$fs = (array) $dataMapper->find($params['customerid']);
+	    	
+
+	    	$fields = array();
+
+	    	foreach ($fs as $k => $v) {
+
+	    		$fields[substr($k, 4)] = $fs[$k];
+	    	}
+
+	    	$this->view->id = $params['customerid'];
+	    	$this->view->params = $fields;  
+	    	$this->view->type = 'edit';
+    	}    	
+
+    	$this->renderScript('customer2/form.phtml');
+    }
+    
+    public function viewAction() {
+    	$request = $this->getRequest();
+    	$params = $request->getParams();
+    	$where = null;
+    	$this->view->header = 'All';
+    	if(isset($params['customerid']))
     	{
-    		echo 'Invalid Method Chosen';
+    		$where['customer_id = ?']= $params['customerid'];
+    		if(isset($params['active']))
+    		{
+    			$where['active = ?']= $params['active'];
+    			$this->view->active = $params['active'];
+    			
+    		}
+    		else
+    		{
+    			$where['active = ?']= 1;
+    			$this->view->active = 1;
+    		}
+    		
     	}
 
-    	elseif($page_params['_method']=='contact')
-    	{
-    		$this->contactAction();
-    		$this->render($page_params['_method']);
+    	$dataMapper = new LLLT_Model_CustomercontactMapper();
+    	$data = $dataMapper->fetchAll($where , 'contact_id');
+    	$this->view->contactid = $params['customertype'];
+
+    	$this->view->data = $data;
+    }
+    
+    public function searchAction(){
+    	//$ratesMapper = new LLLT_Model_RatesMapper();
+    	//$rates = $ratesMapper->fetchAll(null, 'start_date asc');
+    }
+    
+    public function validation($params) {
+    	
+    	$errors = array();
+	    	
+//    	if (empty($params['customer_id'])) {
+//    		
+//    		$errors['customer_id'] = 'You must enter a Customer.';
+//    	}
+//    	    	
+//        if (empty($params['start_date'])) {
+//    		
+//    		$errors['start_date'] = 'You must enter a Effective Date.';
+//    	}
+//       
+//    	if (empty($params['fuel_surcharge'])) {
+//    		
+//    		$errors['fuel_surcharge'] = 'You must enter a fuel surcharge.';
+//    	}
+
+    	
+    	return $errors;
+    }
+    
+    public function buildwhere($params){
+    	$retval=array();
+    	if (!empty($params['customer_id'])) {
+    		
+    		$retval['customer_id = ?']= $params['customer_id'];
     	}
-		elseif($page_params['_method']=='customer')
-    	{
-    		$this->_helper->layout->disableLayout();
-    		$this->customerAction();
-    		$this->render($page_params['_method']);
+        if (!empty($params['fuel_surcharge'])) {
+    		
+    		$retval['fuel_surcharge = ?']= $params['fuel_surcharge'];
     	}
-		elseif($page_params['_method']=='add'||$page_params['_method']=='update'||$page_params['_method']=='delete')
-    	{
+    	if (!empty($params['start_date'])&&!empty($params['end_date'])) {
     		
-    		$form = true;
-    		if(isset($post_params)&&isset($post_params['formtype']))
-    		{
-    			$post_params['last_updated']=new Zend_Db_Expr('CURDATE()');
-    			$post_params['last_updated_by']=$contact_id;
-    			$form = false;
-    			//Remove formtype from the array
-    			 unset($post_params['formtype']);
-    		}
-    		
-    		
-    		if($page_params['_method']=='add' && !$form)
-    		{
-    			$this->_helper->layout->disableLayout();
-    			$post_params['created']=new Zend_Db_Expr('CURDATE()');
-    			$post_params['created_by']=$contact_id;
-    			$this->add($post_params);
-    		}
-    		else if($page_params['_method']=='add' && $form)
-    		{
-    			$this->_helper->layout->disableLayout();
-    			$this->addAction();
-    			$this->render($page_params['_method']);
-    		}
-    		else if($page_params['_method']=='update' && $form)
-    		{
-    			$this->_helper->layout->disableLayout();
-    			$this->updateAction();
-    			$this->render($page_params['_method']);
-    		}
-    	    else if($page_params['_method']=='update' && !$form)
-    		{
-    			$this->_helper->layout->disableLayout();
-    			$this->update($post_params);
-   				$this->customerAction();
-   				$this->render('customer');
-    		}
-    	    else if($page_params['_method']=='delete' && !$form)
-    		{
-    			$this->_helper->layout->disableLayout();
-    			$this->update($post_params);
-
-    		}
-    		
+    		$retval['start_date >= ?']= date('Y-m-d', strtotime($params['start_date']));
+    		$retval['start_date <= ?']= date('Y-m-d', strtotime($params['end_date']));
     	}
-
-	}
-	
-	public function formAction(){
-		$data = new LLLT_Model_Customercontact();
-		$post_params = $this->_request->getPost();
-    	$page_params = $this->_request->getParams();
+       if (!empty($params['start_date'])&& empty($params['end_date'])) {
+    		
+    		$retval['start_date = ?']= date('Y-m-d', strtotime($params['start_date']));
+    	}
+   
+    	if(count($retval)==0){
+    		$retval = null;
+    	}
+    	return $retval;
     	
-    	$this->view->contact_data = $data->sel_customer_by_contact($page_params['_contact_id']);
-	}
-	
-	public function contactAction(){
-		$data = new LLLT_Model_Customercontact();
-		$post_params = $this->_request->getPost();
-    	$page_params = $this->_request->getParams();
-    	
-    	$this->view->contact_data = $data->sel_customer_by_contact($page_params['_contact_id']);
-	}
-
-	
-	public function customerAction(){
-		
-		$data = new LLLT_Model_Customercontact();
-		$post_params = $this->_request->getPost();
-    	$page_params = $this->_request->getParams();
-    	if(isset($page_params['_customer_id']))
-    	{$customer_id = $page_params['_customer_id'];}
-    	else
-    	{$customer_id =$page_params['customer_id'];}
-    	
-    	$this->view->contact_data = $data->sel_customer_by_customer($customer_id);
-	}
-	
-	public function update($post_params){
-		$data = new LLLT_Model_Customercontact();
-		$retval = $data->upd_customer_contact($post_params['contact_id'],$post_params);
-		return $retval;
-	}
-	
-	public function updateAction(){
-		$page_params = $this->_request->getParams();
-		$data = new LLLT_Model_Customercontact();
-		$page_params['contact_data']=$data->sel_customer_by_contact($page_params['_contact_id']);
-		$this->view->page_params = $page_params;
-
-	}
-	
-	public function addAction(){
-	
-		$this->view->page_params = $this->_request->getParams();
-  
-	}
-	
-	public function add($post_params)
-	{
-		if (isset($post_parms['contact_id']))
-		{unset($post_params['contact_id']);}
-		$data = new LLLT_Model_Customercontact();
-		$retval = $data->ins_customer_contact($post_params);
-		return $retval;
-	}
-	
-	public function deleteAction(){
-		$data = new LLLT_Model_Customercontact();
-		$post_params = $this->_request->getPost();
-    	$page_params = $this->_request->getParams();
-    	
-    	//$this->view->contact_data = $data->sel_customer_by_contact($page_params['_contact_id']);
-	}
+    }
 }
