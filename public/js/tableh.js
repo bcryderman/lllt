@@ -35,9 +35,9 @@
 				
 				var $this = $(this);
 				
-				$(this).find('th:not(.edit):not(.delete)').css('cursor', 'pointer');
+				$(this).find('th:not(.edit):not(.delete):not(.copy)').css('cursor', 'pointer');
 				
-				$(this).find('th:not(.edit):not(.delete)').click(function () {
+				$(this).find('th:not(.edit):not(.delete):not(.copy)').click(function () {
 				
 					if ($(this).children('.sort').hasClass('asc')) {
 						

@@ -14,17 +14,30 @@ body {
 }
 
 #header-left {
-	float: left;	
+	float: left;
+	height: 96px;	
 }
 
 #header-right {
 	float: right;
+	height: 96px;
 	padding: 25px 25px 0 0;
 }
 
 #logo {
+	float: left;
 	height: 65px;
 	width: 400px;
+}
+
+#title {
+	float: left;
+	font-size: 20px;
+	font-weight: bold;
+	height: 65px;
+	letter-spacing: 2px;
+	line-height: 65px;
+	text-shadow: 1px 1px 0 #306754;
 }
 
 /* Content */
@@ -42,6 +55,10 @@ label {
 	float: left;
 	margin-right: 10px;
 	text-align: right;
+}
+
+.delete label {
+	font-weight: bold;
 }
 
 .form-header {

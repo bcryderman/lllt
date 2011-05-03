@@ -26,7 +26,7 @@
 	border-top: solid 1px #999;
 }
 
-.tableh th.edit, .tableh th.delete {
+.tableh th.edit, .tableh th.delete, .tableh th.copy {
 	border: none;
 }
 
