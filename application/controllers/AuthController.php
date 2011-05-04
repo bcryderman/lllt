@@ -35,7 +35,16 @@ class AuthController extends Zend_Controller_Action {
 	    		$this->view->errors = $errors;
 		    	$this->view->params = $params;	
 	    	}	    	 	    				
-		}		
+		}	
+		else {
+			
+			$auth = Zend_Auth::getInstance();
+			
+			if ($auth->hasIdentity()) {
+			    
+				$this->_redirect('/');
+			}
+		}	
     }
     
     public function logoutAction() {  
