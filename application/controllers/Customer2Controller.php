@@ -1,7 +1,7 @@
 <?php
-class CustomercontactController extends Zend_Controller_Action {
+class Customer2Controller extends Zend_Controller_Action {
 	
-public $auth;
+	public $auth;
     
 	public function init() {
     $this->auth = Zend_Auth::getInstance()->getIdentity();
@@ -161,9 +161,9 @@ public $auth;
     	$params = $request->getParams();
     	$where = null;
     	$this->view->header = 'All';
-    	if(isset($params['customerid']))
+    	if(isset($params['customertype']))
     	{
-    		$where['customer_id = ?']= $params['customerid'];
+    		$where['customer_type_id = ?']= $params['customertype'];
     		if(isset($params['active']))
     		{
     			$where['active = ?']= $params['active'];
@@ -178,9 +178,9 @@ public $auth;
     		
     	}
 
-    	$dataMapper = new LLLT_Model_CustomercontactMapper();
-    	$data = $dataMapper->fetchAll($where , 'contact_id');
-    	$this->view->contactid = $params['customertype'];
+    	$dataMapper = new LLLT_Model_CustomerMapper();
+    	$data = $dataMapper->fetchAll($where , 'last_updated asc');
+    	$this->view->customertype = $params['customertype'];
 
     	$this->view->data = $data;
     }
