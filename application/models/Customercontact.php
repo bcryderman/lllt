@@ -17,6 +17,7 @@ class LLLT_Model_Customercontact{
  	protected $_created_by;
  	protected $_last_updated;
  	protected $_last_updated_by;
+ 	protected $_customer_name;
  	
  	public function __construct(array $options = null) {
         
@@ -249,4 +250,16 @@ class LLLT_Model_Customercontact{
     	
         return $this->_last_updated_by;
     } 
+    
+    public function setCustomer_name($val) {
+    	
+        $this->_customer_name = $val;
+        
+        return $this;
+    }
+    
+    public function getCustomer_name() {
+    	
+        return $this->_customer_name;
+    }
 }
