@@ -2,7 +2,10 @@
 
 class CarrierdiscountsController extends Zend_Controller_Action {
 
-    public function init() {}
+    public function init() {
+	
+		$this->view->title = 'Carrier Discounts';
+	}
 
 	public function addAction() {
     	
@@ -127,24 +130,29 @@ class CarrierdiscountsController extends Zend_Controller_Action {
 
     	$this->renderScript('carrierdiscounts/form.phtml');
     }
+
+	public function tabulardataAction() {
+		
+		$this->_helper->layout()->disableLayout();
+		
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+
+    	$carrierDiscountMapper = new LLLT_Model_CarrierDiscountMapper();
+    	$carrierDiscounts = $carrierDiscountMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'], 
+													 					 'c.name ' . $params['sort']));
+
+    	$this->view->carrierDiscounts = $carrierDiscounts;
+
+		$this->renderScript('carrierdiscounts/tabulardata.phtml');
+	}
     
     public function viewAction() {
     	
 		$carrierDiscountMapper = new LLLT_Model_CarrierDiscountMapper();
-		$carrierDiscounts = $carrierDiscountMapper->fetchAll(null, 'start_date asc');
-		
-		$customerMapper = new LLLT_Model_CustomerMapper();
-		$customers = $customerMapper->fetchAll(null, 'name asc');
-		
-		$customersArr = array();
-    	
-    	foreach ($customers as $item) {
-    		
-    		$customersArr[$item->getCustomer_id()] = $item;
-    	}
+		$carrierDiscounts = $carrierDiscountMapper->fetchAll(null, 'c.name asc');
 		
     	$this->view->carrierDiscounts = $carrierDiscounts;
-		$this->view->customers = $customersArr;
     }
     
 	public function validation($params) {
@@ -160,7 +168,9 @@ class CarrierdiscountsController extends Zend_Controller_Action {
     		
     		$errors['start_date'] = 'You must enter a start date.';
     	}
-    	else if (!is_int((int) substr($params['start_date'], 0, 2)) || !is_int((int) substr($params['start_date'], 3, 2)) || !is_int((int) substr($params['start_date'], 6, 4)) ||    			 
+    	else if (!is_int((int) substr($params['start_date'], 0, 2)) || 
+				 !is_int((int) substr($params['start_date'], 3, 2)) || 
+				 !is_int((int) substr($params['start_date'], 6, 4)) ||    			 
     			 !checkdate((int) substr($params['start_date'], 0, 2), (int) substr($params['start_date'], 3, 2), (int) substr($params['start_date'], 6, 4))) {
     		
     		$errors['start_date'] = 'The start date you entered is formatted incorrectly.';    		
@@ -170,7 +180,9 @@ class CarrierdiscountsController extends Zend_Controller_Action {
     		
     		$errors['end_date'] = 'You must enter an end date.';
     	}
-    	else if (!is_int((int) substr($params['end_date'], 0, 2)) || !is_int((int) substr($params['end_date'], 3, 2)) || !is_int((int) substr($params['end_date'], 6, 4)) ||    			 
+    	else if (!is_int((int) substr($params['end_date'], 0, 2)) || 
+ 			 	 !is_int((int) substr($params['end_date'], 3, 2)) || 
+				 !is_int((int) substr($params['end_date'], 6, 4)) ||    			 
     			 !checkdate((int) substr($params['end_date'], 0, 2), (int) substr($params['end_date'], 3, 2), (int) substr($params['end_date'], 6, 4))) {
     		
     		$errors['end_date'] = 'The end date you entered is formatted incorrectly.';    		

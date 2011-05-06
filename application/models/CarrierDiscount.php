@@ -4,6 +4,7 @@ class LLLT_Model_CarrierDiscount {
 
 	protected $_id; 	 	 	 	 	 	
 	protected $_company_id;	 
+	protected $_customer_name;
 	protected $_start_date; 	 	 	 	 	
 	protected $_end_date; 	 	 	 	 	 	
 	protected $_discount;
@@ -83,6 +84,18 @@ class LLLT_Model_CarrierDiscount {
     public function getCompany_id() {
     	
         return $this->_company_id;
+    }
+
+ 	public function setCustomer_name($val) {
+    	
+        $this->_customer_name = $val;
+        
+        return $this;
+    }
+ 
+    public function getCustomer_name() {
+    	
+        return $this->_customer_name;
     }
         
  	public function setStart_date($val) {

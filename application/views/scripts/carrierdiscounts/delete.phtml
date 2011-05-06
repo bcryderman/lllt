@@ -10,8 +10,8 @@ $(function() {
 </script>
 <link rel="stylesheet" href="/css/carrierdiscounts/carrierdiscounts.css" />
 
-<div class="form-header">Are you sure you want to delete the following carrier discount?</div>
-<form id="carrierdiscounts-delete-form" action="/carrierdiscounts/delete/id/<?php echo $this->params['id']; ?>" method="post">
+<div class="form-header">Are you sure you want to delete the following Carrier Discount?</div>
+<form id="carrierdiscounts-delete-form" class="delete" action="/carrierdiscounts/delete/id/<?php echo $this->params['id']; ?>" method="post">
 	<div class="form-wrapper">
 		<label>Company:</label>
 		<?php echo $this->company->getName(); ?>
@@ -22,7 +22,7 @@ $(function() {
 	</div>
 	<div class="form-wrapper">
 		<label>End Date:</label>
-		<?php echo $this->formatDate($this->carrierDiscount->getEnd_date()); ?>
+		<?php if (strlen($this->carrierDiscount->getEnd_Date()) !== 0) { echo $this->formatDate($this->carrierDiscount->getEnd_date()); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Discount:</label>

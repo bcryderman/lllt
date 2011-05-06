@@ -1,24 +1,34 @@
-<table>
+<script src="/js/tableh.js"></script>
+<script>
+$(document).ready(function() {
+	
+	$('.tableh').tableh({ 'url': '/carrierdiscounts/tabulardata' });
+});
+</script>
+<link rel="stylesheet" href="/css/tableh.css" />
+
+<table class="tableh">
 	<thead>
 		<tr>
-			<th>Company</th>
-			<th>State Date</th>
-			<th>End Date</th>
-			<th>Discount</th>
-			<th></th>
-			<th></th>
+			<th column="c.name">
+				<div class="header">Company</div>
+				<div class="sort asc"></div>
+			</th>
+			<th column="cd.start_date">
+				<div class="header">Start Date</div>
+				<div class="sort"></div>
+			</th>
+			<th column="cd.end_date">
+				<div class="header">End Date</div>
+				<div class="sort"></div>
+			</th>
+			<th column="cd.discount">
+				<div class="header">Discount</div>
+				<div class="sort"></div>
+			</th>
+			<th class="edit"></th>
+			<th class="delete"></th>
 		</tr>
 	</thead>
-	<tbody>
-	<?php foreach ($this->carrierDiscounts as $item) { ?>	
-		<tr>
-			<td><?php echo $this->customers[$item->getCompany_id()]->getName(); ?></td>
-			<td><?php echo $item->getStart_date(); ?></td>
-			<td><?php echo $item->getEnd_date(); ?></td>
-			<td><?php echo $item->getDiscount(); ?></td>
-			<td><a href="/carrierdiscounts/edit/id/<?php echo $item->getId(); ?>">Edit</a></td>
-			<td><a href="/carrierdiscounts/delete/id/<?php echo $item->getId(); ?>">Delete</a></td>
-		</tr>
-	<?php } ?>
-	</tbody>
+	<?php echo $this->partial('/carrierdiscounts/tabulardata.phtml', array('carrierDiscounts' => $this->carrierDiscounts)); ?>
 </table>

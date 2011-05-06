@@ -42,16 +42,20 @@ class LLLT_Model_CarrierDiscountMapper {
 	    			  'last_updated'    => $carDisc->getLast_updated(),
 	    			  'last_updated_by' => $carDisc->getLast_updated_by());
 	  	    	    	
-	    $id = $this->getDbTable()->insert($data);
+	    $id = $this->getDbTable()
+				   ->insert($data);
 	    
 	    return $id;
     }
     
  	public function delete(LLLT_Model_CarrierDiscount $carDisc) {
     	
-    	$where = $this->getDbTable()->getAdapter()->quoteInto('id = ?', $carDisc->getId());
+    	$where = $this->getDbTable()
+				 	  ->getAdapter()
+					  ->quoteInto('id = ?', $carDisc->getId());
 			
-    	$this->getDbTable()->delete($where);
+    	$this->getDbTable()
+			 ->delete($where);
     }
     
    	public function edit(LLLT_Model_CarrierDiscount $carDisc) {
@@ -64,60 +68,95 @@ class LLLT_Model_CarrierDiscountMapper {
 	    			  'last_updated'    => $carDisc->getLast_updated(),
 	    			  'last_updated_by' => $carDisc->getLast_updated_by());
     	 
-		$where = $this->getDbTable()->getAdapter()->quoteInto('id = ?', $carDisc->getId());
+		$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('id = ?', $carDisc->getId());
 
-		$this->getDbTable()->update($data, $where);
+		$this->getDbTable()
+			 ->update($data, $where);
     }
     
-    public function fetchAll($where = null, $order = null) {
+    public function fetchAll($where, $order = null) {
     	
-        $resultSet = $this->getDbTable()->fetchAll($where, $order);
+			if ($where === null) {
+
+				$resultSet = $this->getDbTable()
+								  ->fetchAll($this->getDbTable()
+												  ->select()
+												  ->setIntegrityCheck(false)
+												  ->from(array('cd' => 'tbl_carrier_discount'))
+												  ->order($order)
+												  ->join(array('c' => 'tbl_customer'),
+														 'cd.company_id = c.customer_id',
+														 array('name')));
+			}
+			else {
+
+				$resultSet = $this->getDbTable()
+								  ->fetchAll($this->getDbTable()
+												  ->select()
+												  ->setIntegrityCheck(false)
+												  ->from(array('cd' => 'tbl_carrier_discount'))
+												  ->where($where)
+												  ->order($order)
+												  ->join(array('c' => 'tbl_customer'),
+														 'cd.company_id = c.customer_id',
+														 array('name')));
+			}
         
-        $entries = array();
+        $carrierDiscounts = array();
         
         foreach ($resultSet as $row) {
         	
-            $carDisc = new LLLT_Model_CarrierDiscount();
+            $carrierDiscount = new LLLT_Model_CarrierDiscount();
             
-        	$carDisc->setId($row->id)        		  
-	        	  	->setCompany_id($row->company_id)
-	        	  	->setStart_date($row->start_date)
-		        	->setEnd_date($row->end_date)
-		        	->setDiscount($row->discount)
-		        	->setCreated($row->created)
-		        	->setCreated_by($row->created_by)
-		        	->setLast_updated($row->last_updated)
-		        	->setLast_updated_by($row->last_updated_by);
+        	$carrierDiscount->setId($row->id)        		  
+	        	  			->setCompany_id($row->company_id)
+						    ->setCustomer_name($row->name)
+			        	  	->setStart_date($row->start_date)
+				        	->setEnd_date($row->end_date)
+				        	->setDiscount($row->discount)
+				        	->setCreated($row->created)
+				        	->setCreated_by($row->created_by)
+				        	->setLast_updated($row->last_updated)
+				        	->setLast_updated_by($row->last_updated_by);
                   
-            $entries[] = $carDisc;            
+            $carrierDiscounts[] = $carrierDiscount;            
         }
         
-        return $entries;
+        return $carrierDiscounts;
     }
     
 	public function find($id) {
 		
-        $result = $this->getDbTable()->find($id);
+		$result = $this->getDbTable()
+					   ->fetchRow($this->getDbTable()
+					   				   ->select()
+					 				   ->setIntegrityCheck(false)
+									   ->from(array('cd' => 'tbl_carrier_discount'))
+									   ->where('cd.id = ?', $id)
+									   ->join(array('c' => 'tbl_customer'),
+									       		    'cd.company_id = c.customer_id',
+									 		  array('name')));
         
         if (0 == count($result)) {
         	
         	return 'The carrier discount could not be found.';
         }
         
-        $row = $result->current();
-        
-        $carDisc = new LLLT_Model_CarrierDiscount();
+        $carrierDiscount = new LLLT_Model_CarrierDiscount();
 
-       	$carDisc->setId($row->id)        		  
-        	  	->setCompany_id($row->company_id)
-        	  	->setStart_date($row->start_date)
-	        	->setEnd_date($row->end_date)
-	        	->setDiscount($row->discount)
-	        	->setCreated($row->created)
-	        	->setCreated_by($row->created_by)
-	        	->setLast_updated($row->last_updated)
-	        	->setLast_updated_by($row->last_updated_by);
+       	$carrierDiscount->setId($result->id)        		  
+        	  			->setCompany_id($result->company_id)
+						->setCustomer_name($result->name)
+		        	  	->setStart_date($result->start_date)
+			        	->setEnd_date($result->end_date)
+			        	->setDiscount($result->discount)
+			        	->setCreated($result->created)
+			        	->setCreated_by($result->created_by)
+			        	->setLast_updated($result->last_updated)
+			        	->setLast_updated_by($result->last_updated_by);
 	        	
-	    return $carDisc;
+	    return $carrierDiscount;
     }
 }

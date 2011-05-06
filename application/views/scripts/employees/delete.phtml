@@ -10,8 +10,8 @@ $(function() {
 </script>
 <link rel="stylesheet" href="/css/employees/employees.css" />
 
-<div class="form-header">Are you sure you want to delete the following <?php echo strtolower($this->roles($this->emp->getRole_id())->getRole_name()); ?>?</div>
-<form id="employees-delete-form" action="/employees/delete/emp_id/<?php echo $this->params['emp_id']; ?>" method="post">
+<div class="form-header">Are you sure you want to delete the following <?php echo $this->roles($this->emp->getRole_id())->getRole_name(); ?>?</div>
+<form id="employees-delete-form" class="delete" action="/employees/delete/emp_id/<?php echo $this->params['emp_id']; ?>" method="post">
 	<div class="form-wrapper">
 		<label>Username:</label>
 		<?php if (strlen($this->login->getUsername()) > 0) { echo $this->login->getUsername(); } else { echo '&nbsp;'; } ?>

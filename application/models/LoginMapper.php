@@ -73,7 +73,7 @@ class LLLT_Model_LoginMapper {
     		  
     		$emp = new LLLT_Model_Employee();
     		$empMapper = new LLLT_Model_EmployeeMapper();
-    		$emp = $empMapper->find($authData->emp_id, $emp);
+    		$emp = $empMapper->find($authData->emp_id);
     					
 			if ($emp->getActive() == 1) {
 				
