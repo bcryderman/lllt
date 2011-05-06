@@ -2,7 +2,10 @@
 
 class MyaccountController extends Zend_Controller_SecureAction {
 
-    public function init() { }
+    public function init() { 
+	
+		$this->view->title = 'My Account';
+	}
 
 	public function changepassAction() {
 		

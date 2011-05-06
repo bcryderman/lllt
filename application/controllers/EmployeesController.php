@@ -2,7 +2,10 @@
 
 class EmployeesController extends Zend_Controller_SecureAction {
 
-    public function init() { }
+    public function init() { 
+	
+		$this->view->title = 'Drivers &amp; Employees';
+	}
 
     public function indexAction() { }
     
@@ -286,24 +289,29 @@ class EmployeesController extends Zend_Controller_SecureAction {
 		
 		$this->renderScript('employees/form.phtml');
     }
+
+	public function tabulardataAction() {
+		
+		$this->_helper->layout()->disableLayout();
+		
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+
+    	$employeeMapper = new LLLT_Model_EmployeeMapper();
+    	$employees = $employeeMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'], 
+											   			   'e.last_name ' . $params['sort']));
+
+    	$this->view->employees = $employees;
+
+		$this->renderScript('employees/tabulardata.phtml');
+	}
         
     public function viewAction() {
     	
-    	$empMapper = new LLLT_Model_EmployeeMapper();
-    	$emps = $empMapper->fetchAll(null, array('last_name asc', 'first_name asc'));
-    	
-    	$roleMapper = new LLLT_Model_RoleMapper();
-    	$roles = $roleMapper->fetchAll('active = 1', 'role_name asc');
-    	
-    	$rolesArr = array();
-    	
-    	foreach ($roles as $item) {
-    		
-    		$rolesArr[$item->getRole_id()] = $item;
-    	}
+    	$employeeMapper = new LLLT_Model_EmployeeMapper();
+    	$employees = $employeeMapper->fetchAll(null, array('e.last_name asc', 'e.first_name asc'));
 
-    	$this->view->emps = $emps;
-    	$this->view->roles = $rolesArr;
+    	$this->view->employees = $employees;
     }
     
     public function validation($params, $modify = false) { 

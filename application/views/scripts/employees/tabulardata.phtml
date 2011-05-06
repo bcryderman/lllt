@@ -1,0 +1,19 @@
+<tbody>
+<?php foreach ($this->employees as $item) { ?>	
+	<tr>
+		<td><?php echo $item->getFirst_name(); ?></td>
+		<td><?php echo $item->getLast_name(); ?></td>
+		<td><?php echo $item->getAddr(); ?></td>
+		<td><?php echo $item->getAddr2(); ?></td>
+		<td><?php echo $item->getCity(); ?></td>
+		<td><?php echo $item->getState(); ?></td>
+		<td><?php if ($item->getZip4() == 0) { if ($item->getZip() != 0) { echo $item->getZip(); } } else { echo $item->getZip() . '-' . $item->getZip4(); } ?></td>
+		<td><?php echo $item->getVehicle_id(); ?></td>
+		<td><?php echo $item->getRole_name(); ?></td>
+		<td><?php echo $item->getActive(); ?></td>
+		<td><?php echo $item->getEmail(); ?></td>
+		<td><a href="/employees/edit/emp_id/<?php echo $item->getEmp_id(); ?>">Edit</a></td>
+		<td><a href="/employees/delete/emp_id/<?php echo $item->getEmp_id(); ?>">Delete</a></td>
+	</tr>
+<?php } ?>
+</tbody>

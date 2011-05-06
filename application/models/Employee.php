@@ -13,6 +13,7 @@ class LLLT_Model_Employee {
  	protected $_zip4;
  	protected $_vehicle_id;
  	protected $_role_id;
+	protected $_role_name;
  	protected $_active = 0;
  	protected $_email;
  	protected $_created;
@@ -198,6 +199,18 @@ class LLLT_Model_Employee {
     public function getRole_id() {
     	
         return $this->_role_id;
+    }
+
+    public function setRole_name($val) {
+    	
+        $this->_role_name = $val;
+        
+        return $this;
+    }
+ 
+    public function getRole_name() {
+    	
+        return $this->_role_name;
     }
     
     public function setActive($val) {

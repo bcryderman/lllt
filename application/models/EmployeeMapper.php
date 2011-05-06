@@ -50,16 +50,20 @@ class LLLT_Model_EmployeeMapper {
 	    			  'last_updated'       => $emp->getLast_updated(),
 	    			  'last_updated_by'    => $emp->getLast_udpated_by());
 	    	    	
-	    $empId = $this->getDbTable()->insert($data);
+	    $empId = $this->getDbTable()
+					 ->insert($data);
 	    
 	    return $empId;
     }
 
  	public function delete(LLLT_Model_Employee $emp) {
     	
-    	$where = $this->getDbTable()->getAdapter()->quoteInto('emp_id = ?', $emp->getEmp_id());
+    	$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('emp_id = ?', $emp->getEmp_id());
 			
-    	$this->getDbTable()->delete($where);
+    	$this->getDbTable()
+			 ->delete($where);
     }
 
    	public function edit(LLLT_Model_Employee $emp) {
@@ -79,76 +83,111 @@ class LLLT_Model_EmployeeMapper {
 	    			  'last_updated'       => $emp->getLast_updated(),
 	    			  'last_updated_by'    => $emp->getLast_udpated_by());
     	 
-		$where = $this->getDbTable()->getAdapter()->quoteInto('emp_id = ?', $emp->getEmp_id());
+		$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('emp_id = ?', $emp->getEmp_id());
 
-		$this->getDbTable()->update($data, $where);
+		$this->getDbTable()
+			 ->update($data, $where);
     }
           
     public function fetchAll($where = null, $order = null) {
     	
-        $resultSet = $this->getDbTable()->fetchAll($where, $order);
+		if ($where === null) {
+			
+			$resultSet = $this->getDbTable()
+							  ->fetchAll($this->getDbTable()
+											  ->select()
+											  ->setIntegrityCheck(false)
+											  ->from(array('e' => 'tbl_employee'))
+											  ->order($order)
+											  ->join(array('r' => 'tbl_role'),
+													 'e.role_id = r.role_id',
+													 array('role_name')));
+		}
+		else {
+			
+			$resultSet = $this->getDbTable()
+							  ->fetchAll($this->getDbTable()
+											  ->select()
+											  ->setIntegrityCheck(false)
+											  ->from(array('e' => 'tbl_employee'))
+											  ->where($where)
+											  ->order($order)
+											  ->join(array('r' => 'tbl_role'),
+													 'e.role_id = r.role_id',
+													 array('role_id')));
+		}
         
-        $entries = array();
+        $employees = array();
         
         foreach ($resultSet as $row) {
         	
-            $entry = new LLLT_Model_Employee();
+            $employee = new LLLT_Model_Employee();
             
-            $entry->setEmp_id($row->emp_id)
-            	  ->setFirst_name($row->first_name)
-        		  ->setLast_name($row->last_name)
-        		  ->setAddr($row->addr)
-        		  ->setAddr2($row->addr2)
-        		  ->setCity($row->city)
-        		  ->setState($row->state)
-        		  ->setZip($row->zip)
-        		  ->setZip4($row->zip4)
-        		  ->setVehicle_id($row->vehicle_id)
-        		  ->setRole_id($row->role_id)
-        		  ->setActive($row->active)
-        		  ->setEmail($row->email)
-        		  ->setCreated($row->created)
-        		  ->setCreated_by($row->created_by)
-        		  ->setLast_updated($row->last_updated)
-        		  ->setLast_updated_by($row->last_updated_by);
+            $employee->setEmp_id($row->emp_id)
+            	  	 ->setFirst_name($row->first_name)
+        		  	 ->setLast_name($row->last_name)
+        		  	 ->setAddr($row->addr)
+	        		 ->setAddr2($row->addr2)
+	        		 ->setCity($row->city)
+	        		 ->setState($row->state)
+	        		 ->setZip($row->zip)
+	        		 ->setZip4($row->zip4)
+	        		 ->setVehicle_id($row->vehicle_id)
+	        		 ->setRole_id($row->role_id)
+					 ->setRole_name($row->role_name)
+	        		 ->setActive($row->active)
+	        		 ->setEmail($row->email)
+	        		 ->setCreated($row->created)
+	        		 ->setCreated_by($row->created_by)
+	        		 ->setLast_updated($row->last_updated)
+	        		 ->setLast_updated_by($row->last_updated_by);
                   
-            $entries[] = $entry;
+            $employees[] = $employee;
         }
         
-        return $entries;
+        return $employees;
     }
     
 	public function find($id) {
     	
-        $result = $this->getDbTable()->find($id);
+		$result = $this->getDbTable()
+					   ->fetchRow($this->getDbTable()
+					   				   ->select()
+					 				   ->setIntegrityCheck(false)
+									   ->from(array('e' => 'tbl_employee'))
+									   ->where('e.emp_id = ?', $id)
+									   ->join(array('r' => 'tbl_role'),
+									       		    'e.role_id = r.role_id',
+									 		  array('role_name')));
         
         if (0 == count($result)) {
         	
             return 'The employee could not be found.';
         }
-        
-        $row = $result->current();
-        
-        $emp = new LLLT_Model_Employee();
+                
+        $employee = new LLLT_Model_Employee();
 
-        $emp->setEmp_id($row->emp_id)
-        	->setFirst_name($row->first_name)
-        	->setLast_name($row->last_name)
-        	->setAddr($row->addr)
-        	->setAddr2($row->addr2)
-        	->setCity($row->city)
-        	->setState($row->state)
-        	->setZip($row->zip)
-         	->setZip4($row->zip4)
-        	->setVehicle_id($row->vehicle_id)
-        	->setRole_id($row->role_id)
-        	->setActive($row->active)
-        	->setEmail($row->email)
-        	->setCreated($row->created)
-        	->setCreated_by($row->created_by)
-        	->setLast_updated($row->last_updated)
-        	->setLast_updated_by($row->last_updated_by);
+        $employee->setEmp_id($result->emp_id)
+	        	 ->setFirst_name($result->first_name)
+	        	 ->setLast_name($result->last_name)
+	        	 ->setAddr($result->addr)
+	        	 ->setAddr2($result->addr2)
+	        	 ->setCity($result->city)
+	        	 ->setState($result->state)
+	        	 ->setZip($result->zip)
+	         	 ->setZip4($result->zip4)
+	        	 ->setVehicle_id($result->vehicle_id)
+	        	 ->setRole_id($result->role_id)
+				 ->setRole_name($result->role_name)
+	        	 ->setActive($result->active)
+	        	 ->setEmail($result->email)
+	        	 ->setCreated($result->created)
+	        	 ->setCreated_by($result->created_by)
+	        	 ->setLast_updated($result->last_updated)
+	        	 ->setLast_updated_by($result->last_updated_by);
 
-        return $emp;
+        return $employee;
     }
 }
