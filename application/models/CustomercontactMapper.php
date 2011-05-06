@@ -72,7 +72,7 @@ class LLLT_Model_CustomercontactMapper{
     
  	public function edit(LLLT_Model_Customercontact $contact) {
     	
-    	$data = array(	'customer_id' 		=>$contact->getCustomer_id(),
+    	$data = array(
     					'first_name'        => $contact->getFirst_name(),
 				      	'last_name'        	=> $contact->getLast_name(),
 				      	'notes'       		=> $contact->getNotes(),
@@ -81,7 +81,6 @@ class LLLT_Model_CustomercontactMapper{
 	    			  	'cell_phone'        => $contact->getCell_phone(),
 				     	'fax_phone'        	=> $contact->getFax_phone(),
 				     	'email'        		=> $contact->getEmail(),
-				     	'active'  			=> $contact->getActvie(),
 	    			  	'last_updated'      => $contact->getLast_updated(),
 	    			  	'last_Updated_by'	=> $contact->getLast_updated_by());
     	 
@@ -92,23 +91,14 @@ class LLLT_Model_CustomercontactMapper{
     
 	public function find($id) {
 		
-		$result = $this->getDbTable()
-					   ->fetchRow($this->getDbTable()
-					   				   ->select()
-					 				   ->setIntegrityCheck(false)
-									   ->from(array('a' => 'tbl_customer_contact'))
-									   ->where('a.contact_id = ?', $id)
-									   ->join(array('at' => 'tbl_customer'),
-									       		    'a.customer_id = at.customer_id',
-									 		  array('name')));
+		$result = $this->getDbTable()->find($id);
     	
-        //$result = $this->getDbTable()->find($id);
+//        $result = $this->getDbTable()->find($id);
         
         if (0 == count($result)) {
         	
             return 'This Customer contact could not be found.';
         }
-        
         $row = $result->current();
         $retval= new LLLT_Model_Customercontact();
         $retval->setContact_id($row->contact_id);
@@ -128,7 +118,52 @@ class LLLT_Model_CustomercontactMapper{
         $retval->setLast_updated_by($row->last_updated_by);
 
         return $retval;
-    }    
+    }
+
+	public function fetchall($where, $order) {
+		
+		$result = $this->getDbTable()
+					   ->fetchAll($this->getDbTable()
+					   				   ->select()
+					 				   ->setIntegrityCheck(false)
+									   ->from(array('a' => 'tbl_customer_contact'))
+									   ->where('a.customer_id = ?',$where['customer_id'])
+					 				   ->where('a.active = ?', $where['active'])
+									   ->join(array('at' => 'tbl_customer'),
+									       		    'a.customer_id = at.customer_id',
+									 		  array('name')));
+    	
+//        $result = $this->getDbTable()->find($id);
+
+        if (0 == count($result)) {
+        	
+            return 'This Customer contact could not be found.';
+        }
+        $retval=array();
+
+         foreach ($result as $row) {
+			        $data= new LLLT_Model_Customercontact();
+			        $data->setContact_id($row->contact_id);
+			        $data->setCustomer_id($row->customer_id);
+			        $data->setFirst_name($row->first_name);
+			        $data->setLast_name($row->last_name);
+			        $data->setNotes($row->notes);
+			        $data->setPhone($row->phone);
+			        $data->setPhone_ext($row->phone_ext);
+			        $data->setCell_Phone($row->cell_phone);
+			        $data->setFax_phone($row->fax_phone);
+			        $data->setEmail($row->email);
+			        $data->setActive($row->active);
+			        $data->setCreated($row->created);
+			        $data->setCreated_by($row->created_by);
+			        $data->setLast_updated($row->last_updated);
+			        $data->setLast_updated_by($row->last_updated_by);
+			        $data->setCustomer_name($row->name);
+			        
+			        $retval[]=$data;
+         }
+        return $retval;
+    }
     
     
     

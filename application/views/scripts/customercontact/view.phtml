@@ -1,28 +1,27 @@
 
-<?php $customertype = $this->customertypes(array('return'=>'arrayid'));
-?>
 <h3>
-	<?php echo $this->header.' ';
-		  echo $customertype[$this->customertype]['customer_type'];?>
-s</h3>
+	<?php echo 'Contacts for  ';
+		  echo $this->customername;?>
+</h3>
 <div>
-	<a href="/customer2/view/customertype/<?php echo $this->customertype?>/active/<?php if($this->active==1){echo 0;}else{echo 1;} ?>">
+	<a href="/customercontact/view/customerid/<?php echo $this->customerid?>/active/<?php if($this->active==1){echo 0;}else{echo 1;} ?>">
 		<?php if($this->active==1){echo 'Show inactive';}else{echo 'Show active';}?>
 	</a>
 </div>
 <div>
-	<a href="/customer2/add/customertype/<?php echo $this->customertype?>">Add</a>
+	<a href="/customercontact/add/customerid/<?php echo $this->customerid?>">Add</a>
 </div>
+<?php if(is_array($this->data)) {?>
 <table>
 	<thead>
 		<tr>
-			<th><?php echo $customertype[$this->customertype]['customer_type'];?> Name</th>
-			<th>Address</th>
-			<th>City</th>
-			<th>State</th>
-			<th>Zip</th>
-			<th>FEIN</th>
-			<th>Color</th>
+			<th>Name</th>
+			<th>Phone</th>
+			<th>Cell Phone</th>
+			<th>Fax</th>
+			<th>Email</th>
+			<th>Notes</th>
+			<th></th>
 			<th></th>
 			<th></th>
 			<th></th>
@@ -32,18 +31,19 @@ s</h3>
 	<tbody>
 	<?php foreach ($this->data as $item) { ?>
 		<tr>
-			<td><?php echo $item->getName();?></td>
-			<td><?php echo $item->getAddr(); ?></td>
-			<td><?php echo $item->getCity(); ?></td>
-			<td><?php echo $item->getState(); ?></td>
-			<td><?php echo $item->getZip();if($item->getZip4()!= null){echo '-'.$item->getZip4();} ?></td>
-			<td><?php echo $item->getFEIN(); ?></td>
-			<td><div class="color_code"  style="width:100px;height:20px;background-color:<?php echo '#'.$item->getColor_Code();?>;">&nbsp;</div></td>
-			<td><a href="/customer2/contacts/customerid/<?php echo $item->getCustomer_id(); ?>">Show Contacts</a></td>
-			<td><a href="/customer2/edit/customerid/<?php echo $item->getCustomer_id(); ?>">Edit</a></td>
-			<td><!--<a href="/customer2/delete/customerid/<?php echo $item->getCustomer_id(); ?>">Delete</a>--></td>
-			<td><a href="/customer2/active/customerid/<?php echo $item->getCustomer_id(); ?>/active/<?php if($item->getActive()==1){echo 0;}else{echo 1;}?>/customertype/<?php echo $this->customertype?>"><?php if($item->getActive()==1){echo 'De-Activate';}else{echo 'Activate';} ?></a></td>
+			<td><?php echo $item->getFirst_Name(). ' ' .$item->getLast_Name();?></td>
+			<td><?php echo $item->getPhone();if($item->getPhone_ext()!=null){echo ' ext ' . $item->getPhone_ext();} ?></td>
+			<td><?php echo $item->getCell_phone(); ?></td>
+			<td><?php echo $item->getFax_phone(); ?></td>
+			<td><?php if($item->getEmail()!=null){?><a href="mailto:<?php echo $item->getEmail(); ?>"<?php echo $item->getEmail();?></a><?php }?></td>
+			<td><?php echo $item->getNotes(); ?></td>
+			<td></td>
+			<td></td>
+			<td><a href="/customercontact/edit/contactid/<?php echo $item->getContact_id(); ?>/customerid/<?php echo $this->customerid ?>">Edit</a></td>
+			<td></td>
+			<td><a href="/customercontact/active/contactid/<?php echo $item->getContact_id(); ?>/active/<?php if($item->getActive()==1){echo 0;}else{echo 1;}?>/customerid/<?php echo $this->customerid?>"><?php if($item->getActive()==1){echo 'De-Activate';}else{echo 'Activate';} ?></a></td>
 		</tr>
 	<?php } ?>
 	</tbody>
 </table>
+<?php }?>

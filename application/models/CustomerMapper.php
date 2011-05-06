@@ -66,7 +66,7 @@ class LLLT_Model_CustomerMapper {
         }
         
         $row = $result->current();
-        $retval= new LLLT_Model_Customer2();
+        $retval= new LLLT_Model_Customer();
         $retval->setCustomer_id($row->customer_id);
         $retval->setName($row->name);
         $retval->setAddr($row->addr);
@@ -99,7 +99,7 @@ class LLLT_Model_CustomerMapper {
         
         foreach ($resultSet as $row) {
         	
-            $customer = new LLLT_Model_Customer2();
+            $customer = new LLLT_Model_Customer();
             
             $customer->setCustomer_id($row->customer_id)
             	  	 ->setName($row->name)
@@ -129,7 +129,7 @@ class LLLT_Model_CustomerMapper {
     }
 
     
-    public function edit(LLLT_Model_Customer2 $customer) {
+    public function edit(LLLT_Model_Customer $customer) {
     	
     	$data = array('name'        => $customer->getName(),
 				      'addr'        => $customer->getAddr(),
@@ -149,7 +149,7 @@ class LLLT_Model_CustomerMapper {
 		$this->getDbTable()->update($data, $where);
     }
     
-    public function active(LLLT_Model_Customer2 $customer){
+    public function active(LLLT_Model_Customer $customer){
     	$data = array('active' => $customer->getActive(),	    			  
     				  'last_updated'       => $customer->getLast_updated(),
 	    			  'last_Updated_by'    => $customer->getLast_updated_by());
@@ -158,7 +158,7 @@ class LLLT_Model_CustomerMapper {
 		$this->getDbTable()->update($data, $where);	
     }
     
-    public function delete(LLLT_Model_Customer2 $customer) {
+    public function delete(LLLT_Model_Customer $customer) {
     	
     	$where = $this->getDbTable()->getAdapter()->quoteInto('customer_id = ?', $customer->getId());
 			
