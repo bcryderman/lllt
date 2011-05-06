@@ -1,5 +1,6 @@
-#employees-entry-form label {
-	width: 110px;
+#employees-entry-form label,
+#employees-delete-form label {
+	width: 115px;
 }
 
 #employees-entry-form label.no-float {
@@ -7,14 +8,10 @@
 	margin-left: 10px;
 }
 
-#employees-delete-form label {
-	width: 110px;
-}
-
 #employees-entry-form .form-controls,
 #employees-entry-form .error-wrapper,
 #employees-delete-form .form-controls  {
-	padding-left: 120px;
+	padding-left: 125px;
 }
 
 #comm-options-wrapper {

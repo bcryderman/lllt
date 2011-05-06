@@ -1,13 +1,13 @@
 #carrierdiscounts-entry-form label {
-	width: 60px;
+	width: 65px;
 }
 
 #carrierdiscounts-delete-form label {
-	width: 60px;
+	width: 65px;
 }
 
 #carrierdiscounts-entry-form .form-controls,
 #carrierdiscounts-entry-form .error-wrapper,
 #carrierdiscounts-delete-form .form-controls  {
-	padding-left: 70px;
+	padding-left: 75px;
 }
