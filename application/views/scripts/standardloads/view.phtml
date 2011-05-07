@@ -1,0 +1,106 @@
+<script src="/js/tableh.js"></script>
+<script>
+$(document).ready(function() {
+	
+	$('.tableh').tableh({ 'url': '/standardloads/tabulardata' });
+});
+</script>
+<link rel="stylesheet" href="/css/tableh.css" />
+
+<table class="tableh">
+	<thead>
+		<tr>
+			<th column="">
+				<div class="header">Carrier</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Bill To</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Shipper</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Origin</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Customer</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Destination</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Product</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Driver</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Delayed Dispatch</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Load Date</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Delivery Date</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Order #</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Bill of Lading #</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Net Gallons</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Bill Rate</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Fuel Surcharge</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Discount</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Invoice Date</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Dispatched</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Notes</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Locked</div>
+				<div class="sort"></div>
+			</th>
+			<th column="">
+				<div class="header">Delivered</div>
+				<div class="sort"></div>
+			</th>
+			<th class="edit"></th>
+			<th class="delete"></th>
+		</tr>
+	</thead>
+	<?php echo $this->partial('/standardloads/tabulardata.phtml', array('loads' => $this->loads)); ?>
+</table>

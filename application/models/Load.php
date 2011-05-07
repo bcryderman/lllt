@@ -191,7 +191,14 @@ class LLLT_Model_Load {
 
  	public function setDelayed_dispatch($val) {
     	
-        $this->_delayed_dispatch = $val;
+		if ($val === 'on' || $val == 1) {
+    		
+    		$this->_delayed_dispatch = 1;
+    	}
+    	else if (is_null($val) || $val == 0) {
+    		
+    		$this->_delayed_dispatch = 0;
+    	}
         
         return $this;
     }

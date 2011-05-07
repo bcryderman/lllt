@@ -31,16 +31,16 @@ class LLLT_Model_CarrierDiscountMapper {
         return $this->_dbTable;
     }
     
-    public function add(LLLT_Model_CarrierDiscount $carDisc) {
+    public function add(LLLT_Model_CarrierDiscount $carrierDiscount) {
     	    			    	
-	    $data = array('company_id'      => $carDisc->getCompany_id(),
-	    			  'start_date'      => $carDisc->getStart_date(),
-	    			  'end_date'        => $carDisc->getEnd_date(),
-	    			  'discount'        => $carDisc->getDiscount(),
-	    			  'created'         => $carDisc->getCreated(),
-	    			  'created_by'      => $carDisc->getCreated_by(),
-	    			  'last_updated'    => $carDisc->getLast_updated(),
-	    			  'last_updated_by' => $carDisc->getLast_updated_by());
+	    $data = array('company_id'      => $carrierDiscount->getCompany_id(),
+	    			  'start_date'      => $carrierDiscount->getStart_date(),
+	    			  'end_date'        => $carrierDiscount->getEnd_date(),
+	    			  'discount'        => $carrierDiscount->getDiscount(),
+	    			  'created'         => $carrierDiscount->getCreated(),
+	    			  'created_by'      => $carrierDiscount->getCreated_by(),
+	    			  'last_updated'    => $carrierDiscount->getLast_updated(),
+	    			  'last_updated_by' => $carrierDiscount->getLast_updated_by());
 	  	    	    	
 	    $id = $this->getDbTable()
 				   ->insert($data);
@@ -48,29 +48,29 @@ class LLLT_Model_CarrierDiscountMapper {
 	    return $id;
     }
     
- 	public function delete(LLLT_Model_CarrierDiscount $carDisc) {
+ 	public function delete(LLLT_Model_CarrierDiscount $carrierDiscount) {
     	
     	$where = $this->getDbTable()
 				 	  ->getAdapter()
-					  ->quoteInto('id = ?', $carDisc->getId());
+					  ->quoteInto('id = ?', $carrierDiscount->getId());
 			
     	$this->getDbTable()
 			 ->delete($where);
     }
     
-   	public function edit(LLLT_Model_CarrierDiscount $carDisc) {
+   	public function edit(LLLT_Model_CarrierDiscount $carrierDiscount) {
     	
-	    $data = array('id'              => $carDisc->getId(),
-					  'company_id'      => $carDisc->getCompany_id(),
-	    			  'start_date'      => $carDisc->getStart_date(),
-	    			  'end_date'        => $carDisc->getEnd_date(),
-	    			  'discount'        => $carDisc->getDiscount(),
-	    			  'last_updated'    => $carDisc->getLast_updated(),
-	    			  'last_updated_by' => $carDisc->getLast_updated_by());
+	    $data = array('id'              => $carrierDiscount->getId(),
+					  'company_id'      => $carrierDiscount->getCompany_id(),
+	    			  'start_date'      => $carrierDiscount->getStart_date(),
+	    			  'end_date'        => $carrierDiscount->getEnd_date(),
+	    			  'discount'        => $carrierDiscount->getDiscount(),
+	    			  'last_updated'    => $carrierDiscount->getLast_updated(),
+	    			  'last_updated_by' => $carrierDiscount->getLast_updated_by());
     	 
 		$where = $this->getDbTable()
 					  ->getAdapter()
-					  ->quoteInto('id = ?', $carDisc->getId());
+					  ->quoteInto('id = ?', $carrierDiscount->getId());
 
 		$this->getDbTable()
 			 ->update($data, $where);

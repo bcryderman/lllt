@@ -146,7 +146,7 @@ $(document).ready(function() {
 		<input type="text" name="zip" class="numeric" 
 			<?php if (isset($this->params['zip'])) { echo 'value="' . $this->params['zip'] . '"'; }?> maxlength="5" size="5" /> -
 		<input type="text" name="zip4" class="numeric" 
-			<?php if (isset($this->params['zip4'])) { echo 'value="' . $this->params['zip4'] . '"'; }?> maxlength="4" size="4" />
+			<?php if (isset($this->params['zip4']) && $this->params['zip4'] !== 0) { echo 'value="' . $this->params['zip4'] . '"'; }?> maxlength="4" size="4" />
 	</div>	
 	<?php if (isset($this->errors['zip'])) { ?><div class="error-wrapper"><?php echo $this->errors['zip']; ?></div><?php } ?>
 	<?php if (isset($this->errors['zip4'])) { ?><div class="error-wrapper"><?php echo $this->errors['zip4']; ?></div><?php } ?>
@@ -158,7 +158,7 @@ $(document).ready(function() {
 				
 			foreach ($this->roles() as $item) {
  
-				if (isset($this->params['role_id']) && $this->params['role_id'] === $item->getRole_id()) {
+				if (isset($this->params['role_id']) && $this->params['role_id'] == $item->getRole_id()) {
 						
 					echo '<option value="' . $item->getRole_id() . '" selected>' . $item->getRole_name() . '</option>';
 				}

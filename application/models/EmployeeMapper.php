@@ -91,7 +91,7 @@ class LLLT_Model_EmployeeMapper {
 			 ->update($data, $where);
     }
           
-    public function fetchAll($where = null, $order = null) {
+    public function fetchAll($where, $order = null) {
     	
 		if ($where === null) {
 			
@@ -116,7 +116,7 @@ class LLLT_Model_EmployeeMapper {
 											  ->order($order)
 											  ->join(array('r' => 'tbl_role'),
 													 'e.role_id = r.role_id',
-													 array('role_id')));
+													 array('role_name')));
 		}
         
         $employees = array();

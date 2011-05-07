@@ -48,7 +48,7 @@ class LLLT_Model_LoadMapper {
 					  'bill_of_lading'   => $load->getBill_of_lading(),
 					  'net_gallons'      => $load->getNet_gallons(),
 					  'bill_rate'        => $load->getBill_rate(),
-					  'fuel_surcharge'   => $load->getFuel_surcharge(),
+					  'fuel_surchage'    => $load->getFuel_surcharge(),
 					  'discount'         => $load->getDiscount(),
 					  'invoice_date'     => $load->getInvoice_date(),
 					  'dispatched'       => $load->getDispatched(),
@@ -62,16 +62,20 @@ class LLLT_Model_LoadMapper {
 					  'last_updated_by'  => $load->getLast_updated_by(),
 					  'active'           => $load->getActive());
 	  	    	    	
-	    $loadId = $this->getDbTable()->insert($data);
+	    $loadId = $this->getDbTable()
+					   ->insert($data);
 	    
 	    return $loadId;
     }
     
  	public function delete(LLLT_Model_Load $load) {
     	
-    	$where = $this->getDbTable()->getAdapter()->quoteInto('load_id = ?', $load->getLoad_id());
+    	$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('load_id = ?', $load->getLoad_id());
 			
-    	$this->getDbTable()->delete($where);
+    	$this->getDbTable()
+			 ->delete($where);
     }
     
    	public function edit(LLLT_Model_Load $load) {
@@ -92,7 +96,7 @@ class LLLT_Model_LoadMapper {
 					  'bill_of_lading'   => $load->getBill_of_lading(),
 					  'net_gallons'      => $load->getNet_gallons(),
 					  'bill_rate'        => $load->getBill_rate(),
-					  'fuel_surcharge'   => $load->getFuel_surcharge(),
+					  'fuel_surchage'    => $load->getFuel_surcharge(),
 					  'discount'         => $load->getDiscount(),
 					  'invoice_date'     => $load->getInvoice_date(),
 					  'dispatched'       => $load->getDispatched(),
@@ -104,14 +108,18 @@ class LLLT_Model_LoadMapper {
 					  'last_updated_by'  => $load->getLast_updated_by(),
 					  'active'           => $load->getActive());
     	 
-		$where = $this->getDbTable()->getAdapter()->quoteInto('load_id = ?', $load->getLoad_id());
+		$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('load_id = ?', $load->getLoad_id());
 
-		$this->getDbTable()->update($data, $where);
+		$this->getDbTable()
+			 ->update($data, $where);
     }
     
     public function fetchAll($where = null, $order = null) {
     	
-        $resultSet = $this->getDbTable()->fetchAll($where, $order);
+        $resultSet = $this->getDbTable()
+						  ->fetchAll($where, $order);
         
         $entries = array();
         
@@ -135,7 +143,7 @@ class LLLT_Model_LoadMapper {
 				 ->setBill_of_lading($row->bill_of_lading)
 				 ->setNet_gallons($row->net_gallons)
 				 ->setBill_rate($row->bill_rate)
-				 ->setFuel_surcharge($row->fuel_surcharge)
+				 ->setFuel_surcharge($row->fuel_surchage)
 				 ->setDiscount($row->discount)
 				 ->setInvoice_date($row->invoice_date)
 				 ->setDispatched($row->dispatched)
@@ -157,7 +165,8 @@ class LLLT_Model_LoadMapper {
     
 	public function find($id) {
 		
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()
+					   ->find($id);
         
         if (0 == count($result)) {
         	

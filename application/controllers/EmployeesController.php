@@ -20,9 +20,7 @@ class EmployeesController extends Zend_Controller_SecureAction {
     		$errors = $this->validation($params);
     		
     		if (empty($errors)) {
-    			
-    			$params['password'] = md5($params['password']);
-    			
+    			    			
     			$loginMapper = new LLLT_Model_LoginMapper();
 		    	$usernameAvail = $loginMapper->usernameAvail($params['username']);
 		    	
@@ -161,8 +159,6 @@ class EmployeesController extends Zend_Controller_SecureAction {
 				$date = date('Y-m-d H:i:s');
 
 				if (isset($params['password']) && isset($params['confpass'])) {
-
-					$params['password'] = md5($params['password']);
 
 					$loginMapper = new LLLT_Model_LoginMapper();
 

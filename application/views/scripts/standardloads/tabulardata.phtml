@@ -1,0 +1,30 @@
+<tbody>
+<?php foreach ($this->loads as $item) { ?>
+	<tr>
+		<td><?php echo $item->getCarrier_id(); ?></td>
+		<td><?php echo $item->getBill_to_id(); ?></td>
+		<td><?php echo $item->getShipper_id() ?></td>
+		<td><?php echo $item->getOrigin_id(); ?></td>
+		<td><?php echo $item->getCustomer_id(); ?></td>
+		<td><?php echo $item->getDestination_id(); ?></td>
+		<td><?php echo $item->getProduct_id(); ?></td>
+		<td><?php echo $item->getDriver_id(); ?></td>
+		<td><?php echo $item->getDelayed_dispatch(); ?></td>
+		<td><?php echo $item->getLoad_date(); ?></td>
+		<td><?php echo $item->getDelivery_date(); ?></td>
+		<td><?php echo $item->getOrder_number(); ?></td>
+		<td><?php echo $item->getBill_of_lading(); ?></td>
+		<td><?php echo $item->getNet_gallons(); ?></td>
+		<td><?php echo $item->getBill_rate(); ?></td>
+		<td><?php echo $item->getFuel_surcharge(); ?></td>
+		<td><?php echo $item->getDiscount(); ?></td>
+		<td><?php echo $item->getInvoice_date(); ?></td>
+		<td><?php echo $item->getDispatched(); ?></td>
+		<td><?php echo $item->getNotes(); ?></td>
+		<td><?php echo $item->getLoad_locked(); ?></td>
+		<td><?php echo $item->getDelivered(); ?></td>
+		<td><a href="/standardloads/edit/load_id/<?php echo $item->getLoad_id(); ?>">Edit</a></td>
+		<td><a href="/standardloads/delete/load_id/<?php echo $item->getLoad_id(); ?>">Delete</a></td>
+	</tr>
+<?php } ?>
+</tbody>
