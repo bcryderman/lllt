@@ -55,3 +55,47 @@
 .tableh .sort.desc {
 	background: url('/images/arrow-down.gif') 50% no-repeat;
 }
+
+.tableh td.icon .ui-icon{
+	margin:auto;
+}
+
+.table-controls{
+	margin-bottom:10px;
+	height:25px;
+	}
+
+.table-controls ul, .table-controls ul * {
+	margin:			0;
+	padding:		0;
+	list-style:		none;
+}
+
+.table-controls ul li {
+	float:			left;
+	position:		relative;
+	line-height: 25px;
+	
+	padding: 0 20px;
+	background-image: -webkit-gradient(
+	    linear,
+	    left bottom,
+	    left top,
+	    color-stop(0.1, rgb(199, 199, 199)),
+	    color-stop(0.55, rgb(242, 242, 242))
+	);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgb(199, 199, 199) 10%,
+	    rgb(242, 242, 242) 55%
+	);	
+	border-left: solid 1px #999;
+	border-right: solid 1px #999;
+	border-top: solid 1px #999;
+}
+.table-controls ul a {
+	display:		block;
+	position:		relative;
+	color:#000000;
+	text-decoration:none;
+}

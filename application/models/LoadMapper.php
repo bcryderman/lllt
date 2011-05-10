@@ -193,7 +193,7 @@ class LLLT_Model_LoadMapper {
 			 ->setBill_of_lading($row->bill_of_lading)
 			 ->setNet_gallons($row->net_gallons)
 			 ->setBill_rate($row->bill_rate)
-			 ->setFuel_surcharge($row->fuel_surcharge)
+			 ->setFuel_surcharge($row->fuel_surchage)
 			 ->setDiscount($row->discount)
 			 ->setInvoice_date($row->invoice_date)
 			 ->setDispatched($row->dispatched)

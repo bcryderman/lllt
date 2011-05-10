@@ -31,7 +31,7 @@ class LLLT_Model_CustomerMapper {
         return $this->_dbTable;
     }
     
-    public function add(LLLT_Model_Customer2 $customer) {
+    public function add(LLLT_Model_Customer $customer) {
 	
 	    $data = array(  'active'		=>$customer->getActive(),
 	    				'name'			=>$customer->getName(),

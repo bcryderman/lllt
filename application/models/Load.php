@@ -365,8 +365,15 @@ class LLLT_Model_Load {
     }
 
  	public function setDelivered($val) {
-    	
-        $this->_delivered = $val;
+	
+		if ($val === 'on' || $val == 1) {
+    		
+    		$this->_delivered = 1;
+    	}
+    	else if (is_null($val) || $val == 0) {
+    		
+    		$this->_delivered = 0;
+    	}
         
         return $this;
     }

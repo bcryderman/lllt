@@ -2,8 +2,13 @@
 $cust_name = $customertype[$this->params['customer_type_id']]['customer_type'];
 ?>
 <script type="text/javascript" src="/js/plugins/mColorPicker.min.js"></script>
-<link rel="stylesheet" href="/css/reminders/reminders.css" />
-
+<link rel="stylesheet" href="/css/forms/form.css" />
+<div class="form-header">
+	<?php 
+	if(isset($this->params['name'])&& $this->type === 'edit'){
+		echo 'Edit: <span>'.$this->params['name'].'</span>';
+	}?>
+</div>
 <form id="customer-form" action="/customer/<?php echo $this->type; ?>" method="post">
 	<?php if ($this->type === 'edit') { ?><input type="hidden" name="customer_id" value="<?php echo $this->id; ?>" /><?php } ?>
 	<?php //if ($this->type === 'edit') { ?><input type="hidden" name="customer_type_id" value="<?php echo $this->params['customer_type_id']; ?>" /><?php // } ?>
@@ -60,7 +65,7 @@ $cust_name = $customertype[$this->params['customer_type_id']]['customer_type'];
 	
 	<div class="form-wrapper">
 		<label for="color_code">Color:</label>
-		<input data-text="hidden"  data-hex="true" type="color" name="color_code" <?php if(isset($this->params['color_code'])&& !isset($this->errors)){echo 'value="'.$this->params['color_code'].'"';} ?>
+		<input id="color" data-text="hidden"  data-hex="true" type="color" name="color_code" <?php if(isset($this->params['color_code'])&& !isset($this->errors)){echo 'value="#'.$this->params['color_code'].'"';} ?>
 										<?php if(isset($this->params['color_code'])&& isset($this->errors)){echo 'value="'.$this->params['color_code'].'"';} ?>/>
 	</div>
 	<?php if (isset($this->errors['color_code'])) { ?><div class="error-wrapper"><?php echo $this->errors['color_code']; ?></div><?php } ?>

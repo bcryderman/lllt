@@ -57,8 +57,8 @@ class LLLT_Model_Date {
     
  	public function setDate($val) {
     	
-        $this->_date = array('day'   => (int) substr($val, 0, 2),
-							 'month' => (int) substr($val, 3, 2),
+        $this->_date = array('month' => (int) substr($val, 0, 2),
+							 'day'   => (int) substr($val, 3, 2),
 							 'year'  => (int) substr($val, 6, 4));
         
         return $this;
@@ -70,7 +70,7 @@ class LLLT_Model_Date {
     }
 
 	public function isValid() {
-				
+
 		if (checkdate($this->_date['month'], $this->_date['day'], $this->_date['year'])) {
 			
 			return true;

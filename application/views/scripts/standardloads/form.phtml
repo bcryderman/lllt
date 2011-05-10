@@ -1,7 +1,17 @@
 <link rel="stylesheet" href="/css/standardloads/standardloads.css" />
 
 <form id="standardloads-entry-form" action="/standardloads/<?php echo $this->type; ?>" method="post">
-	<?php if ($this->type === 'edit') { ?><input type="hidden" name="load_id" value="<?php echo $this->load_id; ?>" /><?php } ?>
+	<?php if ($this->type === 'edit') { ?>
+		<input type="hidden" name="load_id" value="<?php echo $this->params['load_id']; ?>" />
+		<input type="hidden" name="load_locked" value="<?php echo $this->params['load_locked']; ?>" />
+		<input type="hidden" name="delivered" value="<?php echo $this->params['delivered']; ?>" />
+	<div class="form-wrapper">
+		<label for="active">Active:</label>
+		<input type="checkbox" name="active"
+			<?php if (!isset($this->params) || (isset($this->params['active']) && ($this->params['active'] === 'on' || $this->params['active'] == 1))) { echo 'checked'; } ?> />
+	</div>
+		<?php if (isset($this->errors['active'])) { ?><div class="error-wrapper"><?php echo $this->errors['active']; ?></div><?php } ?>
+	<?php } ?>
 	<div class="form-wrapper">
 		<label for="carrier_id">Carrier:</label>
 		<select name="carrier_id">
@@ -229,12 +239,24 @@
 	</div>
 	<?php if (isset($this->errors['load_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['load_date']; ?></div><?php } ?>
 	<div class="form-wrapper">
+		<label for="load_time">Load Time:</label>
+		<input type="text" name="load_time" class="timepicker" 
+			<?php if (isset($this->params['load_date'])) { echo 'value="' . $this->time($this->params['load_date']) . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['load_time'])) { ?><div class="error-wrapper"><?php echo $this->errors['load_time']; ?></div><?php } ?>
+	<div class="form-wrapper">
 		<label for="delivery_date">Delivery Date:</label>
 		<input type="text" name="delivery_date" class="datepicker" 
 			<?php if (isset($this->params['delivery_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['delivery_date']) . '"'; } ?>
 			<?php if (isset($this->params['delivery_date']) && isset($this->errors)) { echo 'value="' . $this->params['delivery_date'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['delivery_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['delivery_date']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="delivery_time">Delivery Time:</label>
+		<input type="text" name="delivery_time" class="timepicker" 
+			<?php if (isset($this->params['delivery_date'])) { echo 'value="' . $this->time($this->params['delivery_date']) . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['delivery_time'])) { ?><div class="error-wrapper"><?php echo $this->errors['delivery_time']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="order_number">Order #:</label>
 		<input type="text" name="order_number" class="numeric" maxlength="30" size="30" 
@@ -249,25 +271,25 @@
 	<?php if (isset($this->errors['bill_of_lading'])) { ?><div class="error-wrapper"><?php echo $this->errors['bill_of_lading']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="net_gallons">Net Gallons:</label>
-		<input type="text" name="net_gallons" class="numeric" maxlength="10" size="10" 
+		<input type="text" name="net_gallons" class="decimal" maxlength="10" size="10" 
 			<?php if (isset($this->params['net_gallons'])) { echo 'value="' . $this->params['net_gallons'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['net_gallons'])) { ?><div class="error-wrapper"><?php echo $this->errors['net_gallons']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="bill_rate">Bill Rate:</label>
-		<input type="text" name="bill_rate" class="numeric" maxlength="10" size="10" 
+		<input type="text" name="bill_rate" class="decimal" maxlength="10" size="10" 
 			<?php if (isset($this->params['bill_rate'])) { echo 'value="' . $this->params['bill_rate'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['bill_rate'])) { ?><div class="error-wrapper"><?php echo $this->errors['bill_rate']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="fuel_surcharge">Fuel Surcharge:</label>
-		<input type="text" name="fuel_surcharge" class="numeric" maxlength="10" size="10" 
+		<input type="text" name="fuel_surcharge" class="decimal" maxlength="10" size="10" 
 			<?php if (isset($this->params['fuel_surcharge'])) { echo 'value="' . $this->params['fuel_surcharge'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['fuel_surcharge'])) { ?><div class="error-wrapper"><?php echo $this->errors['fuel_surcharge']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="discount">Discount:</label>
-		<input type="text" name="discount" class="numeric" maxlength="10" size="10" 
+		<input type="text" name="discount" class="decimal" maxlength="10" size="10" 
 			<?php if (isset($this->params['discount'])) { echo 'value="' . $this->params['discount'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['discount'])) { ?><div class="error-wrapper"><?php echo $this->errors['discount']; ?></div><?php } ?>
