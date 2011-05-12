@@ -15,6 +15,7 @@
 	<div class="form-wrapper">
 		<label for="carrier_id">Carrier:</label>
 		<select name="carrier_id">
+			<option></option>
 			<?php 
 			
 			foreach ($this->carriers() as $item) {
@@ -241,7 +242,7 @@
 	<div class="form-wrapper">
 		<label for="load_time">Load Time:</label>
 		<input type="text" name="load_time" class="timepicker" 
-			<?php if (isset($this->params['load_date'])) { echo 'value="' . $this->time($this->params['load_date']) . '"'; } ?> />
+			<?php if (isset($this->params['load_time'])) { echo 'value="' . $this->params['load_time'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['load_time'])) { ?><div class="error-wrapper"><?php echo $this->errors['load_time']; ?></div><?php } ?>
 	<div class="form-wrapper">
@@ -254,7 +255,7 @@
 	<div class="form-wrapper">
 		<label for="delivery_time">Delivery Time:</label>
 		<input type="text" name="delivery_time" class="timepicker" 
-			<?php if (isset($this->params['delivery_date'])) { echo 'value="' . $this->time($this->params['delivery_date']) . '"'; } ?> />
+			<?php if (isset($this->params['delivery_time'])) { echo 'value="' . $this->params['delivery_time'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['delivery_time'])) { ?><div class="error-wrapper"><?php echo $this->errors['delivery_time']; ?></div><?php } ?>
 	<div class="form-wrapper">

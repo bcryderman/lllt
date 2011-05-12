@@ -24,7 +24,7 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 		    			    	
 				$load = new LLLT_Model_Load();
 								
-				$load->setCarrier_id($params['row_id'])
+				$load->setCarrier_id($params['carrier_id'])
 					 ->setBill_to_id($params['bill_to_id'])
 					 ->setShipper_id($params['shipper_id'])
 					 ->setOrigin_id($params['origin_id'])
@@ -33,8 +33,8 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 					 ->setProduct_id($params['product_id'])
 					 ->setDriver_id($params['driver_id'])
 					 ->setDelayed_dispatch($params['delayed_dispatch'])
-					 ->setLoad_date(date('Y-m-d', strtotime($params['load_date'])))
-					 ->setDelivery_date(date('Y-m-d', strtotime($params['delivery_date'])))
+					 ->setLoad_date(date('Y-m-d', strtotime($params['load_date'])) . ' ' . $params['load_time'] . ':00', true)
+					 ->setDelivery_date(date('Y-m-d', strtotime($params['delivery_date'])) . ' ' . $params['delivery_time'] . ':00', true)
 					 ->setOrder_number($params['order_number'])
 					 ->setBill_of_lading($params['bill_of_lading'])
 					 ->setNet_gallons($params['net_gallons'])
@@ -84,7 +84,7 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 				$load = new LLLT_Model_Load();
 								
 				$load->setLoad_id($params['load_id'])
-					 ->setCarrier_id($params['row_id'])
+					 ->setCarrier_id($params['carrier_id'])
 					 ->setBill_to_id($params['bill_to_id'])
 					 ->setShipper_id($params['shipper_id'])
 					 ->setOrigin_id($params['origin_id'])
@@ -93,8 +93,8 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 					 ->setProduct_id($params['product_id'])
 					 ->setDriver_id($params['driver_id'])
 					 ->setDelayed_dispatch($params['delayed_dispatch'])
-					 ->setLoad_date(date('Y-m-d', strtotime($params['load_date'])) . ' ' . $params['load_time'] . ':00')
-					 ->setDelivery_date(date('Y-m-d', strtotime($params['delivery_date'])) . ' ' . $params['delivery_time'] . ':00')
+					 ->setLoad_date(date('Y-m-d', strtotime($params['load_date'])) . ' ' . $params['load_time'] . ':00', true)
+					 ->setDelivery_date(date('Y-m-d', strtotime($params['delivery_date'])) . ' ' . $params['delivery_time'] . ':00', true)
 					 ->setOrder_number($params['order_number'])
 					 ->setBill_of_lading($params['bill_of_lading'])
 					 ->setNet_gallons($params['net_gallons'])
@@ -102,12 +102,12 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 					 ->setFuel_surcharge($params['fuel_surcharge'])
 					 ->setDiscount($params['discount'])
 					 ->setInvoice_date(date('Y-m-d', strtotime($params['invoice_date'])))
-					 ->setDispatched(0)
+					 ->setDispatched($params['dispatched'])
 					 ->setNotes(trim($params['notes']))
-					 ->setLoad_locked(0)
+					 ->setLoad_locked($params['load_locked'])
 					 ->setLast_updated($date)
 					 ->setLast_updated_by($auth['Employee']->getEmp_id())
-					 ->setActive(1);
+					 ->setActive($params['active']);
 					
 				$loadMapper = new LLLT_Model_LoadMapper();				
 				$loadMapper->edit($load);
@@ -151,7 +151,7 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 		$auth = Zend_Auth::getInstance()->getIdentity();
 
     	$loadMapper = new LLLT_Model_LoadMapper();
-    	$loads = $loadMapper->fetchAll('active = 1', array($params['column'] . ' ' . $params['sort'], 'delivery_date asc'));
+    	$loads = $loadMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'], 'delivery_date asc'));
 
     	$this->view->loads = $loads;
 
@@ -161,15 +161,20 @@ class StandardloadsController extends Zend_Controller_SecureAction {
     public function viewAction() {
     	
     	$loadMapper = new LLLT_Model_LoadMapper();
-    	$loads = $loadMapper->fetchAll('active = 1', array('delivery_date asc'));
+    	$loads = $loadMapper->fetchAll(null, array('delivery_date asc'));
     	  	
     	$this->view->loads = $loads;
     }
 
 	public function validation($params) {
-    	
+
     	$errors = array();
-		
+
+		if (empty($params['carrier_id'])) {
+			
+			$errors['carrier_id'] = 'You must select a carrier.';
+		}
+
 		if (empty($params['bill_to_id'])) {
 			
 			$errors['bill_to_id'] = 'You must select a bill to.';
@@ -211,7 +216,17 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 					
 			if (!$date->isValid()) {
 				
-				$errors['load_date'] = 'Load Date is formatted incorrectly.';
+				$errors['load_date'] = 'Load Date is formatted incorrectly or an invalid date.';
+			}
+		}
+		
+		if (!empty($params['load_time'])) {
+			
+			$time = new LLLT_Model_Time(array('time' => $params['load_time']));
+					
+			if (!$time->isValid()) {
+				
+				$errors['load_time'] = 'Load Time is formatted incorrectly or an invalid time.';
 			}
 		}
 		
@@ -221,7 +236,17 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 			
 			if (!$date->isValid()) {
 				
-				$errors['delivery_date'] = 'Delivery Date is formatted incorrectly.';
+				$errors['delivery_date'] = 'Delivery Date is formatted incorrectly or an invalid date.';
+			}
+		}
+		
+		if (!empty($params['delivery_time'])) {
+			
+			$time = new LLLT_Model_Time(array('time' => $params['delivery_time']));
+					
+			if (!$time->isValid()) {
+				
+				$errors['delivery_time'] = 'Delivery Time is formatted incorrectly or an invalid time.';
 			}
 		}
 		
@@ -251,7 +276,7 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 			
 			if (!$date->isValid()) {
 				
-				$errors['invoice_date'] = 'Invoice Date is formatted incorrectly.';
+				$errors['invoice_date'] = 'Invoice Date is formatted incorrectly or an invalid date.';
 			}
 		}
 

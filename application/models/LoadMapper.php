@@ -116,7 +116,7 @@ class LLLT_Model_LoadMapper {
 			 ->update($data, $where);
     }
     
-    public function fetchAll($where = null, $order = null) {
+    public function fetchAll($where, $order = null) {
     	
         $resultSet = $this->getDbTable()
 						  ->fetchAll($where, $order);
@@ -138,7 +138,9 @@ class LLLT_Model_LoadMapper {
 				 ->setDriver_id($row->driver_id)
 				 ->setDelayed_dispatch($row->delayed_dispatch)
 				 ->setLoad_date($row->load_date)
+				 ->setLoad_time($row->load_date)
 				 ->setDelivery_date($row->delivery_date)
+				 ->setDelivery_time($row->delivery_date)
 				 ->setOrder_number($row->order_number)
 				 ->setBill_of_lading($row->bill_of_lading)
 				 ->setNet_gallons($row->net_gallons)
@@ -188,7 +190,9 @@ class LLLT_Model_LoadMapper {
 			 ->setDriver_id($row->driver_id)
 			 ->setDelayed_dispatch($row->delayed_dispatch)
 			 ->setLoad_date($row->load_date)
+			 ->setLoad_time($row->load_date)
 			 ->setDelivery_date($row->delivery_date)
+			 ->setDelivery_time($row->delivery_date)
 			 ->setOrder_number($row->order_number)
 			 ->setBill_of_lading($row->bill_of_lading)
 			 ->setNet_gallons($row->net_gallons)

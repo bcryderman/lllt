@@ -78,31 +78,31 @@ class LLLT_Model_CarrierDiscountMapper {
     
     public function fetchAll($where, $order = null) {
     	
-			if ($where === null) {
+		if ($where === null) {
 
-				$resultSet = $this->getDbTable()
-								  ->fetchAll($this->getDbTable()
-												  ->select()
-												  ->setIntegrityCheck(false)
-												  ->from(array('cd' => 'tbl_carrier_discount'))
-												  ->order($order)
-												  ->join(array('c' => 'tbl_customer'),
-														 'cd.company_id = c.customer_id',
-														 array('name')));
-			}
-			else {
+			$resultSet = $this->getDbTable()
+							  ->fetchAll($this->getDbTable()
+											  ->select()
+											  ->setIntegrityCheck(false)
+											  ->from(array('cd' => 'tbl_carrier_discount'))
+											  ->order($order)
+											  ->join(array('c' => 'tbl_customer'),
+													 'cd.company_id = c.customer_id',
+													 array('name')));
+		}
+		else {
 
-				$resultSet = $this->getDbTable()
-								  ->fetchAll($this->getDbTable()
-												  ->select()
-												  ->setIntegrityCheck(false)
-												  ->from(array('cd' => 'tbl_carrier_discount'))
-												  ->where($where)
-												  ->order($order)
-												  ->join(array('c' => 'tbl_customer'),
-														 'cd.company_id = c.customer_id',
-														 array('name')));
-			}
+			$resultSet = $this->getDbTable()
+							  ->fetchAll($this->getDbTable()
+											  ->select()
+											  ->setIntegrityCheck(false)
+											  ->from(array('cd' => 'tbl_carrier_discount'))
+											  ->where($where)
+											  ->order($order)
+											  ->join(array('c' => 'tbl_customer'),
+													 'cd.company_id = c.customer_id',
+													 array('name')));
+		}
         
         $carrierDiscounts = array();
         

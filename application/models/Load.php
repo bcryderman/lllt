@@ -13,7 +13,9 @@ class LLLT_Model_Load {
 	protected $_driver_id;
 	protected $_delayed_dispatch;
 	protected $_load_date;
+	protected $_load_time;
 	protected $_delivery_date;
+	protected $_delivery_time;
 	protected $_order_number;
 	protected $_bill_of_lading;
 	protected $_net_gallons;
@@ -208,10 +210,16 @@ class LLLT_Model_Load {
         return $this->_delayed_dispatch;
     }
 	
- 	public function setLoad_date($val) {
+ 	public function setLoad_date($val, $submit = false) {
     	
-        $this->_load_date = $val;
-        
+		if ($submit) {
+			
+			$this->_load_date = $val;
+		}
+		else {
+			
+			$this->_load_date = substr($val, 0, 10);
+		}        
         return $this;
     }
  
@@ -220,9 +228,28 @@ class LLLT_Model_Load {
         return $this->_load_date;
     }
 
- 	public function setDelivery_date($val) {
+ 	public function setLoad_time($val) {
     	
-        $this->_delivery_date = $val;
+        $this->_load_time = substr($val, 11, 5);
+        
+        return $this;
+    }
+ 
+    public function getLoad_time() {
+    	
+        return $this->_load_time;
+    }
+
+ 	public function setDelivery_date($val, $submit = false) {
+    	
+		if ($submit) {
+			
+			$this->_delivery_date = $val;
+		}
+		else {
+			
+			$this->_delivery_date = substr($val, 0, 10);
+		}        
         
         return $this;
     }
@@ -230,6 +257,18 @@ class LLLT_Model_Load {
     public function getDelivery_date() {
     	
         return $this->_delivery_date;
+    }
+
+ 	public function setDelivery_time($val) {
+    	
+        $this->_delivery_time = substr($val, 11, 5);
+        
+        return $this;
+    }
+ 
+    public function getDelivery_time() {
+    	
+        return $this->_delivery_time;
     }	 	 
 
  	public function setOrder_number($val) {
