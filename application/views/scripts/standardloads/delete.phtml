@@ -1,0 +1,111 @@
+<script>
+$(function() {
+
+	$('#cancel').click(function(e) {
+
+		e.preventDefault();
+		window.location = '/standardloads/view';
+	});
+});
+</script>
+<link rel="stylesheet" href="/css/standardloads/standardloads.css" />
+
+<div class="form-header">Are you sure you want to delete the following Standard Load?</div>
+<form id="standardloads-delete-form" class="delete" action="/standardloads/delete/load_id/<?php echo $this->params['load_id']; ?>" method="post">
+	<div class="form-wrapper">
+		<label>Carrier:</label>
+		<?php echo $this->load->getCarrier(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Bill To:</label>
+		<?php echo $this->load->getBill_to(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Shipper:</label>
+		<?php echo $this->load->getShipper(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Origin:</label>
+		<?php echo $this->load->getOrigin(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Customer:</label>
+		<?php echo $this->load->getCustomer(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Destination:</label>
+		<?php echo $this->load->getDestination(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Product:</label>
+		<?php echo $this->load->getProduct(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Driver:</label>
+		<?php echo $this->load->getDriver(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Delayed Dispatch:</label>
+		<?php echo $this->load->getDelayed_dispatch(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Load Date/Time:</label>
+		<?php echo $this->load->getLoad_date() . ' ' . $this->load->getLoad_time(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Delivery Date/Time:</label>
+		<?php echo $this->load->getDelivery_date() . ' ' . $this->load->getDelivery_time(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Order #:</label>
+		<?php echo $this->load->getOrder_number(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Bill of Lading #:</label>
+		<?php echo $this->load->getBill_of_lading(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Net Gallons:</label>
+		<?php echo $this->load->getNet_gallons(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Bill Rate</label>
+		<?php echo $this->load->getBill_rate(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Fuel Surcharge:</label>
+		<?php echo $this->load->getFuel_surcharge(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Discount:</label>
+		<?php echo $this->load->getDiscount(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Invoice Date:</label>
+		<?php echo $this->load->getInvoice_date(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Dispatched:</label>
+		<?php echo $this->load->getDispatched(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Notes:</label>
+		<?php echo $this->load->getNotes(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Load Locked:</label>
+		<?php echo $this->load->getLoad_locked(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Delivered:</label>
+		<?php echo $this->load->getDelivered(); ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Active:</label>
+		<?php echo $this->load->getActive(); ?>
+	</div>
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="Delete" />
+		<input id="cancel" type="button" value="Cancel" />
+	</div>
+</form>

@@ -1,6 +1,9 @@
 <link rel="stylesheet" href="/css/standardloads/standardloads.css" />
 
 <form id="standardloads-entry-form" action="/standardloads/<?php echo $this->type; ?>" method="post">
+	<?php if ($this->params['multiple']) { ?>
+		<input type="hidden" name="multiple" value="true" />
+	<?php } ?>
 	<?php if ($this->type === 'edit') { ?>
 		<input type="hidden" name="load_id" value="<?php echo $this->params['load_id']; ?>" />
 		<input type="hidden" name="load_locked" value="<?php echo $this->params['load_locked']; ?>" />
@@ -227,7 +230,7 @@
 	</div>
 	<?php if (isset($this->errors['driver_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['driver_id']; ?></div><?php } ?>
 	<div class="form-wrapper">
-		<label for="delayed">Delayed Dispatch:</label>
+		<label for="delayed_dispatch">Delayed Dispatch:</label>
 		<input type="checkbox" name="delayed_dispatch" 
 			<?php if (isset($this->params['delayed_dispatch']) && $this->params['delayed_dispatch']) { echo 'checked'; }?> />
 	</div>
@@ -235,8 +238,7 @@
 	<div class="form-wrapper">
 		<label for="load_date">Load Date:</label>
 		<input type="text" name="load_date" class="datepicker" 
-			<?php if (isset($this->params['load_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['load_date']) . '"'; } ?>
-			<?php if (isset($this->params['load_date']) && isset($this->errors)) { echo 'value="' . $this->params['load_date'] . '"'; } ?> />
+			<?php if (isset($this->params['load_date'])) { echo 'value="' . $this->params['load_date'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['load_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['load_date']; ?></div><?php } ?>
 	<div class="form-wrapper">
@@ -248,8 +250,7 @@
 	<div class="form-wrapper">
 		<label for="delivery_date">Delivery Date:</label>
 		<input type="text" name="delivery_date" class="datepicker" 
-			<?php if (isset($this->params['delivery_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['delivery_date']) . '"'; } ?>
-			<?php if (isset($this->params['delivery_date']) && isset($this->errors)) { echo 'value="' . $this->params['delivery_date'] . '"'; } ?> />
+			<?php if (isset($this->params['delivery_date'])) { echo 'value="' . $this->params['delivery_date'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['delivery_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['delivery_date']; ?></div><?php } ?>
 	<div class="form-wrapper">
@@ -258,11 +259,18 @@
 			<?php if (isset($this->params['delivery_time'])) { echo 'value="' . $this->params['delivery_time'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['delivery_time'])) { ?><div class="error-wrapper"><?php echo $this->errors['delivery_time']; ?></div><?php } ?>
+	<?php if ($this->params['multiple']) { ?>
+		<div class="form-wrapper">
+			<label for="order_number">Order #s:</label>
+			<textarea name="order_number"><?php if (isset($this->params['order_number'])) { echo $this->params['order_number']; } ?></textarea>
+		</div>
+	<?php } else { ?>
 	<div class="form-wrapper">
 		<label for="order_number">Order #:</label>
 		<input type="text" name="order_number" class="numeric" maxlength="30" size="30" 
 			<?php if (isset($this->params['order_number'])) { echo 'value="' . $this->params['order_number'] . '"'; } ?> />
 	</div>
+	<?php } ?>
 	<?php if (isset($this->errors['order_number'])) { ?><div class="error-wrapper"><?php echo $this->errors['order_number']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="bill_of_lading">Bill of Lading #:</label>
@@ -297,16 +305,15 @@
 	<div class="form-wrapper">
 		<label for="invoice_date">Invoice Date:</label>
 		<input type="text" name="invoice_date" class="datepicker" 
-			<?php if (isset($this->params['invoice_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['invoice_date']) . '"'; } ?>
-			<?php if (isset($this->params['invoice_date']) && isset($this->errors)) { echo 'value="' . $this->params['invoice_date'] . '"'; } ?> />
+			<?php if (isset($this->params['invoice_date'])) { echo 'value="' . $this->params['invoice_date'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['invoice_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['invoice_date']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="notes">Notes:</label>
 		<textarea name="notes"><?php if (isset($this->params['notes'])) { echo $this->params['notes']; } ?></textarea>
 	</div>
-	<?php if (isset($this->errors['description'])) { ?><div class="error-wrapper"><?php echo $this->errors['description']; ?></div>	<?php } ?>
+	<?php if (isset($this->errors['notes'])) { ?><div class="error-wrapper"><?php echo $this->errors['notes']; ?></div>	<?php } ?>
 	<div class="form-wrapper form-controls">
-		<input type="submit" value="<?php echo ucfirst($this->type); ?> Standard Load" />
+		<input type="submit" value="<?php echo ucfirst($this->type); ?> Standard Load<?php if ($this->params['multiple']) { echo 's'; } ?>" />
 	</div>
 </form>

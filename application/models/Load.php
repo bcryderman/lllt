@@ -4,13 +4,21 @@ class LLLT_Model_Load {
 
 	protected $_load_id;
 	protected $_carrier_id;
+	protected $_carrier;
 	protected $_bill_to_id;
+	protected $_bill_to;
 	protected $_shipper_id;
+	protected $_shipper;
 	protected $_origin_id;
+	protected $_origin;
 	protected $_customer_id;
+	protected $_customer;
 	protected $_destination_id;
+	protected $_destination;
 	protected $_product_id;
+	protected $_product;
 	protected $_driver_id;
+	protected $_driver;
 	protected $_delayed_dispatch;
 	protected $_load_date;
 	protected $_load_time;
@@ -106,6 +114,18 @@ class LLLT_Model_Load {
     	
         return $this->_carrier_id;
     }
+
+ 	public function setCarrier($val) {
+    	
+        $this->_carrier = $val;
+        
+        return $this;
+    }
+ 
+    public function getCarrier() {
+    	
+        return $this->_carrier;
+    }
         
  	public function setBill_to_id($val) {
     	
@@ -117,6 +137,18 @@ class LLLT_Model_Load {
     public function getBill_to_id() {
     	
         return $this->_bill_to_id;
+    }
+
+ 	public function setBill_to($val) {
+    	
+        $this->_bill_to = $val;
+        
+        return $this;
+    }
+ 
+    public function getBill_to() {
+    	
+        return $this->_bill_to;
     }
 	
  	public function setShipper_id($val) {
@@ -131,6 +163,18 @@ class LLLT_Model_Load {
         return $this->_shipper_id;
     }
 
+ 	public function setShipper($val) {
+    	
+        $this->_shipper = $val;
+        
+        return $this;
+    }
+ 
+    public function getShipper() {
+    	
+        return $this->_shipper;
+    }
+
  	public function setOrigin_id($val) {
     	
         $this->_origin_id = $val;
@@ -141,6 +185,49 @@ class LLLT_Model_Load {
     public function getOrigin_id() {
     	
         return $this->_origin_id;
+    }
+
+ 	public function setOrigin($arr) {
+		
+		if (!empty($arr['city']) && !empty($arr['state']) && !empty($arr['name'])) {
+			
+			$this->_origin = $arr['city'] . ', ' . $arr['state'] . ' - ' . $arr['name'];
+		}
+		else if (!empty($arr['state']) && !empty($arr['name'])) {
+			
+			$this->_origin = $arr['state'] . ' - ' . $arr['name'];
+		}
+		else if (!empty($arr['city']) && !empty($arr['state'])) {
+			
+			$this->_origin = $arr['city'] . ', ' . $arr['state'];
+		}
+		else if (!empty($arr['city']) && !empty($arr['name'])) {
+			
+			$this->_origin = $arr['city'] . ' - ' . $arr['name'];
+		}
+		else if (!empty($arr['name'])) {
+			
+			$this->_origin = $arr['name'];
+		}
+		else if (!empty($arr['state'])) {
+			
+			$this->_origin = $arr['state'];
+		}
+		else if (!empty($arr['city'])) {
+			
+			$this->_origin = $arr['city'];
+		}
+		else {
+			
+			$this->_origin = 'N/A';
+		}
+		        
+        return $this;
+    }
+ 
+    public function getOrigin() {
+    	
+        return $this->_origin;
     }
 
  	public function setCustomer_id($val) {
@@ -155,6 +242,18 @@ class LLLT_Model_Load {
         return $this->_customer_id;
     }
 
+ 	public function setCustomer($val) {
+    	
+        $this->_customer = $val;
+        
+        return $this;
+    }
+ 
+    public function getCustomer() {
+    	
+        return $this->_customer;
+    }
+
  	public function setDestination_id($val) {
     	
         $this->_destination_id = $val;
@@ -165,6 +264,49 @@ class LLLT_Model_Load {
     public function getDestination_id() {
     	
         return $this->_destination_id;
+    }
+
+ 	public function setDestination($arr) {
+		
+		if (!empty($arr['city']) && !empty($arr['state']) && !empty($arr['name'])) {
+			
+			$this->_destination = $arr['city'] . ', ' . $arr['state'] . ' - ' . $arr['name'];
+		}
+		else if (!empty($arr['state']) && !empty($arr['name'])) {
+			
+			$this->_destination = $arr['state'] . ' - ' . $arr['name'];
+		}
+		else if (!empty($arr['city']) && !empty($arr['state'])) {
+			
+			$this->_destination = $arr['city'] . ', ' . $arr['state'];
+		}
+		else if (!empty($arr['city']) && !empty($arr['name'])) {
+			
+			$this->_destination = $arr['city'] . ' - ' . $arr['name'];
+		}
+		else if (!empty($arr['name'])) {
+			
+			$this->_destination = $arr['name'];
+		}
+		else if (!empty($arr['state'])) {
+			
+			$this->_destination = $arr['state'];
+		}
+		else if (!empty($arr['city'])) {
+			
+			$this->_destination = $arr['city'];
+		}
+		else {
+			
+			$this->_destination = 'N/A';
+		}
+		        
+        return $this;
+    }
+ 
+    public function getDestination() {
+    	
+        return $this->_destination;
     }
 
  	public function setProduct_id($val) {
@@ -179,6 +321,18 @@ class LLLT_Model_Load {
         return $this->_product_id;
     }
 
+ 	public function setProduct($val) {
+    	
+        $this->_product = $val;
+        
+        return $this;
+    }
+ 
+    public function getProduct() {
+    	
+        return $this->_product;
+    }
+
  	public function setDriver_id($val) {
     	
         $this->_driver_id = $val;
@@ -189,6 +343,33 @@ class LLLT_Model_Load {
     public function getDriver_id() {
     	
         return $this->_driver_id;
+    }
+
+ 	public function setDriver($arr) {
+    	
+		if (!empty($arr['first_name']) && !empty($arr['last_name'])) {
+			
+			$this->_driver = $arr['last_name'] . ', ' . $arr['first_name'];
+		}
+		else if (!empty($arr['last_name'])) {
+			
+			$this->_driver = $arr['last_name'];
+		}
+		else if (!empty($arr['first_name'])) {
+			
+			$this->_driver = $arr['first_name'];
+		}
+		else {
+			
+			$this->_driver = 'N/A';
+		}
+		        
+        return $this;
+    }
+ 
+    public function getDriver() {
+    	
+        return $this->_driver;
     }
 
  	public function setDelayed_dispatch($val) {

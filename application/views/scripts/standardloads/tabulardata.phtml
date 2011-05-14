@@ -1,62 +1,14 @@
 <tbody>
 <?php foreach ($this->loads as $item) { ?>
 	<tr>
-		<td><?php echo $this->pswcustomers($item->getCarrier_id())->getName(); ?></td>
-		<td><?php echo $this->pswcustomers($item->getBill_to_id())->getName(); ?></td>
-		<td><?php echo $this->pswcustomers($item->getShipper_id())->getName(); ?></td>
-		<td>
-			<?php 
-			
-			$origin = $this->pswcustomers($item->getOrigin_id());			
-			$displayVal = '';
-			
-			if ($origin->getName() !== '') {
-					
-				$displayVal = $origin->getCity() . ', ' . $origin->getState() . ' - ' . $origin->getName();
-			}
-			else {
-					
-				$displayVal = $origin->getCity() . ', ' . $origin->getState();
-			}
-			
-			echo $displayVal; 
-				
-			?>
-		</td>
-		<td><?php echo $this->pswcustomers($item->getCustomer_id())->getName(); ?></td>
-		<td>
-			<?php 
-			
-			$destination = $this->pswcustomers($item->getDestination_id());
-			$displayVal = '';
-			
-			if ($destination->getCity() !== '' && $destination->getState() !== '' && $destination->getName() !== '') {
-					
-				$displayVal = $destination->getCity() . ', ' . $destination->getState() . ' - ' . $destination->getName();
-			}
-			else if ($destination->getCity() !== '' && $destination->getState() !== '') {
-					
-				$displayVal = $destination->getCity() . ', ' . $destination->getState();
-			}
-			else if ($destination->getCity() !== '') {
-				
-				$displayVal = $destination->getCity();
-			}
-			else if ($destination->getState() !== '') {
-				
-				$displayVal = $destination->getState();
-			}
-			else if ($destination->getName() !== '') {
-				
-				$displayVal = $destination->getName();
-			}
-
-			echo $displayVal;
-			
-			?>
-		</td>
-		<td><?php echo $item->getProduct_id(); ?></td>
-		<td><?php echo $item->getDriver_id(); ?></td>
+		<td><?php echo $item->getCarrier(); ?></td>
+		<td><?php echo $item->getBill_to(); ?></td>
+		<td><?php echo $item->getShipper(); ?></td>
+		<td><?php echo $item->getOrigin(); ?></td>
+		<td><?php echo $item->getCustomer(); ?></td>
+		<td><?php echo $item->getDestination(); ?></td>
+		<td><?php echo $item->getProduct(); ?></td>
+		<td><?php echo $item->getDriver(); ?></td>
 		<td><?php echo $item->getDelayed_dispatch(); ?></td>
 		<td><?php echo $item->getLoad_date() . ' ' . $item->getLoad_time(); ?></td>
 		<td><?php echo $item->getDelivery_date() . ' ' . $item->getDelivery_time(); ?></td>
@@ -71,6 +23,7 @@
 		<td><?php echo $item->getNotes(); ?></td>
 		<td><?php echo $item->getLoad_locked(); ?></td>
 		<td><?php echo $item->getDelivered(); ?></td>
+		<td><?php echo $item->getActive(); ?></td>
 		<td><a href="/standardloads/edit/load_id/<?php echo $item->getLoad_id(); ?>">Edit</a></td>
 		<td><a href="/standardloads/delete/load_id/<?php echo $item->getLoad_id(); ?>">Delete</a></td>
 	</tr>

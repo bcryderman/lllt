@@ -10,61 +10,86 @@ class StandardloadsController extends Zend_Controller_SecureAction {
     public function addAction() {
 	
 	 	$request = $this->getRequest();
-    	
+    	$params = $request->getParams();
+
 	    if ($request->isPost()) {
 
-	    	$params = $request->getParams();
-	    	
 	    	$errors = $this->validation($params);	    	
 
-		    if (empty($errors)) {
+		    if (($params['multiple'] && empty($errors['errors'])) || empty($errors)) {
 		    	
 		    	$auth = Zend_Auth::getInstance()->getIdentity(); 
 	    		$date = date('Y-m-d H:i:s');
-		    			    	
-				$load = new LLLT_Model_Load();
+		    
+				if ($params['multiple']) {
+			
+					foreach ($errors['params']['order_number'] as $key => $val) {
+						
+						$load = new LLLT_Model_Load();
 								
-				$load->setCarrier_id($params['carrier_id'])
-					 ->setBill_to_id($params['bill_to_id'])
-					 ->setShipper_id($params['shipper_id'])
-					 ->setOrigin_id($params['origin_id'])
-					 ->setCustomer_id($params['customer_id'])
-					 ->setDestination_id($params['destination_id'])
-					 ->setProduct_id($params['product_id'])
-					 ->setDriver_id($params['driver_id'])
-					 ->setDelayed_dispatch($params['delayed_dispatch'])
-					 ->setLoad_date(date('Y-m-d', strtotime($params['load_date'])) . ' ' . $params['load_time'] . ':00', true)
-					 ->setDelivery_date(date('Y-m-d', strtotime($params['delivery_date'])) . ' ' . $params['delivery_time'] . ':00', true)
-					 ->setOrder_number($params['order_number'])
-					 ->setBill_of_lading($params['bill_of_lading'])
-					 ->setNet_gallons($params['net_gallons'])
-					 ->setBill_rate($params['bill_rate'])
-					 ->setFuel_surcharge($params['fuel_surcharge'])
-					 ->setDiscount($params['discount'])
-					 ->setInvoice_date(date('Y-m-d', strtotime($params['invoice_date'])))
-					 ->setDispatched(0)
-					 ->setNotes(trim($params['notes']))
-					 ->setLoad_locked(0)
-					 ->setCreated($date)
-					 ->setCreated_by($auth['Employee']->getEmp_id())
-					 ->setLast_updated($date)
-					 ->setLast_updated_by($auth['Employee']->getEmp_id())
-					 ->setActive(1);
+						$load->setCarrier_id($params['carrier_id'])
+							 ->setBill_to_id($params['bill_to_id'])
+							 ->setShipper_id($params['shipper_id'])
+							 ->setOrigin_id($params['origin_id'])
+							 ->setCustomer_id($params['customer_id'])
+							 ->setDestination_id($params['destination_id'])
+							 ->setProduct_id($params['product_id'])
+							 ->setDriver_id($params['driver_id'])
+							 ->setDelayed_dispatch($params['delayed_dispatch'])
+							 ->setLoad_date(date('Y-m-d', strtotime($params['load_date'])) . ' ' . $params['load_time'] . ':00', true)
+							 ->setDelivery_date(date('Y-m-d', strtotime($params['delivery_date'])) . ' ' . $params['delivery_time'] . ':00', true)
+							 ->setOrder_number($errors['params']['order_number'][$key])
+							 ->setBill_of_lading($params['bill_of_lading'])
+							 ->setNet_gallons($params['net_gallons'])
+							 ->setBill_rate($params['bill_rate'])
+							 ->setFuel_surcharge($params['fuel_surcharge'])
+							 ->setDiscount($params['discount'])
+							 ->setInvoice_date(date('Y-m-d', strtotime($params['invoice_date'])))
+							 ->setDispatched(0)
+							 ->setNotes(trim($params['notes']))
+							 ->setLoad_locked(0)
+							 ->setCreated($date)
+							 ->setCreated_by($auth['Employee']->getEmp_id())
+							 ->setLast_updated($date)
+							 ->setLast_updated_by($auth['Employee']->getEmp_id())
+							 ->setActive(1);
 					
-				$loadMapper = new LLLT_Model_LoadMapper();				
-				$loadMapper->add($load);
+						$loadMapper = new LLLT_Model_LoadMapper();				
+						$loadMapper->add($load);
+					}				
+				}
 		    	
 		    	$this->_redirect('standardloads/view');
 		    }
 		    else {
 		    	
-		    	$this->view->errors = $errors;
+		    	$this->view->errors = $errors['errors'];
 		    	$this->view->params = $params;	
 		    }
 		}
-    
-    	$this->view->type = 'add';
-    	$this->renderScript('standardloads/form.phtml');
+		
+		$this->view->type = 'add';
+		$this->view->params = $params;
+		$this->renderScript('standardloads/form.phtml');
+	}
+	
+	public function deleteAction() {
+		
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+    	
+    	$loadMapper = new LLLT_Model_LoadMapper();
+	    $load = $loadMapper->find($params['load_id']);
+	    	    	
+    	if ($request->isPost()) {
+    		
+    		$loadMapper->delete($load);
+	    	
+	    	$this->_redirect('standardloads/view');
+    	}    	
+     	
+    	$this->view->load = $load;	
+    	$this->view->params = $params;
 	}
 	
     public function editAction() {
@@ -151,17 +176,31 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 		$auth = Zend_Auth::getInstance()->getIdentity();
 
     	$loadMapper = new LLLT_Model_LoadMapper();
-    	$loads = $loadMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'], 'delivery_date asc'));
+
+		if ($params['column'] === 'origin') {
+			
+			$loads = $loadMapper->fetchAll(null, 'c4.city ' . $params['sort'] . ', c4.state ' . $params['sort'] . ', c4.name ' . $params['sort'] . ', l.delivery_date ' . $params['sort']);
+		}
+		else if ($params['column'] === 'destination') {
+			
+			$loads = $loadMapper->fetchAll(null, 'c6.city ' . $params['sort'] . ', c6.state ' . $params['sort'] . ', c6.name ' . $params['sort'] . ', l.delivery_date ' . $params['sort']);
+		}
+		else if ($params['column'] === 'driver') {
+			
+			$loads = $loadMapper->fetchAll(null, 'e.last_name ' . $params['sort'] . ', e.first_name ' . $params['sort'] . ', l.delivery_date ' . $params['sort']);
+		}
+		else {
+			
+			$loads = $loadMapper->fetchAll(null, $params['column'] . ' ' . $params['sort'] . ', l.delivery_date ' . $params['sort']);
+		}
 
     	$this->view->loads = $loads;
-
-		$this->renderScript('loads/tabulardata.phtml');
 	}
    
     public function viewAction() {
     	
     	$loadMapper = new LLLT_Model_LoadMapper();
-    	$loads = $loadMapper->fetchAll(null, array('delivery_date asc'));
+    	$loads = $loadMapper->fetchAll(null, 'l.delivery_date asc');
     	  	
     	$this->view->loads = $loads;
     }
@@ -250,6 +289,28 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 			}
 		}
 		
+		if (!empty($params['order_number']) && $params['multiple']) {
+			
+			$orderNumbers = explode(',', $params['order_number']);
+			
+			if ($orderNumbers[count($orderNumbers) - 1] === '') {
+				
+				array_pop($orderNumbers);
+			}
+
+			foreach ($orderNumbers as $key => $val) {
+				
+				if (!is_numeric($orderNumbers[$key])) {
+					
+					$errors['order_number'] = 'Order numbers must be separated by commas.';
+					
+					break;
+				}
+			}
+			
+			$params['order_number'] = $orderNumbers;
+		}
+		
 		if (!empty($params['net_gallons']) && !is_numeric($params['net_gallons'])) {
 			
 			$errors['net_gallons'] = 'Net Gallons is formatted incorrectly.';
@@ -285,6 +346,11 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 			$errors['notes'] = 'Notes cannot exceed 1,000 characters.';
 		}
     	
-    	return $errors;
+		if ($params['multiple']) {
+			
+			return array('errors' => $errors, 'params' => $params);	
+		}
+    	
+		return $errors;
     }
 }
