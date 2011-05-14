@@ -1,13 +1,13 @@
 #standardloads-entry-form label {
-	width: 100px;
+	width: 115px;
 }
 
 #standardloads-delete-form label {
-	width: 100px;
+	width: 115px;
 }
 
 #standardloads-entry-form .form-controls,
 #standardloads-entry-form .error-wrapper,
 #standardloads-delete-form .form-controls  {
-	padding-left: 110px;
+	padding-left: 125px;
 }
