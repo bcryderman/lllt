@@ -1,7 +1,4 @@
-#carrierdiscounts-entry-form label {
-	width: 65px;
-}
-
+#carrierdiscounts-entry-form label,
 #carrierdiscounts-delete-form label {
 	width: 65px;
 }

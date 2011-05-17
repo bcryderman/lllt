@@ -110,3 +110,7 @@ textarea {
 	height: 75px;
 	width: 250px;	
 }
+
+.datepicker, .timepicker {
+	width: 75px;
+}
