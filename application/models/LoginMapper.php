@@ -30,22 +30,6 @@ class LLLT_Model_LoginMapper {
         
         return $this->_dbTable;
     }
-    
-	public function add(LLLT_Model_Login $login) {
-    	
-    	$data = array('emp_id'          => $login->getEmp_id(),
-    				  'username'        => $login->getUsername(),
-			          'password'        => $login->getPassword(),
-			          'user_type_id'    => $login->getUser_type_id(),
-    				  'created'         => $login->getCreated(),
-    				  'created_by'      => $login->getCreated_by(),
-    				  'last_updated'    => $login->getLast_updated(),
-    				  'last_updated_by' => $login->getLast_updated_by());
-    	
-    	$empId = $this->getDbTable()->insert($data);
-    	
-    	return $empId;
-    }
         
     public function auth(LLLT_Model_Login $login) {
     	
@@ -71,18 +55,17 @@ class LLLT_Model_LoginMapper {
     	
     		$login->setOptions((array) $authData);
     		  
-    		$emp = new LLLT_Model_Employee();
-    		$empMapper = new LLLT_Model_EmployeeMapper();
-    		$emp = $empMapper->find($authData->emp_id);
+    		$employeeMapper = new LLLT_Model_EmployeeMapper();
+    		$employee = $employeeMapper->find($authData->emp_id);
     					
-			if ($emp->getActive() == 1) {
+			if ($employee->getActive() == 1) {
 				
 				$loginAttemptMapper = new LLLT_Model_LoginAttemptMapper();
 				$loginAttemptMapper->create($login);
 				
 				$authStorage = $auth->getStorage();  
    				$authStorage->write(array('Login'    => $login, 
-   										  'Employee' => $emp)); 
+   										  'Employee' => $employee)); 
 
    				return true;
 			}	
@@ -107,7 +90,7 @@ class LLLT_Model_LoginMapper {
 				
 			case 'INACTIVE':
 				
-				return 'The username you entered is inactive. Please contact LLLT for futher action.';
+				return 'The username you entered is inactive. Please contact LLLT for further action.';
 				
 			default:
 				
@@ -121,14 +104,18 @@ class LLLT_Model_LoginMapper {
 			          'last_updated'    => $login->getLast_updated(),
 			          'last_updated_by' => $login->getLast_updated_by());
  
-      	$this->getDbTable()->update($data, array('emp_id = ?' => $login->getEmp_id()));
+      	$this->getDbTable()
+			 ->update($data, array('emp_id = ?' => $login->getEmp_id()));
     }
 
- 	public function delete(LLLT_Model_Login $login) {
+ 	public function delete($id) {
     	
-    	$where = $this->getDbTable()->getAdapter()->quoteInto('emp_id = ?', $login->getEmp_id());
+    	$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('emp_id = ?', $id);
 			
-    	$this->getDbTable()->delete($where);
+    	$this->getDbTable()
+			 ->delete($where);
     }
 
    	public function edit(LLLT_Model_Login $login) {
@@ -139,22 +126,25 @@ class LLLT_Model_LoginMapper {
     				  'last_updated'    => $login->getLast_updated(),
     				  'last_updated_by' => $login->getLast_updated_by());
     	 
-		$where = $this->getDbTable()->getAdapter()->quoteInto('emp_id = ?', $login->getEmp_id());
+		$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('emp_id = ?', $login->getEmp_id());
 
-		$this->getDbTable()->update($data, $where);
+		$this->getDbTable()
+			 ->update($data, $where);
     }
 
-    public function fetchAll($where = null, $order = null) {
+    public function fetchAll($where, $order = null) {
     	
-        $resultSet = $this->getDbTable()->fetchAll($where, $order);
+        $resultSet = $this->getDbTable()
+						  ->fetchAll($where, $order);
         
-        $entries = array();
+        $logins = array();
         
         foreach ($resultSet as $row) {
         	
-            $entry = new LLLT_Model_Login();
-            
-        	$entry->setEmp_id($row->emp_id)
+            $login = new LLLT_Model_Login();
+        	$login->setEmp_id($row->emp_id)
 				  ->setUsername($row->username)
 				  ->setPassword($row->password)
 				  ->setUser_type_id($row->user_type_id)
@@ -163,15 +153,16 @@ class LLLT_Model_LoginMapper {
 		          ->setLast_updated($row->last_updated)
 		          ->setLast_updated_by($row->last_updated_by);
                   
-            $entries[] = $entry;            
+            $logins[] = $login;            
         }
         
-        return $entries;
+        return $logins;
     }
 
 	public function find($id) {
 		
-        $result = $this->getDbTable()->find($id);
+        $result = $this->getDbTable()
+					   ->find($id);
 
         if (0 == count($result)) {
         	
@@ -181,7 +172,6 @@ class LLLT_Model_LoginMapper {
         $row = $result->current();
         
         $login = new LLLT_Model_Login();
-
         $login->setEmp_id($row->emp_id)
 			  ->setUsername($row->username)
 			  ->setPassword($row->password)
@@ -196,8 +186,10 @@ class LLLT_Model_LoginMapper {
         
     public function usernameAvail($username) {
     	
-    	$result = $this->getDbTable()->fetchRow($this->getDbTable()->select()
-																   ->where('username = ?', $username));						
+    	$result = $this->getDbTable()
+					   ->fetchRow($this->getDbTable()
+									   ->select()
+									   ->where('username = ?', $username));						
 
 		if (count($result) > 0) {
         	

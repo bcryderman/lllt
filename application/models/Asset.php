@@ -79,7 +79,7 @@ class LLLT_Model_Asset {
     
  	public function setAsset_type_id($val) {
     	
-        $this->_asset_type_id = $val;
+        $this->_asset_type_id = (int) $val;
         
         return $this;
     }
@@ -91,7 +91,7 @@ class LLLT_Model_Asset {
 
  	public function setAsset_type($val) {
     	
-        $this->_asset_type = $val;
+        $this->_asset_type = (string) $val;
         
         return $this;
     }
@@ -103,7 +103,7 @@ class LLLT_Model_Asset {
         
  	public function setAsset_name($val) {
     	
-        $this->_asset_name = $val;
+        $this->_asset_name = (string) $val;
         
         return $this;
     }
@@ -115,7 +115,7 @@ class LLLT_Model_Asset {
     
  	public function setCompartment_count($val) {
     	
-        $this->_compartment_count = $val;
+        $this->_compartment_count = (int) $val;
         
         return $this;
     }
@@ -146,7 +146,7 @@ class LLLT_Model_Asset {
     
     public function setCustomer_id($val) {
     	
-        $this->_customer_id = $val;
+        $this->_customer_id = (int) $val;
         
         return $this;
     }
@@ -158,7 +158,7 @@ class LLLT_Model_Asset {
     
     public function setCustomer_name($val) {
     	
-        $this->_customer_name = $val;
+        $this->_customer_name = (string) $val;
         
         return $this;
     }
@@ -170,7 +170,7 @@ class LLLT_Model_Asset {
 
     public function setNavman_vehicle_id($val) {
     	
-        $this->_navman_vehicle_id = $val;
+        $this->_navman_vehicle_id = (string) $val;
         
         return $this;
     }
@@ -182,7 +182,7 @@ class LLLT_Model_Asset {
             
     public function setCreated($val) {
     	
-        $this->_created = $val;
+        $this->_created = (string) $val;
         
         return $this;
     }
@@ -194,7 +194,7 @@ class LLLT_Model_Asset {
     
     public function setCreated_by($val) {
     	
-        $this->_created_by = $val;
+        $this->_created_by = (int) $val;
         
         return $this;
     }
@@ -206,7 +206,7 @@ class LLLT_Model_Asset {
     
     public function setLast_updated($val) {
     	
-        $this->_last_updated = $val;
+        $this->_last_updated = (string) $val;
         
         return $this;
     }
@@ -218,7 +218,7 @@ class LLLT_Model_Asset {
     
     public function setLast_updated_by($val) {
     	
-        $this->_last_updated_by = $val;
+        $this->_last_updated_by = (int) $val;
         
         return $this;
     }

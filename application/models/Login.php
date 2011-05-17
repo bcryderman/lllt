@@ -74,7 +74,7 @@ class LLLT_Model_Login {
      
     public function setUsername($val) {
     	
-        $this->_username = strtolower($val);
+        $this->_username = (string) strtolower($val);
         
         return $this;
     }
@@ -86,7 +86,7 @@ class LLLT_Model_Login {
     
     public function setPassword($val) {
     	
-        $this->_password = $val;
+        $this->_password = (string) $val;
         
         return $this;
     }
@@ -98,7 +98,7 @@ class LLLT_Model_Login {
     
     public function setUser_type_id($val) {
     	
-        $this->_user_type_id = $val;
+        $this->_user_type_id = (int) $val;
         
         return $this;
     }
@@ -110,7 +110,7 @@ class LLLT_Model_Login {
     
     public function setCreated($val) {
     	
-        $this->_created = $val;
+        $this->_created = (string) $val;
         
         return $this;
     }
@@ -122,7 +122,7 @@ class LLLT_Model_Login {
     
     public function setCreated_by($val) {
     	
-        $this->_created_by = $val;
+        $this->_created_by = (int) $val;
         
         return $this;
     }
@@ -134,7 +134,7 @@ class LLLT_Model_Login {
     
     public function setLast_updated($val) {
     	
-        $this->_last_updated = $val;
+        $this->_last_updated = (string) $val;
         
         return $this;
     }
@@ -146,7 +146,7 @@ class LLLT_Model_Login {
     
     public function setLast_updated_by($val) {
     	
-        $this->_last_updated_by = $val;
+        $this->_last_updated_by = (int) $val;
         
         return $this;
     }

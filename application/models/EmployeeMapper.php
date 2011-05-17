@@ -31,118 +31,180 @@ class LLLT_Model_EmployeeMapper {
         return $this->_dbTable;
     }
         
-    public function add(LLLT_Model_Employee $emp) {
+    public function add(LLLT_Model_Employee $employee) {
     			    	
-	    $data = array('first_name'         => $emp->getFirst_name(),
-				      'last_name'          => $emp->getLast_name(),
-				      'addr'               => $emp->getAddr(),
-	    			  'addr2'              => $emp->getAddr2(),
-	    			  'city'               => $emp->getCity(),
-	    			  'state'              => $emp->getState(),
-	    			  'zip'                => $emp->getZip(),
-	    			  'zip4'               => $emp->getZip4(),
-	    		      'active'             => 1,
-	    			  'vehicle_id'         => $emp->getVehicle_id(),
-	    			  'role_id'            => $emp->getRole_id(),
-					  'email'              => $emp->getEmail(),
-	    			  'created'            => $emp->getCreated(),
-	    			  'created_by'         => $emp->getCreated_by(),
-	    			  'last_updated'       => $emp->getLast_updated(),
-	    			  'last_updated_by'    => $emp->getLast_udpated_by());
+	    $data = array('first_name'            => $employee->getFirst_name(),
+				      'last_name'             => $employee->getLast_name(),
+				      'addr'                  => $employee->getAddr(),
+	    			  'addr2'                 => $employee->getAddr2(),
+	    			  'city'                  => $employee->getCity(),
+	    			  'state'                 => $employee->getState(),
+	    			  'zip'                   => $employee->getZip(),
+	    			  'zip4'                  => $employee->getZip4(),
+	    		      'active'                => 1,
+	    			  'vehicle_id'            => $employee->getVehicle_id(),
+	    			  'role_id'               => $employee->getRole_id(),
+					  'email'                 => $employee->getEmail(),
+					  'phone' 			      => $employee->getPhone(),
+					  'phone_ext'		      => $employee->getPhone_ext(),
+					  'phone_primary'	      => $employee->getPhone_primary(),
+					  'cell_phone'		   	  => $employee->getCell_phone(),
+					  'cell_phone_primary'    => $employee->getCell_phone_primary(),
+					  'communication_type_id' => $employee->getCommunication_type_id(),
+	    			  'created'            	  => $employee->getCreated(),
+	    			  'created_by'            => $employee->getCreated_by(),
+	    			  'last_updated'          => $employee->getLast_updated(),
+	    			  'last_updated_by'       => $employee->getLast_updated_by());
 	    	    	
 	    $empId = $this->getDbTable()
 					 ->insert($data);
+					
+		$data = array('emp_id' 			=> $empId,
+					  'username'		=> $employee->getUsername(),
+					  'password' 		=> $employee->getPassword(),
+					  'user_type_id' 	=> $employee->getUser_type_id(),
+					  'created' 		=> $employee->getCreated(),
+					  'created_by' 		=> $employee->getCreated_by(),
+					  'last_updated' 	=> $employee->getLast_updated(),
+					  'last_updated_by' => $employee->getLast_updated_by());
+			
+		$login = new LLLT_Model_DbTable_Login();
+		$login->insert($data);
 	    
 	    return $empId;
     }
 
- 	public function delete(LLLT_Model_Employee $emp) {
+ 	public function delete($id) {
     	
+		$login = new LLLT_Model_DbTable_Login();
+		$login->delete($login->getAdapter()
+		  					 ->quoteInto('emp_id = ?', $id));
+		
     	$where = $this->getDbTable()
 					  ->getAdapter()
-					  ->quoteInto('emp_id = ?', $emp->getEmp_id());
+					  ->quoteInto('emp_id = ?', $id);
 			
     	$this->getDbTable()
 			 ->delete($where);
     }
 
-   	public function edit(LLLT_Model_Employee $emp) {
-    	
-	    $data = array('first_name'         => $emp->getFirst_name(),
-				      'last_name'          => $emp->getLast_name(),
-				      'addr'               => $emp->getAddr(),
-	    			  'addr2'              => $emp->getAddr2(),
-	    			  'city'               => $emp->getCity(),
-	    			  'state'              => $emp->getState(),
-	    			  'zip'                => $emp->getZip(),
-	    			  'zip4'               => $emp->getZip4(),
-	    		      'active'             => $emp->getActive(),
-	    			  'vehicle_id'         => $emp->getVehicle_id(),
-	    			  'role_id'            => $emp->getRole_id(),
-					  'email'              => $emp->getEmail(),
-	    			  'last_updated'       => $emp->getLast_updated(),
-	    			  'last_updated_by'    => $emp->getLast_udpated_by());
-    	 
+   	public function edit(LLLT_Model_Employee $employee) {
+			
+	    $data = array('emp_id'  		  	  => $employee->getEmp_id(),
+					  'first_name'       	  => $employee->getFirst_name(),
+				      'last_name'        	  => $employee->getLast_name(),
+				      'addr'               	  => $employee->getAddr(),
+	    			  'addr2'             	  => $employee->getAddr2(),
+	    			  'city'              	  => $employee->getCity(),
+	    			  'state'             	  => $employee->getState(),
+	    			  'zip'               	  => $employee->getZip(),
+	    			  'zip4'              	  => $employee->getZip4(),
+	    		      'active'            	  => $employee->getActive(),
+	    			  'vehicle_id'       	  => $employee->getVehicle_id(),
+	    			  'role_id'          	  => $employee->getRole_id(),
+					  'email'             	  => $employee->getEmail(),
+					  'phone' 			  	  => $employee->getPhone(),
+					  'phone_ext'		  	  => $employee->getPhone_ext(),
+					  'phone_primary'	   	  => $employee->getPhone_primary(),
+					  'cell_phone'		  	  => $employee->getCell_phone(),
+					  'cell_phone_primary' 	  => $employee->getCell_phone_primary(),
+					  'communication_type_id' => $employee->getCommunication_type_id(),
+	    			  'last_updated'      	  => $employee->getLast_updated(),
+	    			  'last_updated_by'   	  => $employee->getLast_updated_by());
+
 		$where = $this->getDbTable()
 					  ->getAdapter()
-					  ->quoteInto('emp_id = ?', $emp->getEmp_id());
-
-		$this->getDbTable()
+					  ->quoteInto('emp_id = ?', $employee->getEmp_id());
+							
+	    $this->getDbTable()
 			 ->update($data, $where);
+
+		if (!is_null($employee->getPassword())) {
+			
+			$data = array('emp_id' 			=> $employee->getEmp_id(),
+						  'username'		=> $employee->getUsername(),
+						  'password' 		=> $employee->getPassword(),
+						  'user_type_id' 	=> $employee->getUser_type_id(),
+						  'last_updated' 	=> $employee->getLast_updated(),
+						  'last_updated_by' => $employee->getLast_updated_by());
+
+			$login = new LLLT_Model_DbTable_Login();
+			$login->update($data, $login->getAdapter()
+			  							->quoteInto('emp_id = ?', $employee->getEmp_id()));
+		}
+												
+	    return $this;
     }
           
     public function fetchAll($where, $order = null) {
     	
-		if ($where === null) {
+		$sql = 'SELECT e.*, 
+					   l.username,
+			  		   r.role_name,
+			  		   ut.user_type, 
+					   ut.user_type_id,
+					   ct.communication_type AS cell_carrier
+				FROM tbl_employee e, 
+				 	 tbl_login l,
+					 tbl_role r,
+					 tbl_user_type ut,
+					 tbl_communication_type ct
+				WHERE e.role_id = r.role_id
+				AND e.emp_id = l.emp_id
+				AND l.user_type_id = ut.user_type_id
+				AND e.communication_type_id = ct.communication_type_id';
+				
+		if (!is_null($where)) {
 			
-			$resultSet = $this->getDbTable()
-							  ->fetchAll($this->getDbTable()
-											  ->select()
-											  ->setIntegrityCheck(false)
-											  ->from(array('e' => 'tbl_employee'))
-											  ->order($order)
-											  ->join(array('r' => 'tbl_role'),
-													 'e.role_id = r.role_id',
-													 array('role_name')));
+			$sql .= ' AND ' . $where;
 		}
-		else {
+		
+		if (!is_null($order)) {
 			
-			$resultSet = $this->getDbTable()
-							  ->fetchAll($this->getDbTable()
-											  ->select()
-											  ->setIntegrityCheck(false)
-											  ->from(array('e' => 'tbl_employee'))
-											  ->where($where)
-											  ->order($order)
-											  ->join(array('r' => 'tbl_role'),
-													 'e.role_id = r.role_id',
-													 array('role_name')));
+			$sql .= ' ORDER BY ' . $order;
 		}
+		
+		$stmt = $this->getDbTable()
+					 ->getAdapter()
+					 ->query($sql);
+		
+		$stmt->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$resultSet = $stmt->fetchAll();
         
         $employees = array();
         
         foreach ($resultSet as $row) {
         	
-            $employee = new LLLT_Model_Employee();
-            
-            $employee->setEmp_id($row->emp_id)
-            	  	 ->setFirst_name($row->first_name)
-        		  	 ->setLast_name($row->last_name)
-        		  	 ->setAddr($row->addr)
-	        		 ->setAddr2($row->addr2)
-	        		 ->setCity($row->city)
-	        		 ->setState($row->state)
-	        		 ->setZip($row->zip)
-	        		 ->setZip4($row->zip4)
-	        		 ->setVehicle_id($row->vehicle_id)
-	        		 ->setRole_id($row->role_id)
+	        $employee = new LLLT_Model_Employee();
+	        $employee->setEmp_id($row->emp_id)
+					 ->setUsername($row->username)
+		        	 ->setFirst_name($row->first_name)
+		        	 ->setLast_name($row->last_name)
+		        	 ->setAddr($row->addr)
+		        	 ->setAddr2($row->addr2)
+		        	 ->setCity($row->city)
+		        	 ->setState($row->state)
+		        	 ->setZip($row->zip)
+		         	 ->setZip4($row->zip4)
+		        	 ->setVehicle_id($row->vehicle_id)
+		        	 ->setRole_id($row->role_id)
 					 ->setRole_name($row->role_name)
-	        		 ->setActive($row->active)
-	        		 ->setEmail($row->email)
-	        		 ->setCreated($row->created)
-	        		 ->setCreated_by($row->created_by)
-	        		 ->setLast_updated($row->last_updated)
-	        		 ->setLast_updated_by($row->last_updated_by);
+					 ->setUser_type_id($row->user_type_id)
+					 ->setUser_type($row->user_type)
+		        	 ->setActive($row->active)
+		        	 ->setEmail($row->email)
+					 ->setPhone($row->phone, true)
+					 ->setPhone_ext($row->phone_ext)
+					 ->setPhone_primary($row->phone_primary)
+					 ->setCell_phone($row->cell_phone, true)
+					 ->setCell_phone_primary($row->cell_phone_primary)
+					 ->setCell_carrier($row->cell_carrier)
+					 ->setCommunication_type_id($row->communication_type_id)
+		        	 ->setCreated($row->created)
+		        	 ->setCreated_by($row->created_by)
+		        	 ->setLast_updated($row->last_updated)
+		        	 ->setLast_updated_by($row->last_updated_by);
                   
             $employees[] = $employee;
         }
@@ -151,42 +213,66 @@ class LLLT_Model_EmployeeMapper {
     }
     
 	public function find($id) {
-    	
-		$result = $this->getDbTable()
-					   ->fetchRow($this->getDbTable()
-					   				   ->select()
-					 				   ->setIntegrityCheck(false)
-									   ->from(array('e' => 'tbl_employee'))
-									   ->where('e.emp_id = ?', $id)
-									   ->join(array('r' => 'tbl_role'),
-									       		    'e.role_id = r.role_id',
-									 		  array('role_name')));
+									
+		$sql = 'SELECT e.*, 
+					   l.username,
+			  		   r.role_name,
+			  		   ut.user_type, 
+					   ut.user_type_id,
+					   ct.communication_type AS cell_carrier
+				FROM tbl_employee e, 
+				 	 tbl_login l,
+					 tbl_role r,
+					 tbl_user_type ut,
+					 tbl_communication_type ct
+				WHERE e.emp_id = ' . $id . '
+				AND e.role_id = r.role_id
+				AND e.emp_id = l.emp_id
+				AND l.user_type_id = ut.user_type_id
+				AND e.communication_type_id = ct.communication_type_id';
+
+		$this->getDbTable()
+			 ->getAdapter()
+			 ->setFetchMode(Zend_Db::FETCH_OBJ);
+
+		$row = $this->getDbTable()
+					->getAdapter()
+					->fetchRow($sql);
         
-        if (0 == count($result)) {
+        if (0 == count($row)) {
         	
             return 'The employee could not be found.';
         }
                 
         $employee = new LLLT_Model_Employee();
-
-        $employee->setEmp_id($result->emp_id)
-	        	 ->setFirst_name($result->first_name)
-	        	 ->setLast_name($result->last_name)
-	        	 ->setAddr($result->addr)
-	        	 ->setAddr2($result->addr2)
-	        	 ->setCity($result->city)
-	        	 ->setState($result->state)
-	        	 ->setZip($result->zip)
-	         	 ->setZip4($result->zip4)
-	        	 ->setVehicle_id($result->vehicle_id)
-	        	 ->setRole_id($result->role_id)
-				 ->setRole_name($result->role_name)
-	        	 ->setActive($result->active)
-	        	 ->setEmail($result->email)
-	        	 ->setCreated($result->created)
-	        	 ->setCreated_by($result->created_by)
-	        	 ->setLast_updated($result->last_updated)
-	        	 ->setLast_updated_by($result->last_updated_by);
+        $employee->setEmp_id($row->emp_id)
+				 ->setUsername($row->username)
+	        	 ->setFirst_name($row->first_name)
+	        	 ->setLast_name($row->last_name)
+	        	 ->setAddr($row->addr)
+	        	 ->setAddr2($row->addr2)
+	        	 ->setCity($row->city)
+	        	 ->setState($row->state)
+	        	 ->setZip($row->zip)
+	         	 ->setZip4($row->zip4)
+	        	 ->setVehicle_id($row->vehicle_id)
+	        	 ->setRole_id($row->role_id)
+				 ->setRole_name($row->role_name)
+				 ->setUser_type_id($row->user_type_id)
+				 ->setUser_type($row->user_type)
+	        	 ->setActive($row->active)
+	        	 ->setEmail($row->email)
+				 ->setPhone($row->phone, true)
+				 ->setPhone_ext($row->phone_ext)
+				 ->setPhone_primary($row->phone_primary)
+				 ->setCell_phone($row->cell_phone, true)
+				 ->setCell_phone_primary($row->cell_phone_primary)
+				 ->setCell_carrier($row->cell_carrier)
+				 ->setCommunication_type_id($row->communication_type_id)
+	        	 ->setCreated($row->created)
+	        	 ->setCreated_by($row->created_by)
+	        	 ->setLast_updated($row->last_updated)
+	        	 ->setLast_updated_by($row->last_updated_by);
 
         return $employee;
     }

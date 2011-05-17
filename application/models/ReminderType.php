@@ -59,7 +59,7 @@ class LLLT_Model_ReminderType {
          
  	public function setReminder_type_id($val) {
     	
-        $this->_reminder_type_id = $val;
+        $this->_reminder_type_id = (int) $val;
         
         return $this;
     }
@@ -71,7 +71,7 @@ class LLLT_Model_ReminderType {
      
     public function setReminder_type($val) {
     	
-        $this->_reminder_type = $val;
+        $this->_reminder_type = (string) $val;
         
         return $this;
     }
@@ -83,13 +83,13 @@ class LLLT_Model_ReminderType {
      	
     public function setActive($val) {
     	
-    	if ($val === 'on') {
+    	if ($val === 'on' || $val == 1) {
     		
     		$this->_active = 1;
     	}
-    	else {
+    	else if (is_null($val) || $val == 0) {
     		
-    		$this->_active = $val;
+    		$this->_active = 0;
     	}
         
         return $this;
@@ -102,7 +102,7 @@ class LLLT_Model_ReminderType {
         
     public function setDescription($val) {
     	
-        $this->_description = $val;
+        $this->_description = (string) $val;
         
         return $this;
     }
@@ -114,7 +114,7 @@ class LLLT_Model_ReminderType {
     
     public function setAsset_or_employee($val) {
     	
-        $this->_asset_or_employee = $val;
+        $this->_asset_or_employee = (string) $val;
         
         return $this;
     }

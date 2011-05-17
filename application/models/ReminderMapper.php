@@ -69,11 +69,11 @@ class LLLT_Model_ReminderMapper {
 	    return $reminderId;
     }
     
-    public function delete(LLLT_Model_Reminder $reminder) {
+    public function delete($id) {
     	
     	$where = $this->getDbTable()
 					  ->getAdapter()
-					  ->quoteInto('reminder_id = ?', $reminder->getReminder_id());
+					  ->quoteInto('reminder_id = ?', $id);
 			
     	$this->getDbTable()
 			 ->delete($where);
@@ -142,7 +142,6 @@ class LLLT_Model_ReminderMapper {
         foreach ($resultSet as $row) {
         	
             $reminder = new LLLT_Model_Reminder();
-            
         	$reminder->setReminder_id($row->reminder_id)
 	        	  	 ->setReminder_type_id($row->reminder_type_id)
 					 ->setReminder_type($row->reminder_type)
@@ -150,8 +149,8 @@ class LLLT_Model_ReminderMapper {
 	        	  	 ->setAsset_id($row->asset_id)
 					 ->setAsset_name($row->asset_name)
 	        	  	 ->setEmployee_id($row->employee_id)
-		        	 ->setDue_date($row->due_date)
-		        	 ->setCompleted_date($row->completed_date)
+		        	 ->setDue_date($row->due_date, true)
+		        	 ->setCompleted_date($row->completed_date, true)
 		        	 ->setNotes($row->notes)
 		        	 ->setCreated($row->created)
 		        	 ->setCreated_by($row->created_by)
@@ -166,20 +165,21 @@ class LLLT_Model_ReminderMapper {
     
 	public function find($id) {
 		
-        $result = $this->getDbTable()->fetchRow($this->getDbTable()
-													 ->select()
-													 ->setIntegrityCheck(false)
-												     ->from(array('r' => 'tbl_reminder'))
-												     ->where('reminder_id = ?', $id)	
-													 ->join(array('rt' => 'tbl_reminder_type'),
-															'r.reminder_type_id = rt.reminder_type_id',
-															array('reminder_type'))
-													 ->join(array('a' => 'tbl_asset'),
-															'r.asset_id = a.asset_id',
-															array('asset_name'))
-													 ->join(array('at' => 'tbl_asset_type'),
-															'a.asset_type_id = at.asset_type_id',
-															array('asset_type')));
+        $result = $this->getDbTable()
+					   ->fetchRow($this->getDbTable()
+									   ->select()
+									   ->setIntegrityCheck(false)
+									   ->from(array('r' => 'tbl_reminder'))
+									   ->where('reminder_id = ?', $id)	
+									   ->join(array('rt' => 'tbl_reminder_type'),
+											  'r.reminder_type_id = rt.reminder_type_id',
+										      array('reminder_type'))
+									   ->join(array('a' => 'tbl_asset'),
+											  'r.asset_id = a.asset_id',
+											  array('asset_name'))
+									   ->join(array('at' => 'tbl_asset_type'),
+											  'a.asset_type_id = at.asset_type_id',
+											  array('asset_type')));
         
         if (0 == count($result)) {
         	
@@ -187,7 +187,6 @@ class LLLT_Model_ReminderMapper {
         }
                 
 		$reminder = new LLLT_Model_Reminder();
-
     	$reminder->setReminder_id($result->reminder_id)
         	  	 ->setReminder_type_id($result->reminder_type_id)
 				 ->setReminder_type($result->reminder_type)
@@ -195,8 +194,8 @@ class LLLT_Model_ReminderMapper {
         	  	 ->setAsset_id($result->asset_id)
 				 ->setAsset_name($result->asset_name)
         	  	 ->setEmployee_id($result->employee_id)
-	        	 ->setDue_date($result->due_date)
-	        	 ->setCompleted_date($result->completed_date)
+	        	 ->setDue_date($result->due_date, true)
+	        	 ->setCompleted_date($result->completed_date, true)
 	        	 ->setNotes($result->notes)
 	        	 ->setCreated($result->created)
 	        	 ->setCreated_by($result->created_by)

@@ -44,11 +44,11 @@ class LLLT_Model_ReminderTypeMapper {
 	    return $reminderTypeId;
     }
     
-    public function delete(LLLT_Model_ReminderType $reminderType) {
+    public function delete($id) {
     	
     	$where = $this->getDbTable()
 					  ->getAdapter()
-					  ->quoteInto('reminder_type_id = ?', $reminderType->getReminder_type_id());
+					  ->quoteInto('reminder_type_id = ?', $id);
 			
     	$this->getDbTable()
 			 ->delete($where);
@@ -79,7 +79,6 @@ class LLLT_Model_ReminderTypeMapper {
         foreach ($resultSet as $row) {
         	
             $reminderType = new LLLT_Model_ReminderType();
-            
         	$reminderType->setReminder_type_id($row->reminder_type_id)
         		  		 ->setReminder_type($row->reminder_type)
 	        	  		 ->setActive($row->active)
@@ -105,7 +104,6 @@ class LLLT_Model_ReminderTypeMapper {
         $row = $result->current();
         
         $reminderType = new LLLT_Model_ReminderType();
-
         $reminderType->setReminder_type_id($row->reminder_type_id)
         			 ->setReminder_type($row->reminder_type)
 	        		 ->setActive($row->active)

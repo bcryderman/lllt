@@ -48,11 +48,11 @@ class LLLT_Model_CarrierDiscountMapper {
 	    return $id;
     }
     
- 	public function delete(LLLT_Model_CarrierDiscount $carrierDiscount) {
+ 	public function delete($id) {
     	
     	$where = $this->getDbTable()
 				 	  ->getAdapter()
-					  ->quoteInto('id = ?', $carrierDiscount->getId());
+					  ->quoteInto('id = ?', $id);
 			
     	$this->getDbTable()
 			 ->delete($where);
@@ -109,12 +109,11 @@ class LLLT_Model_CarrierDiscountMapper {
         foreach ($resultSet as $row) {
         	
             $carrierDiscount = new LLLT_Model_CarrierDiscount();
-            
         	$carrierDiscount->setId($row->id)        		  
 	        	  			->setCompany_id($row->company_id)
-						    ->setCustomer_name($row->name)
-			        	  	->setStart_date($row->start_date)
-				        	->setEnd_date($row->end_date)
+						    ->setCompany_name($row->name)
+			        	  	->setStart_date($row->start_date, true)
+				        	->setEnd_date($row->end_date, true)
 				        	->setDiscount($row->discount)
 				        	->setCreated($row->created)
 				        	->setCreated_by($row->created_by)
@@ -145,12 +144,11 @@ class LLLT_Model_CarrierDiscountMapper {
         }
         
         $carrierDiscount = new LLLT_Model_CarrierDiscount();
-
        	$carrierDiscount->setId($result->id)        		  
         	  			->setCompany_id($result->company_id)
-						->setCustomer_name($result->name)
-		        	  	->setStart_date($result->start_date)
-			        	->setEnd_date($result->end_date)
+						->setCompany_name($result->name)
+		        	  	->setStart_date($result->start_date, true)
+			        	->setEnd_date($result->end_date, true)
 			        	->setDiscount($result->discount)
 			        	->setCreated($result->created)
 			        	->setCreated_by($result->created_by)
