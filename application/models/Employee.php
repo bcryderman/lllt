@@ -16,6 +16,8 @@ class LLLT_Model_Employee {
 	protected $_role_name;
  	protected $_active = 0;
  	protected $_email;
+ 	protected $_dispatch_loads;
+ 	protected $_pending_loads;
  	protected $_created;
  	protected $_created_by;
  	protected $_last_updated;
@@ -242,6 +244,30 @@ class LLLT_Model_Employee {
     public function getEmail() {
     	
         return $this->_email;
+    }
+    
+    public function setDispatch_loads($val) {
+    	
+        $this->_dispatch_loads = $val;
+        
+        return $this;
+    }
+ 
+    public function getDispatch_loads() {
+    	
+        return $this->_dispatch_loads;
+    }
+    
+    public function setPending_loads($val) {
+    	
+        $this->_pending_loads = $val;
+        
+        return $this;
+    }
+ 
+    public function getPending_loads() {
+    	
+        return $this->_pending_loads;
     }
     
     public function setCreated($val) {

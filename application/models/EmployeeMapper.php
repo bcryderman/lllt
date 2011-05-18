@@ -190,4 +190,64 @@ class LLLT_Model_EmployeeMapper {
 
         return $employee;
     }
+    
+    public function fetchdispatch($where = null, $order = null) {
+
+			//->where('a.customer_id = ?',$where['customer_id'])
+			$table = $this->getDbTable();
+							$select = $table->select();
+							$select->setIntegrityCheck(false);
+							$select->from(array('e' => 'tbl_employee'));
+							$select->where('e.role_id = ?',2);
+								foreach($where as $k=>$v)
+									{
+										$x='e.'.$k . ' = ?';
+										echo $x;
+									$select->where($x,$v);
+									}
+							$select->order($order);
+							$select->joinRight(array('l' => 'tbl_load'),
+									       		    'e.emp_id = l.driver_id',
+									 		  array('dispatched_loads'=>'COUNT(*)'))
+								->where('l.dispatched = ?',1);
+								//->group('e.emp_id');
+//							$select->join(array('l'=> 'tbl_load'),
+//											'e.emp_id = l.driver_id',
+//											array('dispatched_loads'=>'COUNT(*)'));
+			$resultSet = $table->fetchAll($select);
+		
+        $employees = array();
+        
+        foreach ($resultSet as $row) {
+        	
+            $employee = new LLLT_Model_Employee();
+            
+            $employee->setEmp_id($row->emp_id)
+            	  	 ->setFirst_name($row->first_name)
+        		  	 ->setLast_name($row->last_name)
+        		  	 ->setAddr($row->addr)
+	        		 ->setAddr2($row->addr2)
+	        		 ->setCity($row->city)
+	        		 ->setState($row->state)
+	        		 ->setZip($row->zip)
+	        		 ->setZip4($row->zip4)
+	        		 ->setVehicle_id($row->vehicle_id)
+	        		 ->setRole_id($row->role_id)
+	        		 ->setActive($row->active)
+	        		 ->setEmail($row->email)
+	        		 //->setPending_loads($row->pending_loads)
+	        		 ->setCreated($row->created)
+	        		 ->setCreated_by($row->created_by)
+	        		 ->setLast_updated($row->last_updated)
+	        		 ->setLast_updated_by($row->last_updated_by);
+                  
+            $employees[] = $employee;
+        }
+        
+        return $employees;
+    }
+    
+    
+    
+    
 }
