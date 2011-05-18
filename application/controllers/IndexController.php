@@ -2,7 +2,10 @@
 
 class IndexController extends Zend_Controller_SecureAction {
 
-    public function init() {}
+    public function init() {
+	
+		$this->view->title = 'Home';
+	}
 
     public function indexAction() {
     

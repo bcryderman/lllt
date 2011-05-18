@@ -43,11 +43,11 @@ class LLLT_Model_AssetTypeMapper {
 	    return $assetTypeId;
     }
     
-	public function delete(LLLT_Model_AssetType $assetType) {
+	public function delete($id) {
     	
     	$where = $this->getDbTable()
 					  ->getAdapter()
-					  ->quoteInto('asset_type_id = ?', $assetType->getAsset_type_id());
+					  ->quoteInto('asset_type_id = ?', $id);
 			
     	$this->getDbTable()
 			 ->delete($where);
@@ -63,7 +63,8 @@ class LLLT_Model_AssetTypeMapper {
 					  ->getAdapter()
 					  ->quoteInto('asset_type_id = ?', $assetType->getAsset_type_id());
 
-		$this->getDbTable()->update($data, $where);
+		$this->getDbTable()
+			 ->update($data, $where);
     }
     
     public function fetchAll($where, $order = null) {
@@ -76,7 +77,6 @@ class LLLT_Model_AssetTypeMapper {
         foreach ($resultSet as $row) {
         	
             $assetType = new LLLT_Model_AssetType();
-            
         	$assetType->setAsset_type_id($row->asset_type_id)
         		  	  ->setAsset_type($row->asset_type)
 	        	  	  ->setActive($row->active)
@@ -101,7 +101,6 @@ class LLLT_Model_AssetTypeMapper {
         $row = $result->current();
         
         $assetType = new LLLT_Model_AssetType();
-
         $assetType->setAsset_type_id($row->asset_type_id)
         		  ->setAsset_type($row->asset_type)
 	        	  ->setActive($row->active)

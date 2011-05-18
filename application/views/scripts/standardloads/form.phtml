@@ -1,0 +1,319 @@
+<link rel="stylesheet" href="/css/standardloads/standardloads.css" />
+
+<form id="standardloads-entry-form" action="/standardloads/<?php echo $this->type; ?>" method="post">
+	<?php if ($this->params['multiple']) { ?>
+		<input type="hidden" name="multiple" value="true" />
+	<?php } ?>
+	<?php if ($this->type === 'edit') { ?>
+		<input type="hidden" name="load_id" value="<?php echo $this->params['load_id']; ?>" />
+		<input type="hidden" name="load_locked" value="<?php echo $this->params['load_locked']; ?>" />
+		<input type="hidden" name="delivered" value="<?php echo $this->params['delivered']; ?>" />
+	<div class="form-wrapper">
+		<label for="active">Active:</label>
+		<input type="checkbox" name="active"
+			<?php if (!isset($this->params) || (isset($this->params['active']) && ($this->params['active'] === 'on' || $this->params['active'] == 1))) { echo 'checked'; } ?> />
+	</div>
+		<?php if (isset($this->errors['active'])) { ?><div class="error-wrapper"><?php echo $this->errors['active']; ?></div><?php } ?>
+	<?php } ?>
+	<div class="form-wrapper">
+		<label for="carrier_id">Carrier:</label>
+		<select name="carrier_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->carriers() as $item) {
+
+				if (isset($this->params['carrier_id']) && $this->params['carrier_id'] == $item->getCustomer_id()) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else if (!isset($this->params['carrier_id']) && $item->getCustomer_id() == 1) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+				}
+			}
+			
+			?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['carrier_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['carrier_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="bill_to_id">Bill To:</label>
+		<select name="bill_to_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->billTos() as $item) {
+
+				if (isset($this->params['bill_to_id']) && $this->params['bill_to_id'] == $item->getCustomer_id()) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+				}
+			}
+			
+			?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['bill_to_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['bill_to_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="shipper_id">Shipper:</label>
+		<select name="shipper_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->shippers() as $item) {
+
+				if (isset($this->params['shipper_id']) && $this->params['shipper_id'] == $item->getCustomer_id()) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+				}
+			}
+			
+			?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['shipper_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['shipper_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="origin_id">Origin:</label>
+		<select name="origin_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->origins() as $item) {
+
+				$displayVal = '';
+				
+				if ($item->getName() !== '') {
+						
+					$displayVal = $item->getCity() . ', ' . $item->getState() . ' - ' . $item->getName();
+				}
+				else {
+						
+					$displayVal = $item->getCity() . ', ' . $item->getState();
+				}
+					
+				if (isset($this->params['origin_id']) && $this->params['origin_id'] == $item->getCustomer_id()) {
+															
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $displayVal . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $displayVal . '</option>';
+				}
+			}
+			
+			?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['origin_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['origin_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="customer_id">Customer:</label>
+		<select name="customer_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->customers() as $item) {
+
+				if (isset($this->params['customer_id']) && $this->params['customer_id'] == $item->getCustomer_id()) {
+															
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+				}
+			}
+			
+			?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['customer_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['customer_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="destination_id">Destination:</label>
+		<select name="destination_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->destinations() as $item) {
+
+				$displayVal = '';
+				
+				if ($item->getCity() !== '' && $item->getState() !== '' && $item->getName() !== '') {
+						
+					$displayVal = $item->getCity() . ', ' . $item->getState() . ' - ' . $item->getName();
+				}
+				else if ($item->getCity() !== '' && $item->getState() !== '') {
+						
+					$displayVal = $item->getCity() . ', ' . $item->getState();
+				}
+				else if ($item->getCity() !== '') {
+					
+					$displayVal = $item->getCity();
+				}
+				else if ($item->getState() !== '') {
+					
+					$displayVal = $item->getState();
+				}
+				else if ($item->getName() !== '') {
+					
+					$displayVal = $item->getName();
+				}
+												
+				if (isset($this->params['destination_id']) && $this->params['destination_id'] == $item->getCustomer_id()) {
+					
+					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $displayVal . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getCustomer_id() . '">' . $displayVal . '</option>';
+				}
+			}
+			
+			?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['destination_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['destination_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="product_id">Product Type:</label>
+		<select name="product_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->productTypes() as $item) {
+
+				if (isset($this->params['product_id']) && $this->params['product_id'] == $item->getProduct_type_id()) {
+															
+					echo '<option value="' . $item->getProduct_type_id() . '" selected>' . $item->getProduct_type() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getProduct_type_id() . '">' . $item->getProduct_type() . '</option>';
+				}
+			}
+			
+			?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['product_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['product_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="driver_id">Driver:</label>
+		<select name="driver_id">
+			<option></option>
+			<?php 
+			
+			foreach ($this->drivers() as $item) {
+
+				if (isset($this->params['driver_id']) && $this->params['driver_id'] == $item->getEmp_id()) {
+															
+					echo '<option value="' . $item->getEmp_id() . '" selected>' . $item->getLast_name() . ', ' . $item->getFirst_name() . '</option>';
+				}
+				else {
+					
+					echo '<option value="' . $item->getEmp_id() . '">' . $item->getLast_name() . ', ' . $item->getFirst_name() . '</option>';
+				}
+			}
+			
+			?>
+		</select>
+	</div>
+	<?php if (isset($this->errors['driver_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['driver_id']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="delayed_dispatch">Delayed Dispatch:</label>
+		<input type="checkbox" name="delayed_dispatch" 
+			<?php if (isset($this->params['delayed_dispatch']) && $this->params['delayed_dispatch']) { echo 'checked'; }?> />
+	</div>
+	<?php if (isset($this->errors['delayed_dispatch'])) { ?><div class="error-wrapper"><?php echo $this->errors['delayed_dispatch']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="load_date">Load Date:</label>
+		<input type="text" name="load_date" class="datepicker" 
+			<?php if (isset($this->params['load_date'])) { echo 'value="' . $this->params['load_date'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['load_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['load_date']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="load_time">Load Time:</label>
+		<input type="text" name="load_time" class="timepicker" 
+			<?php if (isset($this->params['load_time'])) { echo 'value="' . $this->params['load_time'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['load_time'])) { ?><div class="error-wrapper"><?php echo $this->errors['load_time']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="delivery_date">Delivery Date:</label>
+		<input type="text" name="delivery_date" class="datepicker" 
+			<?php if (isset($this->params['delivery_date'])) { echo 'value="' . $this->params['delivery_date'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['delivery_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['delivery_date']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="delivery_time">Delivery Time:</label>
+		<input type="text" name="delivery_time" class="timepicker" 
+			<?php if (isset($this->params['delivery_time'])) { echo 'value="' . $this->params['delivery_time'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['delivery_time'])) { ?><div class="error-wrapper"><?php echo $this->errors['delivery_time']; ?></div><?php } ?>
+	<?php if ($this->params['multiple']) { ?>
+		<div class="form-wrapper">
+			<label for="order_number">Order #s:</label>
+			<textarea name="order_number"><?php if (isset($this->params['order_number'])) { echo $this->params['order_number']; } ?></textarea>
+		</div>
+	<?php } else { ?>
+	<div class="form-wrapper">
+		<label for="order_number">Order #:</label>
+		<input type="text" name="order_number" class="numeric" maxlength="30" size="30" 
+			<?php if (isset($this->params['order_number'])) { echo 'value="' . $this->params['order_number'] . '"'; } ?> />
+	</div>
+	<?php } ?>
+	<?php if (isset($this->errors['order_number'])) { ?><div class="error-wrapper"><?php echo $this->errors['order_number']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="bill_of_lading">Bill of Lading #:</label>
+		<input type="text" name="bill_of_lading" class="numeric" maxlength="30" size="30" 
+			<?php if (isset($this->params['bill_of_lading'])) { echo 'value="' . $this->params['bill_of_lading'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['bill_of_lading'])) { ?><div class="error-wrapper"><?php echo $this->errors['bill_of_lading']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="net_gallons">Net Gallons:</label>
+		<input type="text" name="net_gallons" class="decimal" maxlength="10" size="10" 
+			<?php if (isset($this->params['net_gallons'])) { echo 'value="' . $this->params['net_gallons'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['net_gallons'])) { ?><div class="error-wrapper"><?php echo $this->errors['net_gallons']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="bill_rate">Bill Rate:</label>
+		<input type="text" name="bill_rate" class="decimal" maxlength="10" size="10" 
+			<?php if (isset($this->params['bill_rate'])) { echo 'value="' . $this->params['bill_rate'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['bill_rate'])) { ?><div class="error-wrapper"><?php echo $this->errors['bill_rate']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="fuel_surcharge">Fuel Surcharge:</label>
+		<input type="text" name="fuel_surcharge" class="decimal" maxlength="10" size="10" 
+			<?php if (isset($this->params['fuel_surcharge'])) { echo 'value="' . $this->params['fuel_surcharge'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['fuel_surcharge'])) { ?><div class="error-wrapper"><?php echo $this->errors['fuel_surcharge']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="discount">Discount:</label>
+		<input type="text" name="discount" class="decimal" maxlength="10" size="10" 
+			<?php if (isset($this->params['discount'])) { echo 'value="' . $this->params['discount'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['discount'])) { ?><div class="error-wrapper"><?php echo $this->errors['discount']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="invoice_date">Invoice Date:</label>
+		<input type="text" name="invoice_date" class="datepicker" 
+			<?php if (isset($this->params['invoice_date'])) { echo 'value="' . $this->params['invoice_date'] . '"'; } ?> />
+	</div>
+	<?php if (isset($this->errors['invoice_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['invoice_date']; ?></div><?php } ?>
+	<div class="form-wrapper">
+		<label for="notes">Notes:</label>
+		<textarea name="notes"><?php if (isset($this->params['notes'])) { echo $this->params['notes']; } ?></textarea>
+	</div>
+	<?php if (isset($this->errors['notes'])) { ?><div class="error-wrapper"><?php echo $this->errors['notes']; ?></div>	<?php } ?>
+	<div class="form-wrapper form-controls">
+		<input type="submit" value="<?php echo ucfirst($this->type); ?> Standard Load<?php if ($this->params['multiple']) { echo 's'; } ?>" />
+	</div>
+</form>

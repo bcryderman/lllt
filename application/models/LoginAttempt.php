@@ -59,7 +59,7 @@ class LLLT_Model_LoginAttempt {
      
     public function setEmp_id($val) {
     	
-        $this->_emp_id = $val;
+        $this->_emp_id = (int) $val;
         
         return $this;
     }
@@ -71,7 +71,7 @@ class LLLT_Model_LoginAttempt {
      
     public function setUsername($val) {
     	
-        $this->_username = strtolower($val);
+        $this->_username = (string) strtolower($val);
         
         return $this;
     }
@@ -83,7 +83,7 @@ class LLLT_Model_LoginAttempt {
     
     public function setPassword($val) {
     	
-        $this->_password = $val;
+        $this->_password = (string) $val;
         
         return $this;
     }
@@ -95,7 +95,7 @@ class LLLT_Model_LoginAttempt {
     
     public function setIp($val) {
     	
-        $this->_ip = $val;
+        $this->_ip = (string) $val;
         
         return $this;
     }
@@ -107,7 +107,7 @@ class LLLT_Model_LoginAttempt {
         
     public function setAttempt_date($val) {
     	
-        $this->_attempt_date = $val;
+        $this->_attempt_date = (string) $val;
         
         return $this;
     }

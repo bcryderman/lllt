@@ -31,16 +31,16 @@ class LLLT_Model_CarrierDiscountMapper {
         return $this->_dbTable;
     }
     
-    public function add(LLLT_Model_CarrierDiscount $carDisc) {
+    public function add(LLLT_Model_CarrierDiscount $carrierDiscount) {
     	    			    	
-	    $data = array('company_id'      => $carDisc->getCompany_id(),
-	    			  'start_date'      => $carDisc->getStart_date(),
-	    			  'end_date'        => $carDisc->getEnd_date(),
-	    			  'discount'        => $carDisc->getDiscount(),
-	    			  'created'         => $carDisc->getCreated(),
-	    			  'created_by'      => $carDisc->getCreated_by(),
-	    			  'last_updated'    => $carDisc->getLast_updated(),
-	    			  'last_updated_by' => $carDisc->getLast_updated_by());
+	    $data = array('company_id'      => $carrierDiscount->getCompany_id(),
+	    			  'start_date'      => $carrierDiscount->getStart_date(),
+	    			  'end_date'        => $carrierDiscount->getEnd_date(),
+	    			  'discount'        => $carrierDiscount->getDiscount(),
+	    			  'created'         => $carrierDiscount->getCreated(),
+	    			  'created_by'      => $carrierDiscount->getCreated_by(),
+	    			  'last_updated'    => $carrierDiscount->getLast_updated(),
+	    			  'last_updated_by' => $carrierDiscount->getLast_updated_by());
 	  	    	    	
 	    $id = $this->getDbTable()
 				   ->insert($data);
@@ -48,29 +48,29 @@ class LLLT_Model_CarrierDiscountMapper {
 	    return $id;
     }
     
- 	public function delete(LLLT_Model_CarrierDiscount $carDisc) {
+ 	public function delete($id) {
     	
     	$where = $this->getDbTable()
 				 	  ->getAdapter()
-					  ->quoteInto('id = ?', $carDisc->getId());
+					  ->quoteInto('id = ?', $id);
 			
     	$this->getDbTable()
 			 ->delete($where);
     }
     
-   	public function edit(LLLT_Model_CarrierDiscount $carDisc) {
+   	public function edit(LLLT_Model_CarrierDiscount $carrierDiscount) {
     	
-	    $data = array('id'              => $carDisc->getId(),
-					  'company_id'      => $carDisc->getCompany_id(),
-	    			  'start_date'      => $carDisc->getStart_date(),
-	    			  'end_date'        => $carDisc->getEnd_date(),
-	    			  'discount'        => $carDisc->getDiscount(),
-	    			  'last_updated'    => $carDisc->getLast_updated(),
-	    			  'last_updated_by' => $carDisc->getLast_updated_by());
+	    $data = array('id'              => $carrierDiscount->getId(),
+					  'company_id'      => $carrierDiscount->getCompany_id(),
+	    			  'start_date'      => $carrierDiscount->getStart_date(),
+	    			  'end_date'        => $carrierDiscount->getEnd_date(),
+	    			  'discount'        => $carrierDiscount->getDiscount(),
+	    			  'last_updated'    => $carrierDiscount->getLast_updated(),
+	    			  'last_updated_by' => $carrierDiscount->getLast_updated_by());
     	 
 		$where = $this->getDbTable()
 					  ->getAdapter()
-					  ->quoteInto('id = ?', $carDisc->getId());
+					  ->quoteInto('id = ?', $carrierDiscount->getId());
 
 		$this->getDbTable()
 			 ->update($data, $where);
@@ -78,43 +78,42 @@ class LLLT_Model_CarrierDiscountMapper {
     
     public function fetchAll($where, $order = null) {
     	
-			if ($where === null) {
+		if ($where === null) {
 
-				$resultSet = $this->getDbTable()
-								  ->fetchAll($this->getDbTable()
-												  ->select()
-												  ->setIntegrityCheck(false)
-												  ->from(array('cd' => 'tbl_carrier_discount'))
-												  ->order($order)
-												  ->join(array('c' => 'tbl_customer'),
-														 'cd.company_id = c.customer_id',
-														 array('name')));
-			}
-			else {
+			$resultSet = $this->getDbTable()
+							  ->fetchAll($this->getDbTable()
+											  ->select()
+											  ->setIntegrityCheck(false)
+											  ->from(array('cd' => 'tbl_carrier_discount'))
+											  ->order($order)
+											  ->join(array('c' => 'tbl_customer'),
+													 'cd.company_id = c.customer_id',
+													 array('name')));
+		}
+		else {
 
-				$resultSet = $this->getDbTable()
-								  ->fetchAll($this->getDbTable()
-												  ->select()
-												  ->setIntegrityCheck(false)
-												  ->from(array('cd' => 'tbl_carrier_discount'))
-												  ->where($where)
-												  ->order($order)
-												  ->join(array('c' => 'tbl_customer'),
-														 'cd.company_id = c.customer_id',
-														 array('name')));
-			}
+			$resultSet = $this->getDbTable()
+							  ->fetchAll($this->getDbTable()
+											  ->select()
+											  ->setIntegrityCheck(false)
+											  ->from(array('cd' => 'tbl_carrier_discount'))
+											  ->where($where)
+											  ->order($order)
+											  ->join(array('c' => 'tbl_customer'),
+													 'cd.company_id = c.customer_id',
+													 array('name')));
+		}
         
         $carrierDiscounts = array();
         
         foreach ($resultSet as $row) {
         	
             $carrierDiscount = new LLLT_Model_CarrierDiscount();
-            
         	$carrierDiscount->setId($row->id)        		  
 	        	  			->setCompany_id($row->company_id)
-						    ->setCustomer_name($row->name)
-			        	  	->setStart_date($row->start_date)
-				        	->setEnd_date($row->end_date)
+						    ->setCompany_name($row->name)
+			        	  	->setStart_date($row->start_date, true)
+				        	->setEnd_date($row->end_date, true)
 				        	->setDiscount($row->discount)
 				        	->setCreated($row->created)
 				        	->setCreated_by($row->created_by)
@@ -145,12 +144,11 @@ class LLLT_Model_CarrierDiscountMapper {
         }
         
         $carrierDiscount = new LLLT_Model_CarrierDiscount();
-
        	$carrierDiscount->setId($result->id)        		  
         	  			->setCompany_id($result->company_id)
-						->setCustomer_name($result->name)
-		        	  	->setStart_date($result->start_date)
-			        	->setEnd_date($result->end_date)
+						->setCompany_name($result->name)
+		        	  	->setStart_date($result->start_date, true)
+			        	->setEnd_date($result->end_date, true)
 			        	->setDiscount($result->discount)
 			        	->setCreated($result->created)
 			        	->setCreated_by($result->created_by)

@@ -1,7 +1,4 @@
-#reminders-entry-form label {
-	width: 100px;
-}
-
+#reminders-entry-form label,
 #reminders-delete-form label {
 	width: 100px;
 }

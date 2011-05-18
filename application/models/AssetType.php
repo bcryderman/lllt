@@ -58,7 +58,7 @@ class LLLT_Model_AssetType {
         
  	public function setAsset_type_id($val) {
     	
-        $this->_asset_type_id = $val;
+        $this->_asset_type_id = (int) $val;
         
         return $this;
     }
@@ -70,7 +70,7 @@ class LLLT_Model_AssetType {
     
  	public function setAsset_type($val) {
     	
-        $this->_asset_type = $val;
+        $this->_asset_type = (string) $val;
         
         return $this;
     }
@@ -101,7 +101,7 @@ class LLLT_Model_AssetType {
     
  	public function setDescription($val) {
     	
-        $this->_description = $val;
+        $this->_description = (string) $val;
         
         return $this;
     }

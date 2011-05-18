@@ -68,7 +68,7 @@ class LLLT_Model_Reminder {
          
     public function setReminder_id($val) {
     	
-        $this->_reminder_id = $val;
+        $this->_reminder_id = (int) $val;
         
         return $this;
     }
@@ -80,7 +80,7 @@ class LLLT_Model_Reminder {
      
     public function setReminder_type_id($val) {
     	
-        $this->_reminder_type_id = $val;
+        $this->_reminder_type_id = (int) $val;
         
         return $this;
     }
@@ -92,7 +92,7 @@ class LLLT_Model_Reminder {
 
     public function setReminder_type($val) {
     	
-        $this->_reminder_type = $val;
+        $this->_reminder_type = (string) $val;
         
         return $this;
     }
@@ -104,7 +104,7 @@ class LLLT_Model_Reminder {
 
     public function setAsset_type($val) {
     	
-        $this->_asset_type = $val;
+        $this->_asset_type = (string) $val;
         
         return $this;
     }
@@ -116,7 +116,7 @@ class LLLT_Model_Reminder {
      	
     public function setAsset_id($val) {
     	
-        $this->_asset_id = $val;
+        $this->_asset_id = (int) $val;
         
         return $this;
     }
@@ -128,7 +128,7 @@ class LLLT_Model_Reminder {
 
     public function setAsset_name($val) {
     	
-        $this->_asset_name = $val;
+        $this->_asset_name = (string) $val;
         
         return $this;
     }
@@ -140,7 +140,7 @@ class LLLT_Model_Reminder {
         
     public function setEmployee_id($val) {
     	
-        $this->_employee_id = $val;
+        $this->_employee_id = (int) $val;
         
         return $this;
     }
@@ -149,10 +149,17 @@ class LLLT_Model_Reminder {
     	
         return $this->_employee_id;
     }
-    
-    public function setDue_date($val) {
+
+    public function setDue_date($val, $db = false) {
     	
-        $this->_due_date = $val;
+		if ($db && !is_null($val)) {
+			
+			$this->_due_date = (string) substr($val, 5, 2) . '/' . substr($val, 8, 2) . '/' . substr($val, 0 , 4);
+		}
+		else {
+			
+			$this->_due_date = (string) $val;
+		}
         
         return $this;
     }
@@ -162,9 +169,16 @@ class LLLT_Model_Reminder {
         return $this->_due_date;
     }
     
-    public function setCompleted_date($val) {
+    public function setCompleted_date($val, $db = false) {
     	
-        $this->_completed_date = $val;
+		if ($db && !is_null($val)) {
+			
+			$this->_completed_date = (string) substr($val, 5, 2) . '/' . substr($val, 8, 2) . '/' . substr($val, 0 , 4);
+		}
+		else {
+			
+			$this->_completed_date = (string) $val;
+		}
         
         return $this;
     }
@@ -176,7 +190,7 @@ class LLLT_Model_Reminder {
     
     public function setNotes($val) {
     	
-        $this->_notes = $val;
+        $this->_notes = (string) $val;
         
         return $this;
     }
@@ -186,9 +200,9 @@ class LLLT_Model_Reminder {
         return $this->_notes;
     }
     
-        public function setCreated($val) {
+    public function setCreated($val) {
     	
-        $this->_created = $val;
+        $this->_created = (string) $val;
         
         return $this;
     }
@@ -200,7 +214,7 @@ class LLLT_Model_Reminder {
     
     public function setCreated_by($val) {
     	
-        $this->_created_by = $val;
+        $this->_created_by = (int) $val;
         
         return $this;
     }
@@ -212,7 +226,7 @@ class LLLT_Model_Reminder {
     
     public function setLast_updated($val) {
     	
-        $this->_last_updated = $val;
+        $this->_last_updated = (string) $val;
         
         return $this;
     }
@@ -224,7 +238,7 @@ class LLLT_Model_Reminder {
     
     public function setLast_updated_by($val) {
     	
-        $this->_last_updated_by = $val;
+        $this->_last_updated_by = (int) $val;
         
         return $this;
     }

@@ -1,0 +1,110 @@
+<script src="/js/tableh.js"></script>
+<script>
+$(document).ready(function() {
+	
+	$('.tableh').tableh({ 'url': '/standardloads/tabulardata' });
+});
+</script>
+<link rel="stylesheet" href="/css/tableh.css" />
+
+<table class="tableh" width="2600">
+	<thead>
+		<tr>
+			<th column="c1.name">
+				<div class="header">Carrier</div>
+				<div class="sort"></div>
+			</th>
+			<th column="c2.name">
+				<div class="header">Bill To</div>
+				<div class="sort"></div>
+			</th>
+			<th column="c3.name">
+				<div class="header">Shipper</div>
+				<div class="sort"></div>
+			</th>
+			<th column="origin">
+				<div class="header">Origin</div>
+				<div class="sort"></div>
+			</th>
+			<th column="c5.name">
+				<div class="header">Customer</div>
+				<div class="sort"></div>
+			</th>
+			<th column="destination">
+				<div class="header">Destination</div>
+				<div class="sort"></div>
+			</th>
+			<th column="pt.product_type">
+				<div class="header">Product</div>
+				<div class="sort"></div>
+			</th>
+			<th column="driver">
+				<div class="header">Driver</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.delayed_dispatch">
+				<div class="header">Delayed Dispatch</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.load_date">
+				<div class="header">Load Date</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.delivery_date">
+				<div class="header">Delivery Date</div>
+				<div class="sort asc"></div>
+			</th>
+			<th column="l.order_number">
+				<div class="header">Order #</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.bill_of_lading">
+				<div class="header">Bill of Lading #</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.net_gallons">
+				<div class="header">Net Gallons</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.bill_rate">
+				<div class="header">Bill Rate</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.fuel_surchage">
+				<div class="header">Fuel Surcharge</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.discount">
+				<div class="header">Discount</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.invoice_date">
+				<div class="header">Invoice Date</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.dispatched">
+				<div class="header">Dispatched</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.notes">
+				<div class="header">Notes</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.load_locked">
+				<div class="header">Locked</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.delivered">
+				<div class="header">Delivered</div>
+				<div class="sort"></div>
+			</th>
+			<th column="l.active">
+				<div class="header">Active</div>
+				<div class="sort"></div>
+			</th>
+			<th class="edit"></th>
+			<th class="delete"></th>
+		</tr>
+	</thead>
+	<?php echo $this->partial('/standardloads/tabulardata.phtml', array('loads' => $this->loads)); ?>
+</table>

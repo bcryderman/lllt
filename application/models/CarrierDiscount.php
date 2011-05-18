@@ -4,7 +4,7 @@ class LLLT_Model_CarrierDiscount {
 
 	protected $_id; 	 	 	 	 	 	
 	protected $_company_id;	 
-	protected $_customer_name;
+	protected $_company_name;
 	protected $_start_date; 	 	 	 	 	
 	protected $_end_date; 	 	 	 	 	 	
 	protected $_discount;
@@ -64,7 +64,7 @@ class LLLT_Model_CarrierDiscount {
     
  	public function setId($val) {
     	
-        $this->_id = $val;
+        $this->_id = (int) $val;
         
         return $this;
     }
@@ -76,7 +76,7 @@ class LLLT_Model_CarrierDiscount {
     
  	public function setCompany_id($val) {
     	
-        $this->_company_id = $val;
+        $this->_company_id = (int) $val;
         
         return $this;
     }
@@ -86,33 +86,47 @@ class LLLT_Model_CarrierDiscount {
         return $this->_company_id;
     }
 
- 	public function setCustomer_name($val) {
+ 	public function setCompany_name($val) {
     	
-        $this->_customer_name = $val;
+        $this->_company_name = (string) $val;
         
         return $this;
     }
  
-    public function getCustomer_name() {
+    public function getCompany_name() {
     	
-        return $this->_customer_name;
+        return $this->_company_name;
     }
-        
- 	public function setStart_date($val) {
+ 
+    public function setStart_date($val, $db = false) {
     	
-        $this->_start_date = $val;
+		if ($db && !is_null($val)) {
+			
+			$this->_start_date = (string) substr($val, 5, 2) . '/' . substr($val, 8, 2) . '/' . substr($val, 0 , 4);
+		}
+		else {
+			
+			$this->_start_date = (string) $val;
+		}
         
         return $this;
     }
- 
+
     public function getStart_date() {
     	
         return $this->_start_date;
     }
     
- 	public function setEnd_date($val) {
+    public function setEnd_date($val, $db = false) {
     	
-        $this->_end_date = $val;
+		if ($db && !is_null($val)) {
+			
+			$this->_end_date = (string) substr($val, 5, 2) . '/' . substr($val, 8, 2) . '/' . substr($val, 0 , 4);
+		}
+		else {
+			
+			$this->_end_date = (string) $val;
+		}
         
         return $this;
     }
@@ -124,7 +138,7 @@ class LLLT_Model_CarrierDiscount {
     
     public function setDiscount($val) {
     	
-        $this->_discount = $val;
+        $this->_discount = (float) $val;
         
         return $this;
     }
@@ -136,7 +150,7 @@ class LLLT_Model_CarrierDiscount {
             
     public function setCreated($val) {
     	
-        $this->_created = $val;
+        $this->_created = (string) $val;
         
         return $this;
     }
@@ -148,7 +162,7 @@ class LLLT_Model_CarrierDiscount {
     
     public function setCreated_by($val) {
     	
-        $this->_created_by = $val;
+        $this->_created_by = (int) $val;
         
         return $this;
     }
@@ -160,7 +174,7 @@ class LLLT_Model_CarrierDiscount {
     
     public function setLast_updated($val) {
     	
-        $this->_last_updated = $val;
+        $this->_last_updated = (string) $val;
         
         return $this;
     }
@@ -172,7 +186,7 @@ class LLLT_Model_CarrierDiscount {
     
     public function setLast_updated_by($val) {
     	
-        $this->_last_updated_by = $val;
+        $this->_last_updated_by = (int) $val;
         
         return $this;
     }
