@@ -20,6 +20,8 @@ class LLLT_Model_Employee {
 	protected $_user_type;
  	protected $_active;
  	protected $_email;
+ 	protected $_dispatch_loads;
+ 	protected $_pending_loads;
 	protected $_phone;
 	protected $_phone_ext;
 	protected $_phone_primary;
@@ -456,6 +458,30 @@ class LLLT_Model_Employee {
     public function getCommunication_type_id() {
     	
         return $this->_communication_type_id;
+    }
+    
+    public function setDispatch_loads($val) {
+    	
+        $this->_dispatch_loads = $val;
+        
+        return $this;
+    }
+ 
+    public function getDispatch_loads() {
+    	
+        return $this->_dispatch_loads;
+    }
+    
+    public function setPending_loads($val) {
+    	
+        $this->_pending_loads = $val;
+        
+        return $this;
+    }
+ 
+    public function getPending_loads() {
+    	
+        return $this->_pending_loads;
     }
     
     public function setCreated($val) {
