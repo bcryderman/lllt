@@ -38,6 +38,7 @@ class RemindertypesController extends Zend_Controller_Action {
 		}
 
 		$this->view->type = 'add';
+		
 		$this->renderScript('remindertypes/form.phtml');
     }
     
@@ -47,17 +48,19 @@ class RemindertypesController extends Zend_Controller_Action {
     	$params = $request->getParams();
     	
     	$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
-	    $reminderType = $reminderTypeMapper->find($params['reminder_type_id']);
 	    	
     	if ($request->isPost()) {
     		
-    		$reminderTypeMapper->delete($reminderType);
+    		$reminderTypeMapper->delete($params['reminder_type_id']);
 	    	
 	    	$this->_redirect('remindertypes/view');
     	}    	
-     	
-    	$this->view->reminderType = $reminderType;	
-    	$this->view->params = $params;
+		else {
+			
+			$reminderType = $reminderTypeMapper->find($params['reminder_type_id']);
+			
+			$this->view->reminderType = $reminderType;
+		}
     }
     
     public function editAction() {
@@ -86,9 +89,7 @@ class RemindertypesController extends Zend_Controller_Action {
 		    else {
 		    	
 		    	$this->view->errors = $errors;
-		    	$this->view->reminderTypeId = $params['reminder_type_id'];
 		    	$this->view->params = $params;	
-		    	$this->view->type = 'edit';	    	
 		    }
 		}		
     	else {
@@ -96,17 +97,13 @@ class RemindertypesController extends Zend_Controller_Action {
 	    	$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
 	    	$reminderType = (array) $reminderTypeMapper->find($params['reminder_type_id']);
 	    	    	
-	    	$fields = array();
+			$object2Array = new LLLT_Model_Object2Array();
+			$object2Array->setFields($reminderType);
 	    	
-	    	foreach ($reminderType as $k => $v) {
-	  
-	    		$fields[substr($k, 4)] = $reminderType[$k];
-	    	}
-	    	
-	    	$this->view->reminderTypeId = $params['reminder_type_id'];
-	    	$this->view->params = $fields;  
-	    	$this->view->type = 'edit';
-    	}    	
+	    	$this->view->params = $object2Array->getFields();  
+    	}   
+
+ 		$this->view->type = 'edit';
 
     	$this->renderScript('remindertypes/form.phtml');
     }
@@ -119,8 +116,7 @@ class RemindertypesController extends Zend_Controller_Action {
     	$params = $request->getParams();
 
 		$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
-    	$reminderTypes = $reminderTypeMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'],
-																   'reminder_type ' . $params['sort']));
+    	$reminderTypes = $reminderTypeMapper->fetchAll(null, $params['column'] . ' ' . $params['sort'] . ', tbl_reminder_type.reminder_type ' . $params['sort']);
     	
     	$this->view->reminderTypes = $reminderTypes;
 
@@ -130,7 +126,7 @@ class RemindertypesController extends Zend_Controller_Action {
     public function viewAction() {
     	
     	$reminderTypeMapper = new LLLT_Model_ReminderTypeMapper();
-    	$reminderTypes = $reminderTypeMapper->fetchAll(null, 'reminder_type asc');
+    	$reminderTypes = $reminderTypeMapper->fetchAll(null, 'tbl_reminder_type.reminder_type asc');
     	
     	$this->view->reminderTypes = $reminderTypes;
     }
@@ -141,10 +137,10 @@ class RemindertypesController extends Zend_Controller_Action {
 	    	
     	if (empty($params['reminder_type'])) {
     		
-    		$errors['reminder_type'] = 'You must enter a reminder type.';
+    		$errors['reminder_type'] = 'You must enter a Reminder Type.';
     	}
     	
-    	if (strlen($params['description']) > 1000) {
+    	if (!empty($params['description']) && strlen($params['description']) > 1000) {
     		
     		$errors['description'] = 'Description cannot exceed 1,000 characters.';
     	}

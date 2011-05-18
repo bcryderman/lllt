@@ -10,58 +10,82 @@ $(function() {
 </script>
 <link rel="stylesheet" href="/css/employees/employees.css" />
 
-<div class="form-header">Are you sure you want to delete the following <?php echo $this->roles($this->emp->getRole_id())->getRole_name(); ?>?</div>
+<div class="form-header">Are you sure you want to delete the following <?php echo $this->roles($this->employee->getRole_id())->getRole_name(); ?>?</div>
 <form id="employees-delete-form" class="delete" action="/employees/delete/emp_id/<?php echo $this->params['emp_id']; ?>" method="post">
 	<div class="form-wrapper">
 		<label>Username:</label>
-		<?php if (strlen($this->login->getUsername()) > 0) { echo $this->login->getUsername(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getUsername()) > 0) { echo $this->employee->getUsername(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>First Name:</label>
-		<?php if (strlen($this->emp->getFirst_name()) > 0) { echo $this->emp->getFirst_name(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getFirst_name()) > 0) { echo $this->employee->getFirst_name(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Last Name:</label>
-		<?php if (strlen($this->emp->getLast_name()) > 0) { echo $this->emp->getLast_name(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getLast_name()) > 0) { echo $this->employee->getLast_name(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>E-mail:</label>
-		<?php if (strlen($this->emp->getEmail()) > 0) { echo $this->emp->getEmail(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getEmail()) > 0) { echo $this->employee->getEmail(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Address:</label>
-		<?php if (strlen($this->emp->getAddr()) > 0) { echo $this->emp->getAddr(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getAddr()) > 0) { echo $this->employee->getAddr(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Address Line 2:</label>
-		<?php if (strlen($this->emp->getAddr2()) > 0) { echo $this->emp->getAddr2(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getAddr2()) > 0) { echo $this->employee->getAddr2(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>City:</label>
-		<?php if (strlen($this->emp->getCity()) > 0) { echo $this->emp->getCity(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getCity()) > 0) { echo $this->employee->getCity(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>State:</label>
-		<?php if (strlen($this->emp->getState()) > 0) { echo $this->emp->getState(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getState()) > 0) { echo $this->employee->getState(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Zip:</label>
-		<?php if (strlen($this->emp->getZip()) > 0 && strlen($this->emp->getZip4()) > 0) { echo $this->emp->getZip() . '-' . $this->emp->getZip4(); } 
-			  else if (strlen($this->emp->getZip()) > 0) { echo $this->emp->getZip(); } 
-			  else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getZip()) > 0 && strlen($this->employee->getZip4()) > 0) { echo $this->employee->getZip() . '-' . $this->employee->getZip4(); } 
+			  else if (strlen($this->employee->getZip()) > 0) { echo $this->employee->getZip(); } 
+			  else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Navman Vehicle ID:</label>
-		<?php if (strlen($this->emp->getVehicle_id()) > 0) { echo $this->emp->getVehicle_id(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getVehicle_id()) > 0) { echo $this->employee->getVehicle_id(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Role:</label>
-		<?php if (strlen($this->emp->getRole_id()) > 0) { echo $this->roles($this->emp->getRole_id())->getRole_name(); } else { echo '&nbsp;'; } ?>
+		<?php if (strlen($this->employee->getRole_name()) > 0) { echo $this->employee->getRole_name(); } else { echo 'N/A'; } ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Active:</label>
-		<?php if ($this->emp->getActive() === 1) { echo 'Yes'; } else { echo 'No'; } ?>
+		<?php if ($this->employee->getActive() === 1) { echo 'Y'; } else { echo 'N'; } ?>
 	</div>	
+	<div class="form-wrapper">
+		<label>Phone:</label>
+		<?php if (strlen($this->employee->getPhone()) > 0) { echo $this->employee->getPhone(); } else { echo 'N/A'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Phone Ext.:</label>
+		<?php if (strlen($this->employee->getPhone_ext()) > 0) { echo $this->employee->getPhone_ext(); } else { echo 'N/A'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Phone Primary:</label>
+		<?php if (strlen($this->employee->getPhone_primary()) > 0) { if ($this->employee->getPhone_primary() === 1) { echo 'Y'; } else { echo 'N'; } } else { echo 'N/A'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Cell Phone:</label>
+		<?php if (strlen($this->employee->getCell_phone()) > 0) { echo $this->employee->getCell_phone(); } else { echo 'N/A'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Cell Phone Primary:</label>
+		<?php if (strlen($this->employee->getCell_phone_primary()) > 0) { if ($this->employee->getCell_phone_primary() === 1) { echo 'Y'; } else { echo 'N'; } } else { echo 'N/A'; } ?>
+	</div>
+	<div class="form-wrapper">
+		<label>Cell Carrier:</label>
+		<?php if (strlen($this->employee->getCell_carrier()) > 0) { echo $this->employee->getCell_carrier(); } else { echo 'N/A'; } ?>
+	</div>
 	<div class="form-wrapper form-controls">
 		<input type="submit" value="Delete" />
 		<input id="cancel" type="button" value="Cancel" />

@@ -11,14 +11,14 @@ $(function() {
 <link rel="stylesheet" href="/css/remindertypes/remindertypes.css" />
 
 <div class="form-header">Are you sure you want to delete the following Reminder Type?</div>
-<form id="remindertypes-delete-form" class="delete" action="/remindertypes/delete/reminder_type_id/<?php echo $this->params['reminder_type_id']; ?>" method="post">
+<form id="remindertypes-delete-form" class="delete" action="/remindertypes/delete/reminder_type_id/<?php echo $this->reminderType->getReminder_type_id(); ?>" method="post">
 	<div class="form-wrapper">
 		<label>Reminder Type:</label>
 		<?php echo $this->reminderType->getReminder_type(); ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Active:</label>
-		<?php echo $this->reminderType->getActive(); ?>
+		<?php if ($this->reminderType->getActive() === 1) { echo 'Y'; } else { echo 'N'; } ?>
 	</div>	
 	<div class="form-wrapper">
 		<label>Description:</label>

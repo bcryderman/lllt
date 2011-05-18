@@ -69,8 +69,26 @@ class LLLT_Model_AssetTypeMapper {
     
     public function fetchAll($where, $order = null) {
     	
-        $resultSet = $this->getDbTable()
-						  ->fetchAll($where, $order);
+		$sql = 'SELECT tbl_asset_type.*
+				FROM tbl_asset_type';
+				
+		if (!is_null($where)) {
+			
+			$sql .= ' WHERE ' . $where;
+		}
+		
+		if (!is_null($order)) {
+			
+			$sql .= ' ORDER BY ' . $order;
+		}
+		
+		$stmt = $this->getDbTable()
+					 ->getAdapter()
+					 ->query($sql);
+		
+		$stmt->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$resultSet = $stmt->fetchAll();
         
         $assetTypes = array();
         
@@ -90,16 +108,23 @@ class LLLT_Model_AssetTypeMapper {
     
 	public function find($id) {
 		
-        $result = $this->getDbTable()
-					   ->find($id);
+		$sql = 'SELECT tbl_asset_type.*
+				FROM tbl_asset_type
+				WHERE tbl_asset_type.asset_type_id = ' . $id;
+
+		$this->getDbTable()
+			 ->getAdapter()
+			 ->setFetchMode(Zend_Db::FETCH_OBJ);
+
+		$row = $this->getDbTable()
+					->getAdapter()
+					->fetchRow($sql);
         
-        if (0 == count($result)) {
+        if (0 == count($row)) {
         	
             return 'The asset type could not be found.';
         }
-        
-        $row = $result->current();
-        
+                
         $assetType = new LLLT_Model_AssetType();
         $assetType->setAsset_type_id($row->asset_type_id)
         		  ->setAsset_type($row->asset_type)

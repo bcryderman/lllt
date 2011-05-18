@@ -6,6 +6,7 @@ $(function() {
 });
 </script>
 <?php } ?>
+
 <link rel="stylesheet" href="/css/myaccount/changepass.css">
 
 <?php if (isset($this->error)) { ?>
@@ -13,6 +14,7 @@ $(function() {
 	<?php echo $this->error; ?>
 </div>
 <?php } ?>
+
 <form id="changepass-form" action="/myaccount/changepass" method="post">
 	<div class="form-wrapper">
 		<label for="password">Current Password:</label>

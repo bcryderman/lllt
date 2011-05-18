@@ -99,43 +99,29 @@ class LLLT_Model_ReminderMapper {
      
     public function fetchAll($where, $order) {
     	
-		if ($where === null) {
+		$sql = 'SELECT tbl_reminder.*, tbl_reminder_type.reminder_type, tbl_asset.asset_name, tbl_asset_type.asset_type
+				FROM tbl_reminder
+				LEFT JOIN tbl_reminder_type ON tbl_reminder.reminder_type_id = tbl_reminder_type.reminder_type_id
+				LEFT JOIN tbl_asset ON tbl_reminder.asset_id = tbl_asset.asset_id 
+				LEFT JOIN tbl_asset_type ON tbl_asset.asset_type_id = tbl_asset_type.asset_type_id';
+				
+		if (!is_null($where)) {
 			
-			$resultSet = $this->getDbTable()
-							  ->fetchAll($this->getDbTable()
-											  ->select()
-											  ->setIntegrityCheck(false)
-											  ->from(array('r' => 'tbl_reminder'))											
-											  ->order($order)
-											  ->join(array('rt' => 'tbl_reminder_type'),
-													 'r.reminder_type_id = rt.reminder_type_id',
-													 array('reminder_type'))
-											  ->join(array('a' => 'tbl_asset'),
-													 'r.asset_id = a.asset_id',
-													 array('asset_name'))
-											  ->join(array('at' => 'tbl_asset_type'),
-													 'a.asset_type_id = at.asset_type_id',
-													 array('asset_type')));
+			$sql .= ' WHERE ' . $where;
 		}
-		else {
+		
+		if (!is_null($order)) {
 			
-			$resultSet = $this->getDbTable()
-							  ->fetchAll($this->getDbTable()
-											  ->select()
-											  ->setIntegrityCheck(false)
-											  ->from(array('r' => 'tbl_reminder'))
-											  ->where($where)
-											  ->order($order)
-											  ->join(array('rt' => 'tbl_reminder_type'),
-													 'r.reminder_type_id = rt.reminder_type_id',
-													 array('reminder_type'))
-											  ->join(array('a' => 'tbl_asset'),
-													 'r.asset_id = a.asset_id',
-													 array('asset_name'))
-											  ->join(array('at' => 'tbl_asset_type'),
-													 'a.asset_type_id = at.asset_type_id',
-													 array('asset_type')));
+			$sql .= ' ORDER BY ' . $order;
 		}
+		
+		$stmt = $this->getDbTable()
+					 ->getAdapter()
+					 ->query($sql);
+		
+		$stmt->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$resultSet = $stmt->fetchAll();
         
         $reminders = array();
         
@@ -165,42 +151,41 @@ class LLLT_Model_ReminderMapper {
     
 	public function find($id) {
 		
-        $result = $this->getDbTable()
-					   ->fetchRow($this->getDbTable()
-									   ->select()
-									   ->setIntegrityCheck(false)
-									   ->from(array('r' => 'tbl_reminder'))
-									   ->where('reminder_id = ?', $id)	
-									   ->join(array('rt' => 'tbl_reminder_type'),
-											  'r.reminder_type_id = rt.reminder_type_id',
-										      array('reminder_type'))
-									   ->join(array('a' => 'tbl_asset'),
-											  'r.asset_id = a.asset_id',
-											  array('asset_name'))
-									   ->join(array('at' => 'tbl_asset_type'),
-											  'a.asset_type_id = at.asset_type_id',
-											  array('asset_type')));
+		$sql = 'SELECT tbl_reminder.*, tbl_reminder_type.reminder_type, tbl_asset.asset_name, tbl_asset_type.asset_type
+				FROM tbl_reminder
+				LEFT JOIN tbl_reminder_type ON tbl_reminder.reminder_type_id = tbl_reminder_type.reminder_type_id
+				LEFT JOIN tbl_asset ON tbl_reminder.asset_id = tbl_asset.asset_id 
+				LEFT JOIN tbl_asset_type ON tbl_asset.asset_type_id = tbl_asset_type.asset_type_id
+				WHERE tbl_reminder.reminder_id = ' . $id;
+
+		$this->getDbTable()
+			 ->getAdapter()
+			 ->setFetchMode(Zend_Db::FETCH_OBJ);
+
+		$row = $this->getDbTable()
+					->getAdapter()
+					->fetchRow($sql);
         
-        if (0 == count($result)) {
+        if (0 == count($row)) {
         	
             return 'The reminder could not be found.';
         }
                 
 		$reminder = new LLLT_Model_Reminder();
-    	$reminder->setReminder_id($result->reminder_id)
-        	  	 ->setReminder_type_id($result->reminder_type_id)
-				 ->setReminder_type($result->reminder_type)
-				 ->setAsset_type($result->asset_type)
-        	  	 ->setAsset_id($result->asset_id)
-				 ->setAsset_name($result->asset_name)
-        	  	 ->setEmployee_id($result->employee_id)
-	        	 ->setDue_date($result->due_date, true)
-	        	 ->setCompleted_date($result->completed_date, true)
-	        	 ->setNotes($result->notes)
-	        	 ->setCreated($result->created)
-	        	 ->setCreated_by($result->created_by)
-	        	 ->setLast_updated($result->last_updated)
-	        	 ->setLast_updated_by($result->last_updated_by);
+    	$reminder->setReminder_id($row->reminder_id)
+        	  	 ->setReminder_type_id($row->reminder_type_id)
+				 ->setReminder_type($row->reminder_type)
+				 ->setAsset_type($row->asset_type)
+        	  	 ->setAsset_id($row->asset_id)
+				 ->setAsset_name($row->asset_name)
+        	  	 ->setEmployee_id($row->employee_id)
+	        	 ->setDue_date($row->due_date, true)
+	        	 ->setCompleted_date($row->completed_date, true)
+	        	 ->setNotes($row->notes)
+	        	 ->setCreated($row->created)
+	        	 ->setCreated_by($row->created_by)
+	        	 ->setLast_updated($row->last_updated)
+	        	 ->setLast_updated_by($row->last_updated_by);
 	        	
 	    return $reminder;
     }

@@ -1,7 +1,9 @@
 <link rel="stylesheet" href="/css/assettypes/assettypes.css" />
 
 <form id="assettypes-entry-form" action="/assettypes/<?php echo $this->type; ?>" method="post">
-	<?php if ($this->type === 'edit') { ?><input type="hidden" name="asset_type_id" value="<?php echo $this->assetTypeId; ?>" /><?php } ?>
+	<?php if ($this->type === 'edit') { ?>
+		<input type="hidden" name="asset_type_id" value="<?php echo $this->params['asset_type_id']; ?>" />
+	<?php } ?>
 	<div class="form-wrapper">
 		<label for="asset_type">Asset Type:</label>
 		<input type="text" name="asset_type" maxlength="256"

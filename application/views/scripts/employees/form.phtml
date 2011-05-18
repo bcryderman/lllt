@@ -63,7 +63,10 @@ $(document).ready(function() {
 <link rel="stylesheet" href="/css/employees/employees.css">
 
 <form id="employees-entry-form" action="/employees/<?php echo $this->type; ?>" method="post">
-	<?php if ($this->type === 'edit') { ?><input type="hidden" name="emp_id" value="<?php echo $this->empId; ?>" /><?php } ?>
+	<?php if ($this->type === 'edit') { ?>
+		<input type="hidden" name="emp_id" value="<?php echo $this->params['emp_id']; ?>" />
+		<input type="hidden" name="username" value="<?php echo $this->params['username']; ?>" />
+	<?php } ?>
 	<div class="form-wrapper">
 		<label for="username">Username:</label>
 		<?php if ($this->type === 'add') { ?>
@@ -124,7 +127,7 @@ $(document).ready(function() {
 				
 			foreach ($this->pswstates() as $key => $value) {
  
-				if (isset($this->params['state']) && $this->params['state'] === $key) {
+				if (isset($this->params['state']) && $this->params['state'] == $key) {
 						
 					echo '<option value="' . $key . '" selected>' . $value . '</option>';
 				}
@@ -187,7 +190,7 @@ $(document).ready(function() {
 				
 			foreach ($this->userTypes() as $item) {
  
-				if (isset($this->params['user_type_id']) && $this->params['user_type_id'] === $item->getUser_type_id()) {
+				if (isset($this->params['user_type_id']) && $this->params['user_type_id'] == $item->getUser_type_id()) {
 						
 					echo '<option value="' . $item->getUser_type_id() . '" selected>' . $item->getUser_type() . '</option>';
 				}
@@ -201,13 +204,18 @@ $(document).ready(function() {
 		</select>
 	</div>	
 	<?php if (isset($this->errors['user_type_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['user_type_id']; ?></div><?php } ?>
+	<!--<div class="form-wrapper">
+		<label for="navman_vehicle_id">Navman Vehicle ID:</label>
+		<input type="text" name="vehicle_id" size="45"
+			<?php //if (isset($this->params['vehicle_id'])) { echo 'value="' . $this->params['vehicle_id'] . '"'; } ?> />
+	</div>-->
 	<div id="comm-options-wrapper">
 		<div id="show-hide-comm-options">+ Communication Options</div>
 		<div id="comm-options">
 			<div class="form-wrapper">
 				<label for="phone">Phone #:</label>
 				<input type="text" id="phone" name="phone" class="numeric phone" 
-					<?php if (isset($this->params['phone'])) { echo 'value="' . $this->params['phone'] . '"'; }?> />
+					<?php if (isset($this->params['phone'])) { echo 'value="' . $this->params['phone'] . '"'; } ?> />
 				<label for="phone_ext" class="no-float">Ext:</label>
 				<input type="text" name="phone_ext" class="numeric" 
 					<?php if (isset($this->params['phone_ext'])) { echo 'value="' . $this->params['phone_ext'] . '"'; }?> maxlength="4" size="4" />
@@ -223,9 +231,9 @@ $(document).ready(function() {
 					<option></option>
 					<?php 
 					
-					foreach ($this->commTypes() as $item) {
+					foreach ($this->commtypes() as $item) {
 	 
-						if (isset($this->params['communication_type_id']) && $this->params['communication_type_id'] === $item->getCommunication_type_id()) {
+						if (isset($this->params['communication_type_id']) && $this->params['communication_type_id'] == $item->getCommunication_type_id()) {
 							
 							echo '<option value="' . $item->getCommunication_type_id() . '" selected>' . $item->getCommunication_type() . '</option>';
 						}
@@ -242,7 +250,7 @@ $(document).ready(function() {
 			<div class="form-wrapper">
 				<label for="cell_phone">Cell #:</label>
 				<input type="text" id="cell_phone" name="cell_phone" class="numeric phone" 
-					<?php if (isset($this->params['cell_phone'])) { echo 'value="' . $this->params['cell_phone'] . '"'; }?> />
+					<?php if (isset($this->params['cell_phone'])) { echo 'value="' . $this->params['cell_phone'] . '"'; } ?> />
 				<label for="cell_phone_primary" class="no-float">Primary:</label>
 				<input type="checkbox" id="cell_phone_primary" name="cell_phone_primary"
 					<?php if (isset($this->params['cell_phone_primary']) && $this->params['cell_phone_primary']) { echo 'checked'; }?>					

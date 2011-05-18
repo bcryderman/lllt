@@ -11,7 +11,7 @@ $(function() {
 <link rel="stylesheet" href="/css/reminders/reminders.css" />
 
 <div class="form-header">Are you sure you want to delete the following Reminder?</div>
-<form id="reminders-delete-form" class="delete" action="/reminders/delete/reminder_id/<?php echo $this->params['reminder_id']; ?>" method="post">
+<form id="reminders-delete-form" class="delete" action="/reminders/delete/reminder_id/<?php echo $this->reminder->getReminder_id(); ?>" method="post">
 	<div class="form-wrapper">
 		<label>Reminder Type:</label>
 		<?php echo $this->reminder->getReminder_type(); ?>

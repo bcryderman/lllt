@@ -2,7 +2,7 @@
 <?php foreach($this->assetTypes as $item) { ?>
 	<tr>
 		<td><?php echo $item->getAsset_type(); ?></td>
-		<td><?php echo $item->getActive(); ?></td>
+		<td><?php if ($item->getActive() === 1) { echo 'Y'; } else { echo 'N'; } ?></td>
 		<td><?php echo $item->getDescription(); ?></td>
 		<td><a href="/assettypes/edit/asset_type_id/<?php echo $item->getAsset_type_id(); ?>">Edit</a></td>
 		<td><a href="/assettypes/delete/asset_type_id/<?php echo $item->getAsset_type_id(); ?>">Delete</a></td>

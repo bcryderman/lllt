@@ -138,25 +138,21 @@ class LLLT_Model_EmployeeMapper {
           
     public function fetchAll($where, $order = null) {
     	
-		$sql = 'SELECT e.*, 
-					   l.username,
-			  		   r.role_name,
-			  		   ut.user_type, 
-					   ut.user_type_id,
-					   ct.communication_type AS cell_carrier
-				FROM tbl_employee e, 
-				 	 tbl_login l,
-					 tbl_role r,
-					 tbl_user_type ut,
-					 tbl_communication_type ct
-				WHERE e.role_id = r.role_id
-				AND e.emp_id = l.emp_id
-				AND l.user_type_id = ut.user_type_id
-				AND e.communication_type_id = ct.communication_type_id';
+		$sql = 'SELECT tbl_employee.*, 
+					   tbl_login.username,
+			  		   tbl_role.role_name,
+			  		   tbl_user_type.user_type, 
+					   tbl_user_type.user_type_id,
+					   tbl_communication_type.communication_type AS cell_carrier
+				FROM tbl_employee
+				LEFT JOIN tbl_role ON tbl_employee.role_id = tbl_role.role_id
+				LEFT JOIN tbl_login ON tbl_employee.emp_id = tbl_login.emp_id
+				LEFT JOIN tbl_user_type ON tbl_login.user_type_id = tbl_user_type.user_type_id
+				LEFT JOIN tbl_communication_type ON tbl_employee.communication_type_id = tbl_communication_type.communication_type_id';
 				
 		if (!is_null($where)) {
 			
-			$sql .= ' AND ' . $where;
+			$sql .= ' WHERE ' . $where;
 		}
 		
 		if (!is_null($order)) {
@@ -214,22 +210,18 @@ class LLLT_Model_EmployeeMapper {
     
 	public function find($id) {
 									
-		$sql = 'SELECT e.*, 
-					   l.username,
-			  		   r.role_name,
-			  		   ut.user_type, 
-					   ut.user_type_id,
-					   ct.communication_type AS cell_carrier
-				FROM tbl_employee e, 
-				 	 tbl_login l,
-					 tbl_role r,
-					 tbl_user_type ut,
-					 tbl_communication_type ct
-				WHERE e.emp_id = ' . $id . '
-				AND e.role_id = r.role_id
-				AND e.emp_id = l.emp_id
-				AND l.user_type_id = ut.user_type_id
-				AND e.communication_type_id = ct.communication_type_id';
+		$sql = 'SELECT tbl_employee.*, 
+					   tbl_login.username,
+			  		   tbl_role.role_name,
+			  		   tbl_user_type.user_type, 
+					   tbl_user_type.user_type_id,
+					   tbl_communication_type.communication_type AS cell_carrier
+				FROM tbl_employee
+				LEFT JOIN tbl_role ON tbl_employee.role_id = tbl_role.role_id
+				LEFT JOIN tbl_login ON tbl_employee.emp_id = tbl_login.emp_id
+				LEFT JOIN tbl_user_type ON tbl_login.user_type_id = tbl_user_type.user_type_id
+				LEFT JOIN tbl_communication_type ON tbl_employee.communication_type_id = tbl_communication_type.communication_type_id
+				WHERE tbl_employee.emp_id = ' . $id;
 
 		$this->getDbTable()
 			 ->getAdapter()

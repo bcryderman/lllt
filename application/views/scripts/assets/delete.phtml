@@ -11,7 +11,7 @@ $(function() {
 <link rel="stylesheet" href="/css/assets/assets.css" />
 
 <div class="form-header">Are you sure you want to delete the following Asset?</div>
-<form id="assets-delete-form" class="delete" action="/assets/delete/asset_id/<?php echo $this->params['asset_id']; ?>" method="post">
+<form id="assets-delete-form" class="delete" action="/assets/delete/asset_id/<?php echo $this->asset->getAsset_id(); ?>" method="post">
 	<div class="form-wrapper">
 		<label>Asset Type:</label>
 		<?php echo $this->asset->getAsset_type(); ?>
@@ -26,7 +26,7 @@ $(function() {
 	</div>
 	<div class="form-wrapper">
 		<label>Active:</label>
-		<?php echo $this->asset->getActive(); ?>
+		<?php if ($this->asset->getActive() === 1) { echo 'Y'; } else { echo 'N'; } ?>
 	</div>	
 	<div class="form-wrapper">
 		<label>Customer:</label>

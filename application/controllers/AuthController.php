@@ -18,8 +18,13 @@ class AuthController extends Zend_Controller_Action {
 	    	
 	    	if (empty($errors)) {
 	    		
-	    		$login = new LLLT_Model_Login($params);
+	    		$login = new LLLT_Model_Login();
+	
+				$login->setUsername($params['username'])
+					  ->setPassword($params['password']);
+	
 		    	$loginMapper = new LLLT_Model_LoginMapper();
+		
 		    	$authResult = $loginMapper->auth($login);
 	
 		    	if ($authResult === true) {
@@ -28,13 +33,13 @@ class AuthController extends Zend_Controller_Action {
 		    	}
 		    	
 		    	$this->view->error = $authResult;
-		    	$this->view->params = $params;	
 	    	}
 	    	else {
 	    		
 	    		$this->view->errors = $errors;
-		    	$this->view->params = $params;	
-	    	}	    	 	    				
+	    	}	    	 	  
+	  				
+			$this->view->params = $params;	
 		}	
 		else {
 			
@@ -54,7 +59,7 @@ class AuthController extends Zend_Controller_Action {
 	    
     	Zend_Auth::getInstance()->clearIdentity();  
     	
-    	$this->_redirect('/auth');  
+    	$this->_redirect('auth');  
 	}         
 
 	public function validation($params) {

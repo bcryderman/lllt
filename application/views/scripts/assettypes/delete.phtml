@@ -11,14 +11,14 @@ $(function() {
 <link rel="stylesheet" href="/css/assettypes/assettypes.css" />
 
 <div class="form-header">Are you sure you want to delete the following Asset Type?</div>
-<form id="assettypes-delete-form" class="delete" action="/assettypes/delete/asset_type_id/<?php echo $this->params['asset_type_id']; ?>" method="post">
+<form id="assettypes-delete-form" class="delete" action="/assettypes/delete/asset_type_id/<?php echo $this->assetType->getAsset_type_id(); ?>" method="post">
 	<div class="form-wrapper">
 		<label>Asset Type:</label>
 		<?php echo $this->assetType->getAsset_type(); ?>
 	</div>
 	<div class="form-wrapper">
 		<label>Active:</label>
-		<?php echo $this->assetType->getActive(); ?>
+		<?php if ($this->assetType->getActive() === 1) { echo 'Y'; } else { echo 'N'; } ?>
 	</div>	
 	<div class="form-wrapper">
 		<label>Description:</label>

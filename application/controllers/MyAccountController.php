@@ -22,39 +22,34 @@ class MyaccountController extends Zend_Controller_SecureAction {
 	    		if ($params['newpass'] !== $params['confnewpass']) {
 	    			
 	    			$this->view->error = 'The new password and confirmation password do not match.';
-	    			$this->view->params = $params;
 	    		}
 	    		else {
-		    			
-		    		$dbAdapter = Zend_Db_Table::getDefaultAdapter();    
-			        	    	
+		    						        	    	
 			        $auth = Zend_Auth::getInstance();        	
 			        $identity = $auth->getIdentity();
 			        	          	
 				    if ($identity['Login']->getPassword() === md5($params['password'])) {
 				       
-			        	$login = new LLLT_Model_Login(array('emp_id'          => $identity['Login']->getEmp_id(),
-			        										'password'        => md5($params['newpass']),
-			        										'last_updated'    => date('Y-m-d H:i:s'),
-			        										'last_updated_by' => $identity['Login']->getEmp_id()));
+			        	$login = new LLLT_Model_Login();
+						$login->setEmp_id($identity['Login']->getEmp_id())
+							  ->setPassword(md5($params['newpass']))
+							  ->setLast_updated(date('Y-m-d H:i:s'))
+							  ->setLast_updated_by($identity['Login']->getEmp_id());
 			        		     			
 			   			$loginMapper = new LLLT_Model_LoginMapper();
 			   			$loginMapper->changePassword($login);
 						
-			   			$this->_redirect('/auth/logout');
+			   			$this->_redirect('auth/logout');
 				    }        
 					else {
 		
 						$this->view->error = 'The current password you entered is incorrect.';	
-						$this->view->params = $params;	       
 				    } 
 	    		}   			
 	    	}
-	    	else {
-	    		
-	    		$this->view->errors = $errors;
-	    		$this->view->params = $params;
-	    	}  
+			
+			$this->view->errors = $errors;
+		    $this->view->params = $params;		
 		}
 	}
 	

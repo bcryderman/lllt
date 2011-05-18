@@ -30,13 +30,14 @@ class AssettypesController extends Zend_Controller_Action {
 		    	$this->_redirect('assettypes/view');
 		    }
 		    else {
-		    	
-		    	$this->view->errors = $errors;
-		    	$this->view->params = $params;		    	
-		    }
+			
+				$this->view->errors = $errors;
+			    $this->view->params = $params;
+			}					    	
 		}
 
 		$this->view->type = 'add';
+		
 		$this->renderScript('assettypes/form.phtml');
     }
     
@@ -44,19 +45,21 @@ class AssettypesController extends Zend_Controller_Action {
 	    
     	$request = $this->getRequest();
     	$params = $request->getParams();
-    	
-    	$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
-	    $assetType = $assetTypeMapper->find($params['asset_type_id']);
 	    	
+		$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
+		
     	if ($request->isPost()) {
     		
-    		$assetTypeMapper->delete($assetType);
+    		$assetTypeMapper->delete($params['asset_type_id']);
 	    	
 	    	$this->_redirect('assettypes/view');
     	}    	
-     	
-    	$this->view->assetType = $assetType;	
-    	$this->view->params = $params;
+		else {
+			
+			$assetType = $assetTypeMapper->find($params['asset_type_id']);
+			
+			$this->view->assetType = $assetType;	
+		}		
     }
     
     public function editAction() {
@@ -81,30 +84,24 @@ class AssettypesController extends Zend_Controller_Action {
 		    	
 		    	$this->_redirect('assettypes/view');
 		    }
-		    else {
-		    	
-		    	$this->view->errors = $errors;
-		    	$this->view->assetTypeId = $params['asset_type_id'];
-		    	$this->view->params = $params;	
-		    	$this->view->type = 'edit';	    	
-		    }
+			else {
+				
+				$this->view->errors = $errors;
+			    $this->view->params = $params;
+			}	
 		}		
     	else {
     		
 	    	$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
 	    	$assetType = (array) $assetTypeMapper->find($params['asset_type_id']);
 	    	    	
-	    	$fields = array();
+			$object2Array = new LLLT_Model_Object2Array();
+			$object2Array->setFields($assetType);
 	    	
-	    	foreach ($assetType as $k => $v) {
-	  
-	    		$fields[substr($k, 4)] = $assetType[$k];
-	    	}
-	    	
-	    	$this->view->assetTypeId = $params['asset_type_id'];
-	    	$this->view->params = $fields;  
-	    	$this->view->type = 'edit';
-    	}    	
+	    	$this->view->params = $object2Array->getFields();  
+    	}  
+
+		$this->view->type = 'edit';  	
 
     	$this->renderScript('assettypes/form.phtml');
     }
@@ -117,8 +114,7 @@ class AssettypesController extends Zend_Controller_Action {
     	$params = $request->getParams();
 				
 		$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
-    	$assetTypes = $assetTypeMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'],
-														     'asset_type ' . $params['sort']));
+    	$assetTypes = $assetTypeMapper->fetchAll(null, $params['column'] . ' ' . $params['sort'] . ', tbl_asset_type.asset_type ' . $params['sort']);
 
     	$this->view->assetTypes = $assetTypes;
 
@@ -128,7 +124,7 @@ class AssettypesController extends Zend_Controller_Action {
     public function viewAction() {
     	
     	$assetTypeMapper = new LLLT_Model_AssetTypeMapper();
-    	$assetTypes = $assetTypeMapper->fetchAll(null, 'asset_type asc');
+    	$assetTypes = $assetTypeMapper->fetchAll(null, 'tbl_asset_type.asset_type asc');
 
     	$this->view->assetTypes = $assetTypes;
     }
@@ -142,7 +138,7 @@ class AssettypesController extends Zend_Controller_Action {
     		$errors['asset_type'] = 'You must enter an asset type.';
     	}
     	
-    	if (strlen($params['description']) > 1000) {
+    	if (!empty($params['description']) && strlen($params['description']) > 1000) {
     		
     		$errors['description'] = 'Description cannot exceed 1,000 characters.';
     	}

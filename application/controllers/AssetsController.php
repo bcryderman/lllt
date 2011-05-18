@@ -47,6 +47,7 @@ class AssetsController extends Zend_Controller_Action {
 		}
     
     	$this->view->type = 'add';
+
     	$this->renderScript('assets/form.phtml');
     }
         
@@ -56,17 +57,20 @@ class AssetsController extends Zend_Controller_Action {
     	$params = $request->getParams();
     	
     	$assetMapper = new LLLT_Model_AssetMapper();
-	    $asset = $assetMapper->find($params['asset_id']);
-	    	    	
+	    
     	if ($request->isPost()) {
     		
-    		$assetMapper->delete($asset);
+    		$assetMapper->delete($params['asset_id']);
 	    	
 	    	$this->_redirect('assets/view');
     	}    	
-     	
-    	$this->view->asset = $asset;	
-    	$this->view->params = $params;
+     	else {
+	
+			$asset = $assetMapper->find($params['asset_id']);
+			
+			$this->view->asset = $asset;	
+	    	$this->view->params = $params;
+		}
     }
         
     public function editAction() {
@@ -102,9 +106,7 @@ class AssetsController extends Zend_Controller_Action {
 		    else {
 		    	
 		    	$this->view->errors = $errors;
-		    	$this->view->assetId = $params['asset_id'];
 		    	$this->view->params = $params;	
-		    	$this->view->type = 'edit';	    	
 		    }
 		}		
     	else {
@@ -112,17 +114,13 @@ class AssetsController extends Zend_Controller_Action {
 	    	$assetMapper = new LLLT_Model_AssetMapper();
 	    	$asset = (array) $assetMapper->find($params['asset_id']);
 	    	    	
-	    	$fields = array();
+			$object2Array = new LLLT_Model_Object2Array();
+			$object2Array->setFields($asset);
 	    	
-	    	foreach ($asset as $k => $v) {
-	  
-	    		$fields[substr($k, 4)] = $asset[$k];
-	    	}
-	    	
-	    	$this->view->assetId = $params['asset_id'];
-	    	$this->view->params = $fields;  
-	    	$this->view->type = 'edit';
-    	}    	
+	    	$this->view->params = $object2Array->getFields();  
+    	}   
+
+		$this->view->type = 'edit'; 	
 
     	$this->renderScript('assets/form.phtml');
     }

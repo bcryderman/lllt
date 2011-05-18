@@ -81,38 +81,29 @@ class LLLT_Model_AssetMapper {
     
     public function fetchAll($where, $order) {
     			
-		if ($where === null) {
+		$sql = 'SELECT tbl_asset.*, tbl_asset_type.asset_type, tbl_customer.name 
+				FROM tbl_asset
+				LEFT JOIN tbl_asset_type ON tbl_asset.asset_type_id = tbl_asset_type.asset_type_id
+				LEFT JOIN tbl_customer ON tbl_asset.customer_id = tbl_customer.customer_id';
+				
+		if (!is_null($where)) {
 			
-			$resultSet = $this->getDbTable()
-							  ->fetchAll($this->getDbTable()
-											  ->select()
-											  ->setIntegrityCheck(false)
-											  ->from(array('a' => 'tbl_asset'))
-											  ->order($order)
-											  ->join(array('at' => 'tbl_asset_type'),
-													 'a.asset_type_id = at.asset_type_id',
-													 array('asset_type'))																	  
-											  ->join(array('c' => 'tbl_customer'),
-													 'a.customer_id = c.customer_id',
-													 array('name')));
+			$sql .= ' WHERE ' . $where;
 		}
-		else {
+		
+		if (!is_null($order)) {
 			
-			$resultSet = $this->getDbTable()
-							  ->fetchAll($this->getDbTable()
-											  ->select()
-											  ->setIntegrityCheck(false)
-											  ->from(array('a' => 'tbl_asset'))
-											  ->where($where)
-											  ->order($order)
-											  ->join(array('at' => 'tbl_asset_type'),
-													 'a.asset_type_id = at.asset_type_id',
-													 array('asset_type'))																  
-											  ->join(array('c' => 'tbl_customer'),
-													 'a.customer_id = c.customer_id',
-													 array('name')));
+			$sql .= ' ORDER BY ' . $order;
 		}
-							        
+		
+		$stmt = $this->getDbTable()
+					 ->getAdapter()
+					 ->query($sql);
+		
+		$stmt->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$resultSet = $stmt->fetchAll();
+
         $assets = array();
         
         foreach ($resultSet as $row) {
@@ -140,20 +131,21 @@ class LLLT_Model_AssetMapper {
     
 	public function find($id) {
 
-		$result = $this->getDbTable()
-					   ->fetchRow($this->getDbTable()
-					   				   ->select()
-					 				   ->setIntegrityCheck(false)
-									   ->from(array('a' => 'tbl_asset'))
-									   ->where('a.asset_id = ?', $id)
-									   ->join(array('at' => 'tbl_asset_type'),
-									       		    'a.asset_type_id = at.asset_type_id',
-									 		  array('asset_type'))																  
-									   ->join(array('c' => 'tbl_customer'),
-							        				'a.customer_id = c.customer_id',
-											  array('name')));
+		$sql = 'SELECT tbl_asset.*, tbl_asset_type.asset_type, tbl_customer.name
+				FROM tbl_asset
+				LEFT JOIN tbl_asset_type ON tbl_asset.asset_type_id = tbl_asset_type.asset_type_id
+				LEFT JOIN tbl_customer ON tbl_asset.customer_id = tbl_customer.customer_id
+				WHERE tbl_asset.asset_id = ' . $id;
+
+		$this->getDbTable()
+			 ->getAdapter()
+			 ->setFetchMode(Zend_Db::FETCH_OBJ);
+
+		$row = $this->getDbTable()
+					->getAdapter()
+					->fetchRow($sql);
 							        
-        if (0 == count($result)) {
+        if (0 == count($row)) {
         	
         	return 'The asset could not be found.';
         }

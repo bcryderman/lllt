@@ -120,39 +120,31 @@ class LLLT_Model_LoadMapper {
     	
 		$sql = 'SELECT l.*, 
 					   c1.name AS carrier, 
-					   c2.name AS bill_to, 
-					   c3.name AS shipper, 
-					   c4.city AS origin_city, 
-					   c4.state AS origin_state, 
-					   c4.name AS origin_name, 
+					   c2.name AS bill_to,
+					   c3.name AS shipper,
+					   c4.city AS origin_city,
+					   c4.state AS origin_state,
+					   c4.name AS origin_name,
 					   c5.name AS customer,
 					   c6.city AS destination_city,
 					   c6.state AS destination_state,
 					   c6.name AS destination_name,
 					   pt.product_type AS product,
-					   e.first_name AS driver_first_name, 
-					   e.last_name AS driver_last_name 
-				FROM tbl_load l, 
-					 tbl_customer c1, 
-					 tbl_customer c2, 
-					 tbl_customer c3, 
-					 tbl_customer c4, 
-					 tbl_customer c5,
-					 tbl_customer c6,
-					 tbl_product_type pt,
-					 tbl_employee e
-				WHERE l.carrier_id = c1.customer_id 
-				AND l.bill_to_id = c2.customer_id
-				AND l.shipper_id = c3.customer_id 
-				AND l.origin_id = c4.customer_id
-				AND l.customer_id = c5.customer_id
-				AND l.destination_id = c6.customer_id
-				AND l.product_id = pt.product_type_id
-				AND l.driver_id = e.emp_id';
-				
+					   e.first_name AS driver_first_name,
+					   e.last_name AS driver_last_name
+				FROM tbl_load l
+				LEFT JOIN tbl_customer AS c1 ON l.carrier_id = c1.customer_id
+				LEFT JOIN tbl_customer AS c2 ON l.bill_to_id = c2.customer_id
+				LEFT JOIN tbl_customer AS c3 ON l.shipper_id = c2.customer_id
+				LEFT JOIN tbl_customer AS c4 ON l.origin_id = c4.customer_id
+				LEFT JOIN tbl_customer AS c5 ON l.customer_id = c5.customer_id
+				LEFT JOIN tbl_customer AS c6 ON l.destination_id = c6.customer_id
+				LEFT JOIN tbl_product_type AS pt ON l.product_id = pt.product_type_id
+				LEFT JOIN tbl_employee AS e ON l.driver_id = e.emp_id';
+		
 		if (!is_null($where)) {
 			
-			$sql .= ' AND ' . $where;
+			$sql .= ' WHERE ' . $where;
 		}
 		
 		if (!is_null($order)) {
@@ -173,7 +165,6 @@ class LLLT_Model_LoadMapper {
         foreach ($resultSet as $row) {
         	
             $load = new LLLT_Model_Load();
-            
         	$load->setLoad_id($row->load_id)        		  
 	        	 ->setCarrier_id($row->carrier_id)
 				 ->setCarrier($row->carrier)
@@ -228,37 +219,29 @@ class LLLT_Model_LoadMapper {
 	public function find($id) {
 		
 		$sql = 'SELECT l.*, 
-			  		   c1.name AS carrier, 
-					   c2.name AS bill_to, 
-					   c3.name AS shipper, 
-					   c4.city AS origin_city, 
-					   c4.state AS origin_state, 
-					   c4.name AS origin_name, 
+					   c1.name AS carrier, 
+					   c2.name AS bill_to,
+					   c3.name AS shipper,
+					   c4.city AS origin_city,
+					   c4.state AS origin_state,
+					   c4.name AS origin_name,
 					   c5.name AS customer,
 					   c6.city AS destination_city,
 					   c6.state AS destination_state,
 					   c6.name AS destination_name,
 					   pt.product_type AS product,
-					   e.first_name AS driver_first_name, 
-					   e.last_name AS driver_last_name 
-				FROM tbl_load l, 
-					 tbl_customer c1, 
-					 tbl_customer c2, 
-					 tbl_customer c3, 
-					 tbl_customer c4, 
-					 tbl_customer c5,
-					 tbl_customer c6,
-					 tbl_product_type pt,
-					 tbl_employee e
-				WHERE l.load_id = ' . $id . '
-				AND l.carrier_id = c1.customer_id 
-				AND l.bill_to_id = c2.customer_id
-				AND l.shipper_id = c3.customer_id 
-				AND l.origin_id = c4.customer_id
-				AND l.customer_id = c5.customer_id
-				AND l.destination_id = c6.customer_id
-				AND l.product_id = pt.product_type_id
-				AND l.driver_id = e.emp_id';
+					   e.first_name AS driver_first_name,
+					   e.last_name AS driver_last_name
+				FROM tbl_load l
+				LEFT JOIN tbl_customer AS c1 ON l.carrier_id = c1.customer_id
+				LEFT JOIN tbl_customer AS c2 ON l.bill_to_id = c2.customer_id
+				LEFT JOIN tbl_customer AS c3 ON l.shipper_id = c2.customer_id
+				LEFT JOIN tbl_customer AS c4 ON l.origin_id = c4.customer_id
+				LEFT JOIN tbl_customer AS c5 ON l.customer_id = c5.customer_id
+				LEFT JOIN tbl_customer AS c6 ON l.destination_id = c6.customer_id
+				LEFT JOIN tbl_product_type AS pt ON l.product_id = pt.product_type_id
+				LEFT JOIN tbl_employee AS e ON l.driver_id = e.emp_id
+				WHERE l.load_id = ' . $id;
 		
 		$this->getDbTable()
 			 ->getAdapter()
@@ -269,7 +252,6 @@ class LLLT_Model_LoadMapper {
 					->fetchRow($sql);
         
 		$load = new LLLT_Model_Load();
-		
     	$load->setLoad_id($row->load_id)        		  
         	 ->setCarrier_id($row->carrier_id)
 			 ->setCarrier($row->carrier)

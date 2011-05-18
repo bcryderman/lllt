@@ -47,7 +47,7 @@
 			<option></option>
 			<?php 
 			
-			foreach ($this->billTos() as $item) {
+			foreach ($this->billtos() as $item) {
 
 				if (isset($this->params['bill_to_id']) && $this->params['bill_to_id'] == $item->getCustomer_id()) {
 					
@@ -191,7 +191,7 @@
 			<option></option>
 			<?php 
 			
-			foreach ($this->productTypes() as $item) {
+			foreach ($this->producttypes() as $item) {
 
 				if (isset($this->params['product_id']) && $this->params['product_id'] == $item->getProduct_type_id()) {
 															

@@ -57,7 +57,7 @@ class LLLT_Model_LoginMapper {
     		  
     		$employeeMapper = new LLLT_Model_EmployeeMapper();
     		$employee = $employeeMapper->find($authData->emp_id);
-    					
+
 			if ($employee->getActive() == 1) {
 				
 				$loginAttemptMapper = new LLLT_Model_LoginAttemptMapper();

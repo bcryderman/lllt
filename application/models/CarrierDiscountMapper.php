@@ -78,31 +78,27 @@ class LLLT_Model_CarrierDiscountMapper {
     
     public function fetchAll($where, $order = null) {
     	
-		if ($where === null) {
-
-			$resultSet = $this->getDbTable()
-							  ->fetchAll($this->getDbTable()
-											  ->select()
-											  ->setIntegrityCheck(false)
-											  ->from(array('cd' => 'tbl_carrier_discount'))
-											  ->order($order)
-											  ->join(array('c' => 'tbl_customer'),
-													 'cd.company_id = c.customer_id',
-													 array('name')));
+		$sql = 'SELECT tbl_carrier_discount.*, tbl_customer.name
+				FROM tbl_carrier_discount
+				LEFT JOIN tbl_customer ON tbl_carrier_discount.company_id = tbl_customer.customer_id';
+				
+		if (!is_null($where)) {
+			
+			$sql .= ' WHERE ' . $where;
 		}
-		else {
-
-			$resultSet = $this->getDbTable()
-							  ->fetchAll($this->getDbTable()
-											  ->select()
-											  ->setIntegrityCheck(false)
-											  ->from(array('cd' => 'tbl_carrier_discount'))
-											  ->where($where)
-											  ->order($order)
-											  ->join(array('c' => 'tbl_customer'),
-													 'cd.company_id = c.customer_id',
-													 array('name')));
+		
+		if (!is_null($order)) {
+			
+			$sql .= ' ORDER BY ' . $order;
 		}
+		
+		$stmt = $this->getDbTable()
+					 ->getAdapter()
+					 ->query($sql);
+		
+		$stmt->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$resultSet = $stmt->fetchAll();
         
         $carrierDiscounts = array();
         
@@ -128,32 +124,35 @@ class LLLT_Model_CarrierDiscountMapper {
     
 	public function find($id) {
 		
-		$result = $this->getDbTable()
-					   ->fetchRow($this->getDbTable()
-					   				   ->select()
-					 				   ->setIntegrityCheck(false)
-									   ->from(array('cd' => 'tbl_carrier_discount'))
-									   ->where('cd.id = ?', $id)
-									   ->join(array('c' => 'tbl_customer'),
-									       		    'cd.company_id = c.customer_id',
-									 		  array('name')));
+		$sql = 'SELECT tbl_carrier_discount.*, tbl_customer.name
+				FROM tbl_carrier_discount
+				LEFT JOIN tbl_customer ON tbl_carrier_discount.company_id = tbl_customer.customer_id 
+				WHERE tbl_carrier_discount.id = ' . $id;
+
+		$this->getDbTable()
+			 ->getAdapter()
+			 ->setFetchMode(Zend_Db::FETCH_OBJ);
+
+		$row = $this->getDbTable()
+					->getAdapter()
+					->fetchRow($sql);
         
-        if (0 == count($result)) {
+        if (0 == count($row)) {
         	
         	return 'The carrier discount could not be found.';
         }
         
         $carrierDiscount = new LLLT_Model_CarrierDiscount();
-       	$carrierDiscount->setId($result->id)        		  
-        	  			->setCompany_id($result->company_id)
-						->setCompany_name($result->name)
-		        	  	->setStart_date($result->start_date, true)
-			        	->setEnd_date($result->end_date, true)
-			        	->setDiscount($result->discount)
-			        	->setCreated($result->created)
-			        	->setCreated_by($result->created_by)
-			        	->setLast_updated($result->last_updated)
-			        	->setLast_updated_by($result->last_updated_by);
+       	$carrierDiscount->setId($row->id)        		  
+        	  			->setCompany_id($row->company_id)
+						->setCompany_name($row->name)
+		        	  	->setStart_date($row->start_date, true)
+			        	->setEnd_date($row->end_date, true)
+			        	->setDiscount($row->discount)
+			        	->setCreated($row->created)
+			        	->setCreated_by($row->created_by)
+			        	->setLast_updated($row->last_updated)
+			        	->setLast_updated_by($row->last_updated_by);
 	        	
 	    return $carrierDiscount;
     }

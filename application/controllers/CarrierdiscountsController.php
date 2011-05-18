@@ -23,7 +23,6 @@ class CarrierdiscountsController extends Zend_Controller_Action {
 	    		$date = date('Y-m-d H:i:s');
 		    			    	
 		    	$carrierDiscount = new LLLT_Model_CarrierDiscount();
-		
 		    	$carrierDiscount->setCompany_id($params['company_id']);
 		    	$carrierDiscount->setStart_date(date('Y-m-d', strtotime($params['start_date'])));
 				$carrierDiscount->setEnd_date(date('Y-m-d', strtotime($params['end_date'])));
@@ -55,21 +54,20 @@ class CarrierdiscountsController extends Zend_Controller_Action {
     	$params = $request->getParams();
     	
     	$carrierDiscountMapper = new LLLT_Model_CarrierDiscountMapper();
-	    $carrierDiscount = $carrierDiscountMapper->find($params['id']);
-	    	    	
+	    
     	if ($request->isPost()) {
     		
-    		$carrierDiscountMapper->delete($carrierDiscount);
+    		$carrierDiscountMapper->delete($params['id']);
 	    	
 	    	$this->_redirect('carrierdiscounts/view');
     	}    	
-
-		$customerMapper = new LLLT_Model_CustomerMapper();
-		$customer = $customerMapper->find($carrierDiscount->getCompany_id());
-     	
-    	$this->view->carrierDiscount = $carrierDiscount;
-		$this->view->company = $customer;
-    	$this->view->params = $params;
+		else {
+			
+			$carrierDiscount = $carrierDiscountMapper->find($params['id']);
+			
+			$this->view->carrierDiscount = $carrierDiscount;
+		    $this->view->params = $params;
+		}
     }
         
     public function editAction() {
@@ -87,7 +85,6 @@ class CarrierdiscountsController extends Zend_Controller_Action {
 	    		$date = date('Y-m-d H:i:s');  
 
 		    	$carrierDiscount = new LLLT_Model_CarrierDiscount();
-		
 				$carrierDiscount->setId($params['id']);
 		    	$carrierDiscount->setCompany_id($params['company_id']);
 		    	$carrierDiscount->setStart_date(date('Y-m-d', strtotime($params['start_date'])));
@@ -106,9 +103,7 @@ class CarrierdiscountsController extends Zend_Controller_Action {
 		    else {
 		    	
 		    	$this->view->errors = $errors;
-		    	$this->view->id = $params['id'];
 		    	$this->view->params = $params;	
-		    	$this->view->type = 'edit';	    	
 		    }
 		}		
     	else {
@@ -116,17 +111,13 @@ class CarrierdiscountsController extends Zend_Controller_Action {
 	    	$carrierDiscountMapper = new LLLT_Model_CarrierDiscountMapper();
 	    	$carrierDiscount = (array) $carrierDiscountMapper->find($params['id']);
 	    	    	
-	    	$fields = array();
+			$object2Array = new LLLT_Model_Object2Array();
+			$object2Array->setFields($carrierDiscount);
 	    	
-	    	foreach ($carrierDiscount as $k => $v) {
-	  
-	    		$fields[substr($k, 4)] = $carrierDiscount[$k];
-	    	}
-	    	
-	    	$this->view->id = $params['id'];
-	    	$this->view->params = $fields;  
-	    	$this->view->type = 'edit';
-    	}    	
+	    	$this->view->params = $object2Array->getFields(); 	
+    	}  
+
+  		$this->view->type = 'edit';
 
     	$this->renderScript('carrierdiscounts/form.phtml');
     }
@@ -139,8 +130,7 @@ class CarrierdiscountsController extends Zend_Controller_Action {
     	$params = $request->getParams();
 
     	$carrierDiscountMapper = new LLLT_Model_CarrierDiscountMapper();
-    	$carrierDiscounts = $carrierDiscountMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'], 
-													 					 'c.name ' . $params['sort']));
+    	$carrierDiscounts = $carrierDiscountMapper->fetchAll(null, $params['column'] . ' ' . $params['sort'] . ', tbl_customer.name ' . $params['sort']);
 
     	$this->view->carrierDiscounts = $carrierDiscounts;
 
@@ -150,7 +140,7 @@ class CarrierdiscountsController extends Zend_Controller_Action {
     public function viewAction() {
     	
 		$carrierDiscountMapper = new LLLT_Model_CarrierDiscountMapper();
-		$carrierDiscounts = $carrierDiscountMapper->fetchAll(null, 'c.name asc');
+		$carrierDiscounts = $carrierDiscountMapper->fetchAll(null, 'tbl_customer.name asc');
 		
     	$this->view->carrierDiscounts = $carrierDiscounts;
     }
@@ -163,30 +153,30 @@ class CarrierdiscountsController extends Zend_Controller_Action {
     		
     		$errors['company_id'] = 'You must select a company.';
     	}
-    	
+
 		if (empty($params['start_date'])) {
-    		
-    		$errors['start_date'] = 'You must enter a start date.';
-    	}
-    	else if (!is_int((int) substr($params['start_date'], 0, 2)) || 
-				 !is_int((int) substr($params['start_date'], 3, 2)) || 
-				 !is_int((int) substr($params['start_date'], 6, 4)) ||    			 
-    			 !checkdate((int) substr($params['start_date'], 0, 2), (int) substr($params['start_date'], 3, 2), (int) substr($params['start_date'], 6, 4))) {
-    		
-    		$errors['start_date'] = 'The start date you entered is formatted incorrectly.';    		
-    	}
+			
+			$errors['start_date'] = 'You must enter a start date.';
+		}
+   		else {
+			
+			$date = new LLLT_Model_Date(array('date' => $params['start_date']));
+			
+			if (!$date->isValid()) {
+				
+				$errors['start_date'] = 'Start Date is formatted incorrectly or an invalid date.';
+			}
+		}
     	
-		if (empty($params['end_date'])) {
-    		
-    		$errors['end_date'] = 'You must enter an end date.';
-    	}
-    	else if (!is_int((int) substr($params['end_date'], 0, 2)) || 
- 			 	 !is_int((int) substr($params['end_date'], 3, 2)) || 
-				 !is_int((int) substr($params['end_date'], 6, 4)) ||    			 
-    			 !checkdate((int) substr($params['end_date'], 0, 2), (int) substr($params['end_date'], 3, 2), (int) substr($params['end_date'], 6, 4))) {
-    		
-    		$errors['end_date'] = 'The end date you entered is formatted incorrectly.';    		
-    	}
+		if (!empty($params['end_date'])) {
+			
+			$date = new LLLT_Model_Date(array('date' => $params['end_date']));
+			
+			if (!$date->isValid()) {
+				
+				$errors['end_date'] = 'End Date is formatted incorrectly or an invalid date.';
+			}
+		}
 
 		if (empty($params['discount'])) {
     		

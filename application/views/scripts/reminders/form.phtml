@@ -1,7 +1,9 @@
 <link rel="stylesheet" href="/css/reminders/reminders.css" />
 
 <form id="reminders-entry-form" action="/reminders/<?php echo $this->type; ?>" method="post">
-	<?php if ($this->type === 'edit') { ?><input type="hidden" name="reminder_id" value="<?php echo $this->reminderId; ?>" /><?php } ?>
+	<?php if ($this->type === 'edit') { ?>
+		<input type="hidden" name="reminder_id" value="<?php echo $this->params['reminder_id']; ?>" />
+	<?php } ?>
 	<div class="form-wrapper">
 		<label for="reminder_type_id">Reminder Type:</label>
 		<select name="reminder_type_id">
@@ -49,15 +51,13 @@
 	<div class="form-wrapper">
 		<label for="due_date">Due Date:</label>
 		<input type="text" name="due_date" class="datepicker" 
-			<?php if (isset($this->params['due_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['due_date']) . '"'; } ?>
-			<?php if (isset($this->params['due_date']) && isset($this->errors)) { echo 'value="' . $this->params['due_date'] . '"'; } ?> />
+			<?php if (isset($this->params['due_date'])) { echo 'value="' . $this->params['due_date'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['due_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['due_date']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="completed_date">Completed Date:</label>
 		<input type="text" name="completed_date" class="datepicker" 
-			<?php if (isset($this->params['completed_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['completed_date']) . '"'; } ?>
-			<?php if (isset($this->params['completed_date']) && isset($this->errors)) { echo 'value="' . $this->params['completed_date'] . '"'; } ?> />
+			<?php if (isset($this->params['completed_date'])) { echo 'value="' . $this->params['completed_date'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['completed_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['completed_date']; ?></div><?php } ?>
 	<div class="form-wrapper">

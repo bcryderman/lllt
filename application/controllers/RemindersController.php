@@ -47,6 +47,7 @@ class RemindersController extends Zend_Controller_Action {
 		}
     
     	$this->view->type = 'add';
+
     	$this->renderScript('reminders/form.phtml');
     }
     
@@ -85,7 +86,6 @@ class RemindersController extends Zend_Controller_Action {
 		    	
 		    	$this->view->errors = $errors;
 		    	$this->view->params = $params;	
-		    	$this->view->type = 'copy';	    	
 		    }
 		}		
     	else {
@@ -93,17 +93,13 @@ class RemindersController extends Zend_Controller_Action {
 	    	$reminderMapper = new LLLT_Model_ReminderMapper();
 	    	$reminder = (array) $reminderMapper->find($params['reminder_id']);
 	    	    	
-	    	$fields = array();
+			$object2Array = new LLLT_Model_Object2Array();
+			$object2Array->setFields($reminder);
 	    	
-	    	foreach ($reminder as $k => $v) {
-	  
-	    		$fields[substr($k, 4)] = $reminder[$k];
-	    	}
-	    	
-	    	$this->view->reminderId = $params['reminder_id'];
-	    	$this->view->params = $fields;  
-	    	$this->view->type = 'copy';
-    	}    	
+	    	$this->view->params = $object2Array->getFields();  
+    	}  
+  	
+		$this->view->type = 'copy';
 
     	$this->renderScript('reminders/form.phtml');
     }
@@ -114,17 +110,20 @@ class RemindersController extends Zend_Controller_Action {
     	$params = $request->getParams();
     	
     	$reminderMapper = new LLLT_Model_ReminderMapper();
-	    $reminder = $reminderMapper->find($params['reminder_id']);
 	    	
     	if ($request->isPost()) {
     		
-    		$reminderMapper->delete($reminder);
+    		$reminderMapper->delete($params['reminder_id']);
 	    	
 	    	$this->_redirect('reminders/view');
     	}    	
-     	
-    	$this->view->reminder = $reminder;	
-    	$this->view->params = $params;
+		else {
+			
+			$reminder = $reminderMapper->find($params['reminder_id']);
+			
+			$this->view->reminder = $reminder;	
+	    	$this->view->params = $params;
+		}
 	}
     
     public function editAction() {
@@ -159,9 +158,7 @@ class RemindersController extends Zend_Controller_Action {
 		    else {
 		    	
 		    	$this->view->errors = $errors;
-		    	$this->view->reminderId = $params['reminder_id'];
 		    	$this->view->params = $params;	
-		    	$this->view->type = 'edit';	    	
 		    }
 		}		
     	else {
@@ -169,17 +166,13 @@ class RemindersController extends Zend_Controller_Action {
 	    	$reminderMapper = new LLLT_Model_ReminderMapper();
 	    	$reminder = (array) $reminderMapper->find($params['reminder_id']);
 	    	    	
-	    	$fields = array();
+			$object2Array = new LLLT_Model_Object2Array();
+			$object2Array->setFields($reminder);
 	    	
-	    	foreach ($reminder as $k => $v) {
-	  
-	    		$fields[substr($k, 4)] = $reminder[$k];
-	    	}
-	    	
-	    	$this->view->reminderId = $params['reminder_id'];
-	    	$this->view->params = $fields;  
-	    	$this->view->type = 'edit';
-    	}    	
+	    	$this->view->params = $object2Array->getFields();  
+    	}   
+
+ 		$this->view->type = 'edit';
 
     	$this->renderScript('reminders/form.phtml');
     }
@@ -194,8 +187,8 @@ class RemindersController extends Zend_Controller_Action {
 		$auth = Zend_Auth::getInstance()->getIdentity();
 
     	$reminderMapper = new LLLT_Model_ReminderMapper();
-    	$reminders = $reminderMapper->fetchAll('employee_id = ' . $auth['Employee']->getEmp_id(), 
-											   array($params['column'] . ' ' . $params['sort'], 'due_date asc'));
+    	$reminders = $reminderMapper->fetchAll('tbl_reminder.employee_id = ' . $auth['Employee']->getEmp_id(), 
+											   $params['column'] . ' ' . $params['sort'] . ', tbl_reminder.due_date asc');
 
     	$this->view->reminders = $reminders;
 
@@ -207,8 +200,8 @@ class RemindersController extends Zend_Controller_Action {
     	$auth = Zend_Auth::getInstance()->getIdentity(); 
     	
     	$reminderMapper = new LLLT_Model_ReminderMapper();
-    	$reminders = $reminderMapper->fetchAll('employee_id = ' . $auth['Employee']->getEmp_id(),
-											   array('due_date asc', 'reminder_type asc'));
+    	$reminders = $reminderMapper->fetchAll('tbl_reminder.employee_id = ' . $auth['Employee']->getEmp_id(), 
+											   'tbl_reminder.due_date asc, tbl_reminder_type.reminder_type asc');
     	  	
     	$this->view->reminders = $reminders;
     }
@@ -226,29 +219,28 @@ class RemindersController extends Zend_Controller_Action {
     		
     		$errors['asset_id'] = 'You must select an asset type.';
     	}
-    	    	
-		if (empty($params['due_date'])) {
-    		
-    		$errors['due_date'] = 'You must enter a due date.';
-    	}
-    	else if (!is_int((int) substr($params['due_date'], 0, 2)) || 
-				 !is_int((int) substr($params['due_date'], 3, 2)) || 
-				 !is_int((int) substr($params['due_date'], 6, 4)) ||    			 
-    			 !checkdate((int) substr($params['due_date'], 0, 2), (int) substr($params['due_date'], 3, 2), (int) substr($params['due_date'], 6, 4))) {
-    		
-    		$errors['due_date'] = 'The date you entered is formatted incorrectly.';    		
-    	}
-    	    	
-		if (!empty($params['completed_date']) && 
-			(!is_int((int) substr($params['completed_date'], 0, 2)) || 
-			 !is_int((int) substr($params['completed_date'], 3, 2)) || 
-			 !is_int((int) substr($params['completed_date'], 6, 4)) ||    			 
-    		 !checkdate((int) substr($params['completed_date'], 0, 2), (int) substr($params['completed_date'], 3, 2), (int) substr($params['completed_date'], 6, 4)))) {
-    		
-    		$errors['completed_date'] = 'The date you entered is formatted incorrectly.';    		
-    	}
+
+		if (!empty($params['due_date'])) {
+			
+			$date = new LLLT_Model_Date(array('date' => $params['due_date']));
+			
+			if (!$date->isValid()) {
+				
+				$errors['due_date'] = 'Due Date is formatted incorrectly or an invalid date.';
+			}
+		}
+    	 
+   		if (!empty($params['completed_date'])) {
+			
+			$date = new LLLT_Model_Date(array('date' => $params['completed_date']));
+			
+			if (!$date->isValid()) {
+				
+				$errors['completed_date'] = 'Completed Date is formatted incorrectly or an invalid date.';
+			}
+		}
     	
-    	if (strlen($params['notes']) > 1000) {
+    	if (!empty($params['notes']) && strlen($params['notes']) > 1000) {
     		
     		$errors['notes'] = 'Notes cannot exceed 1,000 characters.';
     	}

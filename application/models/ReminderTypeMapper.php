@@ -71,8 +71,26 @@ class LLLT_Model_ReminderTypeMapper {
      
     public function fetchAll($where, $order = null) {
     	
-        $resultSet = $this->getDbTable()
-						  ->fetchAll($where, $order);
+		$sql = 'SELECT tbl_reminder_type.*
+				FROM tbl_reminder_type';
+				
+		if (!is_null($where)) {
+			
+			$sql .= ' WHERE ' . $where;
+		}
+		
+		if (!is_null($order)) {
+			
+			$sql .= ' ORDER BY ' . $order;
+		}
+		
+		$stmt = $this->getDbTable()
+					 ->getAdapter()
+					 ->query($sql);
+		
+		$stmt->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$resultSet = $stmt->fetchAll();
         
         $reminderTypes = array();
         
@@ -93,16 +111,23 @@ class LLLT_Model_ReminderTypeMapper {
     
 	public function find($id) {
 		
-        $result = $this->getDbTable()
-					   ->find($id);
+		$sql = 'SELECT tbl_reminder_type.*
+				FROM tbl_reminder_type
+				WHERE tbl_reminder_type.reminder_type_id = ' . $id;
+
+		$this->getDbTable()
+			 ->getAdapter()
+			 ->setFetchMode(Zend_Db::FETCH_OBJ);
+
+		$row = $this->getDbTable()
+					->getAdapter()
+					->fetchRow($sql);
         
-        if (0 == count($result)) {
+        if (0 == count($row)) {
         	
             return 'The reminder type could not be found.';
         }
-        
-        $row = $result->current();
-        
+                
         $reminderType = new LLLT_Model_ReminderType();
         $reminderType->setReminder_type_id($row->reminder_type_id)
         			 ->setReminder_type($row->reminder_type)

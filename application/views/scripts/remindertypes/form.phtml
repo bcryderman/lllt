@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/css/remindertypes/remindertypes.css" />
 
 <form id="remindertypes-entry-form" action="/remindertypes/<?php echo $this->type; ?>" method="post">
-	<?php if ($this->type === 'edit') { ?><input type="hidden" name="reminder_type_id" value="<?php echo $this->reminderTypeId; ?>" /><?php } ?>
+	<?php if ($this->type === 'edit') { ?><input type="hidden" name="reminder_type_id" value="<?php echo $this->params['reminder_type_id']; ?>" /><?php } ?>
 	<div class="form-wrapper">
 		<label for="reminder_type">Reminder Type:</label>
 		<input type="text" name="reminder_type" maxlength="256"

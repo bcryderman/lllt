@@ -1,7 +1,9 @@
 <link rel="stylesheet" href="/css/carrierdiscounts/carrierdiscounts.css" />
 
 <form id="carrierdiscounts-entry-form" action="/carrierdiscounts/<?php echo $this->type; ?>" method="post">
-	<?php if ($this->type === 'edit') { ?><input type="hidden" name="id" value="<?php echo $this->id; ?>" /><?php } ?>
+	<?php if ($this->type === 'edit') { ?>
+		<input type="hidden" name="id" value="<?php echo $this->params['id']; ?>" />
+	<?php } ?>
 	<div class="form-wrapper">
 		<label for="company_id">Company:</label>
 		<select name="company_id">
@@ -10,7 +12,7 @@
 			
 			foreach ($this->customers() as $item) {
  
-				if (isset($this->params['company_id']) && $this->params['company_id'] === $item->getCustomer_id()) {
+				if (isset($this->params['company_id']) && $this->params['company_id'] == $item->getCustomer_id()) {
 					
 					echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
 				}
@@ -27,15 +29,13 @@
 	<div class="form-wrapper">
 		<label for="start_date">Start Date:</label>
 		<input type="text" name="start_date" class="datepicker" 
-			<?php if (isset($this->params['start_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['start_date']) . '"'; } ?>
-			<?php if (isset($this->params['start_date']) && isset($this->errors)) { echo 'value="' . $this->params['start_date'] . '"'; } ?> />
+			<?php if (isset($this->params['start_date'])) { echo 'value="' . $this->params['start_date'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['start_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['start_date']; ?></div><?php } ?>
 	<div class="form-wrapper">
 		<label for="end_date">End Date:</label>
 		<input type="text" name="end_date" class="datepicker" 
-			<?php if (isset($this->params['end_date']) && !isset($this->errors)) { echo 'value="' . $this->formatDate($this->params['end_date']) . '"'; } ?>
-			<?php if (isset($this->params['end_date']) && isset($this->errors)) { echo 'value="' . $this->params['end_date'] . '"'; } ?> />
+			<?php if (isset($this->params['end_date'])) { echo 'value="' . $this->params['end_date'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['end_date'])) { ?><div class="error-wrapper"><?php echo $this->errors['end_date']; ?></div><?php } ?>
 	<div class="form-wrapper">
