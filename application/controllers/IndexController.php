@@ -13,7 +13,7 @@ class IndexController extends Zend_Controller_SecureAction {
     	
     	$reminderMapper = new LLLT_Model_ReminderMapper();
     	$reminders = $reminderMapper->fetchAll('employee_id = ' . $auth['Employee']->getEmp_id(), 
-											   array('due_date asc', 'reminder_type asc'));
+											   'tbl_reminder.due_date asc', 'tbl_reminder.reminder_type asc');
 
     	$this->view->reminders = $reminders;
     }
@@ -29,7 +29,7 @@ class IndexController extends Zend_Controller_SecureAction {
 
     	$reminderMapper = new LLLT_Model_ReminderMapper();
     	$reminders = $reminderMapper->fetchAll('employee_id = ' . $auth['Employee']->getEmp_id(), 
-											   array($params['column'] . ' ' . $params['sort'], 'due_date asc'));
+											   $params['column'] . ' ' . $params['sort'] . ', tbl_reminder.due_date asc');
 
     	$this->view->reminders = $reminders;
 

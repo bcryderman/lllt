@@ -134,7 +134,7 @@ class AssetsController extends Zend_Controller_Action {
 
     	$assetMapper = new LLLT_Model_AssetMapper();
     	$assets = $assetMapper->fetchAll(null, array($params['column'] . ' ' . $params['sort'], 
-													 'asset_name ' . $params['sort']));
+													 'tbl_asset.asset_name ' . $params['sort']));
 
     	$this->view->assets = $assets;
 
@@ -144,7 +144,7 @@ class AssetsController extends Zend_Controller_Action {
     public function viewAction() {
     	
     	$assetMapper = new LLLT_Model_AssetMapper();
-    	$assets = $assetMapper->fetchAll(null, 'asset_name asc');
+    	$assets = $assetMapper->fetchAll(null, 'tbl_asset.asset_name asc');
 
     	$this->view->assets = $assets;
     }

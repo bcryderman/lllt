@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/css/standardloads/standardloads.css" />
 
 <form id="standardloads-entry-form" action="/standardloads/<?php echo $this->type; ?>" method="post">
-	<?php if ($this->params['multiple']) { ?>
+	<?php if (isset($this->params['multiple']) && $this->params['multiple']) { ?>
 		<input type="hidden" name="multiple" value="true" />
 	<?php } ?>
 	<?php if ($this->type === 'edit') { ?>
@@ -259,7 +259,7 @@
 			<?php if (isset($this->params['delivery_time'])) { echo 'value="' . $this->params['delivery_time'] . '"'; } ?> />
 	</div>
 	<?php if (isset($this->errors['delivery_time'])) { ?><div class="error-wrapper"><?php echo $this->errors['delivery_time']; ?></div><?php } ?>
-	<?php if ($this->params['multiple']) { ?>
+	<?php if (isset($this->params['multiple']) && $this->params['multiple']) { ?>
 		<div class="form-wrapper">
 			<label for="order_number">Order #s:</label>
 			<textarea name="order_number"><?php if (isset($this->params['order_number'])) { echo $this->params['order_number']; } ?></textarea>
@@ -314,6 +314,6 @@
 	</div>
 	<?php if (isset($this->errors['notes'])) { ?><div class="error-wrapper"><?php echo $this->errors['notes']; ?></div>	<?php } ?>
 	<div class="form-wrapper form-controls">
-		<input type="submit" value="<?php echo ucfirst($this->type); ?> Standard Load<?php if ($this->params['multiple']) { echo 's'; } ?>" />
+		<input type="submit" value="<?php echo ucfirst($this->type); ?> Standard Load<?php if (isset($this->params['multiple']) && $this->params['multiple']) { echo 's'; } ?>" />
 	</div>
 </form>

@@ -10,7 +10,7 @@ class Zend_View_Helper_Assets {
     	
     	if (is_null($assetId)) {
     	
-    		$this->_assets = $assetMapper->fetchAll('a.active = 1', 'a.asset_name asc');
+    		$this->_assets = $assetMapper->fetchAll('tbl_asset.active = 1', 'tbl_asset.asset_name asc');
     	}
     	else {
     	

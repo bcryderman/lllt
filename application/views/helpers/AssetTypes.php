@@ -10,7 +10,7 @@ class Zend_View_Helper_Assettypes {
     	
     	if (is_null($assetTypeId)) {
     		
-    		$this->_assetTypes = $assetTypeMapper->fetchAll(array('active = 1'), 'asset_type asc');
+    		$this->_assetTypes = $assetTypeMapper->fetchAll('tbl_asset_type.active = 1', 'tbl_asset_type.asset_type asc');
     	}
     	else {
     		
