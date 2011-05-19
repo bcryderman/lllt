@@ -1,0 +1,11 @@
+<tbody>
+<?php foreach ($this->data as $item) { ?>
+	<tr>
+		<td></td>
+		<td><?php echo $item->getLast_name().', '.$item->getFirst_name(); ?></td>
+		<td><?php echo $item->getDispatched_loads(); ?></td>
+		<td><?php echo $item->getPending_loads(); ?></td>
+		<td></td>
+	</tr>
+<?php } ?>
+</tbody>

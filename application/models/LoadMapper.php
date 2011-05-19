@@ -60,7 +60,8 @@ class LLLT_Model_LoadMapper {
 					  'created_by'       => $load->getCreated_by(),
 					  'last_updated'     => $load->getLast_updated(),
 					  'last_updated_by'  => $load->getLast_updated_by(),
-					  'active'           => $load->getActive());
+					  'active'           => $load->getActive(),
+	    			  'driver_compartment_number'	=> $load->getDriver_compartment_number());
 	  	    	    	
 	    $loadId = $this->getDbTable()
 					   ->insert($data);
@@ -120,15 +121,21 @@ class LLLT_Model_LoadMapper {
     	
 		$sql = 'SELECT l.*, 
 					   c1.name AS carrier, 
+                       c1.color_code AS carrier_color,
 					   c2.name AS bill_to,
+                       c2.color_code AS bill_to_color,
 					   c3.name AS shipper,
+                       c3.color_code AS shipper_color,
 					   c4.city AS origin_city,
 					   c4.state AS origin_state,
 					   c4.name AS origin_name,
+                       c4.color_code AS origin_color,
 					   c5.name AS customer,
+                       c5.color_code AS customer_color,
 					   c6.city AS destination_city,
 					   c6.state AS destination_state,
 					   c6.name AS destination_name,
+                       c6.color_code AS destination_color,
 					   pt.product_type AS product,
 					   e.first_name AS driver_first_name,
 					   e.last_name AS driver_last_name
@@ -168,20 +175,26 @@ class LLLT_Model_LoadMapper {
         	$load->setLoad_id($row->load_id)        		  
 	        	 ->setCarrier_id($row->carrier_id)
 				 ->setCarrier($row->carrier)
+				 ->setCarrier_color($row->carrier_color)
 	        	 ->setBill_to_id($row->bill_to_id)
 	 			 ->setBill_to($row->bill_to)
+	 			 ->setBill_to_color($row->bill_to_color)
 	        	 ->setShipper_id($row->shipper_id)
 				 ->setShipper($row->shipper)
+				 ->setShipper_color($row->shipper_color)
 	        	 ->setOrigin_id($row->origin_id)
 				 ->setOrigin(array('city'  => $row->origin_city,
 								   'state' => $row->origin_state,
 								   'name'  => $row->origin_name))
+				 ->setOrigin_color($row->origin_color)
 	        	 ->setCustomer_id($row->customer_id)
 				 ->setCustomer($row->customer)
+				 ->setCustomer_color($row->customer_color)
 	        	 ->setDestination_id($row->destination_id)
 	 			 ->setDestination(array('city'  => $row->destination_city,
 								   		'state' => $row->destination_state,
 								   		'name'  => $row->destination_name))
+	 			 ->setDestination_color($row->destination_color)
 				 ->setProduct_id($row->product_id)
 				 ->setProduct($row->product)
 				 ->setDriver_id($row->driver_id)
@@ -208,7 +221,8 @@ class LLLT_Model_LoadMapper {
 	        	 ->setCreated_by($row->created_by)
 	        	 ->setLast_updated($row->last_updated)
 	        	 ->setLast_updated_by($row->last_updated_by)
-				 ->setActive($row->active);
+				 ->setActive($row->active)
+				 ->setDriver_compartment_number($row->driver_compartment_number);
                   
             $entries[] = $load;            
         }
@@ -220,15 +234,21 @@ class LLLT_Model_LoadMapper {
 		
 		$sql = 'SELECT l.*, 
 					   c1.name AS carrier, 
+                       c1.color_code AS carrier_color,
 					   c2.name AS bill_to,
+                       c2.color_code AS bill_to_color,
 					   c3.name AS shipper,
+                       c3.color_code AS shipper_color,
 					   c4.city AS origin_city,
 					   c4.state AS origin_state,
 					   c4.name AS origin_name,
+                       c4.color_code AS origin_color,
 					   c5.name AS customer,
+                       c5.color_code AS customer_color,
 					   c6.city AS destination_city,
 					   c6.state AS destination_state,
 					   c6.name AS destination_name,
+                       c6.color_code AS destination_color,
 					   pt.product_type AS product,
 					   e.first_name AS driver_first_name,
 					   e.last_name AS driver_last_name
@@ -253,22 +273,28 @@ class LLLT_Model_LoadMapper {
         
 		$load = new LLLT_Model_Load();
     	$load->setLoad_id($row->load_id)        		  
-        	 ->setCarrier_id($row->carrier_id)
+	         ->setCarrier_id($row->carrier_id)
 			 ->setCarrier($row->carrier)
-        	 ->setBill_to_id($row->bill_to_id)
- 			 ->setBill_to($row->bill_to)
-        	 ->setShipper_id($row->shipper_id)
+			 ->setCarrier_color($row->carrier_color)
+	         ->setBill_to_id($row->bill_to_id)
+	 		 ->setBill_to($row->bill_to)
+	 		 ->setBill_to_color($row->bill_to_color)
+	         ->setShipper_id($row->shipper_id)
 			 ->setShipper($row->shipper)
-        	 ->setOrigin_id($row->origin_id)
+			 ->setShipper_color($row->shipper_color)
+	         ->setOrigin_id($row->origin_id)
 			 ->setOrigin(array('city'  => $row->origin_city,
 							   'state' => $row->origin_state,
 							   'name'  => $row->origin_name))
-        	 ->setCustomer_id($row->customer_id)
+			 ->setOrigin_color($row->origin_color)
+	         ->setCustomer_id($row->customer_id)
 			 ->setCustomer($row->customer)
-        	 ->setDestination_id($row->destination_id)
- 			 ->setDestination(array('city'  => $row->destination_city,
+			 ->setCustomer_color($row->customer_color)
+	         ->setDestination_id($row->destination_id)
+	 		 ->setDestination(array('city'  => $row->destination_city,
 							   		'state' => $row->destination_state,
 							   		'name'  => $row->destination_name))
+	 		 ->setDestination_color($row->destination_color)
 			 ->setProduct_id($row->product_id)
 			 ->setProduct($row->product)
 			 ->setDriver_id($row->driver_id)
@@ -295,7 +321,8 @@ class LLLT_Model_LoadMapper {
         	 ->setCreated_by($row->created_by)
         	 ->setLast_updated($row->last_updated)
         	 ->setLast_updated_by($row->last_updated_by)
-			 ->setActive($row->active);
+			 ->setActive($row->active)
+			 ->setDriver_compartment_number($row->driver_compartment_number);
 	        	
 	    return $load;
     }

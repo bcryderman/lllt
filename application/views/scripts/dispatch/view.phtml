@@ -1,0 +1,30 @@
+<script src="/js/tableh.js"></script>
+<script>
+$(document).ready(function() {
+	
+	$('.tableh').tableh({ 'url': '/dispatch/emptabulardata' });
+});
+</script>
+<link rel="stylesheet" href="/css/tableh.css" />
+
+<table class="tableh" width="250">
+	<thead>
+		<tr>
+			<th class="select"></th>
+			<th column="last_name">
+				<div class="header">Name</div>
+				<div class="sort"></div>
+			</th>
+			<th column="dispatched_loads">
+				<div class="header">Disp</div>
+				<div class="sort"></div>
+			</th>
+			<th column="pending_loads">
+				<div class="header">Pend</div>
+				<div class="sort"></div>
+			</th>
+			<th class="load_info"></th>
+		</tr>
+	</thead>
+	<?php echo $this->partial('/dispatch/emptabulardata.phtml', array('data' => $this->data)); ?>
+</table>

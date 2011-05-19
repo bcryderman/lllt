@@ -1,0 +1,58 @@
+<div id="stdloads-wrapper">
+	<?php if (isset($this->status['success'])) { echo '<div class="error-header">' . $this->status['success'] . '</div>'; } ?>
+	<?php if (isset($this->status['error'])) { echo '<div class="error-header">' . $this->status['error'] . '</div>'; } ?>
+	<form id="create-stdload-form" action="/standardloads/create" method="post">
+
+		<div class="form-wrapper">
+			<label for="loaddate">Load Date:</label>
+			<input type="text" id="loaddate" name="loaddate" <?php if (isset($this->params['loaddate'])) { echo 'value="' . $this->params['loaddate'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="loadtime">Load Time:</label>
+			<input type="text" id="loadtime" name="loadtime" <?php if (isset($this->params['loadtime'])) { echo 'value="' . $this->params['loadtime'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="deliverydate">Delivery Date:</label>
+			<input type="text" id="deliverydate" name="deliverydate" <?php if (isset($this->params['deliverydate'])) { echo 'value="' . $this->params['deliverydate'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="deliverytime">Delivery Time:</label>
+			<input type="text" id="deliverytime" name="deliverytime" <?php if (isset($this->params['deliverytime'])) { echo 'value="' . $this->params['deliverytime'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="ordernum">Order #:</label>
+			<input type="text" id="ordernum" name="ordernum" <?php if (isset($this->params['ordernum'])) { echo 'value="' . $this->params['ordernum'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="billlading">Bill of Lading #:</label>
+			<input type="text" id="billlading" name="billlading" <?php if (isset($this->params['billlading'])) { echo 'value="' . $this->params['billlading'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="netgall">Net Gallons:</label>
+			<input type="text" id="netgall" name="netgall" <?php if (isset($this->params['netgall'])) { echo 'value="' . $this->params['netgall'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="billrate">Bill Rate:</label>
+			<select id="billrate" name="billrate">
+				<option></option>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="fuelsurcharge">Fuel Surcharge:</label>
+			<select id="fuelsurcharge" name="fuelsurcharge">
+				<option></option>
+			</select>
+		</div>
+		<div class="form-wrapper">
+			<label for="invoicedate">Invoice Date:</label>
+			<input type="text" id="invoicedate" name="invoicedate" <?php if (isset($this->params['invoicedate'])) { echo 'value="' . $this->params['invoicedate'] . '"'; }?> />
+		</div>
+		<div class="form-wrapper">
+			<label for="notes">Notes:</label>
+			<textarea id="notes" name="notes"><?php if (isset($this->params['notes'])) { echo $this->params['notes']; }?></textarea>
+		</div>
+		<div class="form-wrapper form-controls">
+			<input type="submit" value="Create" />
+		</div>
+	</form>		
+</div>

@@ -5,16 +5,22 @@ class LLLT_Model_Load {
 	protected $_load_id;
 	protected $_carrier_id;
 	protected $_carrier;
+	protected $_carrier_color;
 	protected $_bill_to_id;
 	protected $_bill_to;
+	protected $_bill_to_color;
 	protected $_shipper_id;
 	protected $_shipper;
+	protected $_shipper_color;
 	protected $_origin_id;
 	protected $_origin;
+	protected $_origin_color;
 	protected $_customer_id;
 	protected $_customer;
+	protected $_customer_color;
 	protected $_destination_id;
 	protected $_destination;
+	protected $_destination_color;
 	protected $_product_id;
 	protected $_product;
 	protected $_driver_id;
@@ -41,6 +47,7 @@ class LLLT_Model_Load {
 	protected $_last_updated;
 	protected $_last_updated_by;
 	protected $_active;
+	protected $_driver_compartment_number;
  	 	
     public function __construct(array $options = null) {
         
@@ -122,6 +129,18 @@ class LLLT_Model_Load {
         return $this;
     }
  
+    public function getCarrier_color() {
+    	
+        return $this->_carrier_color;
+    }
+    
+ 	public function setCarrier_color($val) {
+    	
+        $this->_carrier_color = $val;
+        
+        return $this;
+    }
+ 
     public function getCarrier() {
     	
         return $this->_carrier;
@@ -150,6 +169,18 @@ class LLLT_Model_Load {
     	
         return $this->_bill_to;
     }
+    
+ 	public function setBill_to_color($val) {
+    	
+        $this->_bill_to_color = $val;
+        
+        return $this;
+    }
+ 
+    public function getBill_to_color() {
+    	
+        return $this->_bill_to_color;
+    }
 	
  	public function setShipper_id($val) {
     	
@@ -173,6 +204,18 @@ class LLLT_Model_Load {
     public function getShipper() {
     	
         return $this->_shipper;
+    }
+    
+ 	public function setShipper_color($val) {
+    	
+        $this->_shipper_color = $val;
+        
+        return $this;
+    }
+ 
+    public function getShipper_color() {
+    	
+        return $this->_shipper_color;
     }
 
  	public function setOrigin_id($val) {
@@ -229,6 +272,18 @@ class LLLT_Model_Load {
     	
         return $this->_origin;
     }
+    
+ 	public function setOrigin_color($val) {
+    	
+        $this->_origin_color = $val;
+        
+        return $this;
+    }
+ 
+    public function getOrigin_color() {
+    	
+        return $this->_origin_color;
+    }
 
  	public function setCustomer_id($val) {
     	
@@ -252,6 +307,18 @@ class LLLT_Model_Load {
     public function getCustomer() {
     	
         return $this->_customer;
+    }
+    
+ 	public function setCustomer_color($val) {
+    	
+        $this->_customer_color = $val;
+        
+        return $this;
+    }
+ 
+    public function getCustomer_color() {
+    	
+        return $this->_customer_color;
     }
 
  	public function setDestination_id($val) {
@@ -307,6 +374,18 @@ class LLLT_Model_Load {
     public function getDestination() {
     	
         return $this->_destination;
+    }
+    
+ 	public function setDestination_color($val) {
+    	
+        $this->_destination_color = $val;
+        
+        return $this;
+    }
+ 
+    public function getDestination_color() {
+    	
+        return $this->_destination_color;
     }
 
  	public function setProduct_id($val) {
@@ -668,5 +747,17 @@ class LLLT_Model_Load {
     public function getActive() {
     	
         return $this->_active;
+    }
+    
+    public function setDriver_compartment_number($val) {
+    	
+        $this->_driver_compartment_number = $val;
+        
+        return $this;
+    }
+    
+    public function getDriver_compartment_number() {
+    	
+        return $this->_driver_compartment_number;
     }
 }
