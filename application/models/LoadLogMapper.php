@@ -35,7 +35,7 @@ class LLLT_Model_LoadLogMapper {
 		
 	    $data = array('load_id'               => $loadLog->getLoad_id(),
 	    			  'load_activity_type_id' => $loadLog->getLoad_activity_type_id(),
-	    			  'activity_time'         => $loadLog->getActivity_time()
+	    			  'activity_time'         => $loadLog->getActivity_time(),
 					  'activity_by'           => $loadLog->getActivity_by());
 	  	    	    	
 	    $loadLog = $this->getDbTable()->insert($data);
@@ -54,7 +54,7 @@ class LLLT_Model_LoadLogMapper {
     	
 	    $data = array('load_id'               => $loadLog->getLoad_id(),
 	    			  'load_activity_type_id' => $loadLog->getLoad_activity_type_id(),
-	    			  'activity_time'         => $loadLog->getActivity_time()
+	    			  'activity_time'         => $loadLog->getActivity_time(),
 					  'activity_by'           => $loadLog->getActivity_by());
     	 
 		$where = $this->getDbTable()->getAdapter()->quoteInto('load_id = ?', $loadLog->getLoad_id());

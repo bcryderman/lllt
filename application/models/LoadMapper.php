@@ -117,6 +117,21 @@ class LLLT_Model_LoadMapper {
 			 ->update($data, $where);
     }
     
+    public function lockload(LLLT_Model_Load $load){
+    	$data = array('load_id'          => $load->getLoad_id(),
+    				  'load_locked'      => $load->getLoad_locked(),
+					  'locked_by'        => $load->getLocked_by(),
+					  'last_updated'     => $load->getLast_updated(),
+					  'last_updated_by'  => $load->getLast_updated_by());
+    			$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('load_id = ?', $load->getLoad_id());
+
+		$this->getDbTable()
+			 ->update($data, $where);
+    	
+    }
+    
     public function fetchAll($where, $order = null) {
     	
 		$sql = 'SELECT l.*, 

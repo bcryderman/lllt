@@ -1,7 +1,7 @@
 <tbody>
 <?php foreach ($this->data as $item) { ?>
 	<tr>
-		<td></td>
+		<td><input class="emp-select" type="radio" name="emp_group" emp_id="<?php echo $item->getEmp_id();?>"></input></td>
 		<td><?php echo $item->getLast_name().', '.$item->getFirst_name(); ?></td>
 		<td><?php echo $item->getDispatched_loads(); ?></td>
 		<td><?php echo $item->getPending_loads(); ?></td>

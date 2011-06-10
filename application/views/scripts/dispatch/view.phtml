@@ -1,30 +1,83 @@
 <script src="/js/tableh.js"></script>
+<script src="/js/dispatch/dispatch.js"></script>
 <script>
+
+var ldlck = new lockload();
 $(document).ready(function() {
-	
-	$('.tableh').tableh({ 'url': '/dispatch/emptabulardata' });
+	$('.loadlock').click(function(){ldlck._lockload(this);});
+	ldlck._build_existing_loads();
+	$('.dispatch').click(function(){ldlck._dispatch_load();});
+	$('.emp-select').click(function(){ldlck._select_employee(this);});
+	$('.emptable').tableh({ 'url': '/dispatch/emptabulardata' });
+	$('.loadtable').tableh({ 'url': '/dispatch/loadtabulardata' });
 });
 </script>
 <link rel="stylesheet" href="/css/tableh.css" />
+<link rel="stylesheet" href="/css/dispatch.css" />
 
-<table class="tableh" width="250">
-	<thead>
-		<tr>
-			<th class="select"></th>
-			<th column="last_name">
-				<div class="header">Name</div>
-				<div class="sort"></div>
-			</th>
-			<th column="dispatched_loads">
-				<div class="header">Disp</div>
-				<div class="sort"></div>
-			</th>
-			<th column="pending_loads">
-				<div class="header">Pend</div>
-				<div class="sort"></div>
-			</th>
-			<th class="load_info"></th>
-		</tr>
-	</thead>
-	<?php echo $this->partial('/dispatch/emptabulardata.phtml', array('data' => $this->data)); ?>
-</table>
+<input class="dispatch" type="button">Dispatch</input>
+<div class="emp-container">
+
+	<table class="tableh emptable" width="250">
+		<thead>
+			<tr>
+				<th class="select"></th>
+				<th column="last_name">
+					<div class="header">Name</div>
+					<div class="sort"></div>
+				</th>
+				<th column="dispatched_loads">
+					<div class="header">Disp</div>
+					<div class="sort"></div>
+				</th>
+				<th column="pending_loads">
+					<div class="header">Pend</div>
+					<div class="sort"></div>
+				</th>
+				<th class="load_info"></th>
+			</tr>
+		</thead>
+		<?php echo $this->partial('/dispatch/emptabulardata.phtml', array('data' => $this->data)); ?>
+	</table>
+
+</div>
+
+
+<div class="loads-container">
+
+	<table class="tableh loadtable">
+		<thead>
+			<tr>
+				<th>
+					<div class="select"></div>
+				</th>
+				<th column="c3.name">
+					<div class="header">Shipper</div>
+					<div class="sort"></div>
+				</th>
+				<th column="origin">
+					<div class="header">Origin</div>
+					<div class="sort"></div>
+				</th>
+				<th column="destination">
+					<div class="header">Destination</div>
+					<div class="sort"></div>
+				</th>
+				<th column="c5.name">
+					<div class="header">Customer</div>
+					<div class="sort"></div>
+				</th>
+				<th column="driver">
+					<div class="header">Driver</div>
+					<div class="sort"></div>
+				</th>
+	
+				<th column="l.delivered">
+					<div class="header">Delivered</div>
+					<div class="sort"></div>
+				</th>
+			</tr>
+		</thead>
+		<?php echo $this->partial('/dispatch/loadtabulardata.phtml', array('loads' => $this->loads,'emp_id'=>$this->emp_id)); ?>
+	</table>
+</div>
