@@ -24,6 +24,13 @@ class DispatchController extends Zend_Controller_SecureAction {
     	$this->view->employees = $employees;
     }
     
+    public function dispatchAction(){
+    	$this->_helper->layout()->disableLayout();
+    	$request = $this->getRequest();
+    	$params = $request->getParams();
+    	echo json_encode($params);
+    }
+    
 	public function emptabulardataAction() {
 		
 		$this->_helper->layout()->disableLayout();

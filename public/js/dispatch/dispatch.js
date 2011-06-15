@@ -33,6 +33,18 @@ function lockload()
 				}
 				else
 				{
+					var ids = new Array();
+					$('.locked-by-me').each(function(i){
+						//alert($(this).attr('load_id'));
+						ids[i]= $(this).attr('load_id');
+						//{'checkBox': [x, y, z, ...]} 
+					});
+					
+					$.post("/dispatch/dispatch",{'load_id':ids},
+							function(data){
+						console.log(data);
+					});
+					
 					
 				}
 			},
@@ -50,9 +62,15 @@ function lockload()
 					   function(data) {
 						status = thislockload._checkloadstatus(data,_this);
 						if(status==1)
-						{thislockload._add_load($load_id);}
+						{
+							thislockload._add_load($load_id);
+							$(_this).addClass('locked-by-me');
+						}
 						else if(status ==0)
-						{thislockload._remove_load($load_id);}
+						{
+							thislockload._remove_load($load_id);
+							$(_this).removeClass('locked-by-me');
+						}
 							
 					   },'json');
 		},
