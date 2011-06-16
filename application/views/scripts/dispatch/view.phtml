@@ -6,7 +6,7 @@ var ldlck = new lockload();
 $(document).ready(function() {
 	$('.loadlock').click(function(){ldlck._lockload(this);});
 	ldlck._build_existing_loads();
-	$('.dispatch').click(function(){ldlck._dispatch_load();});
+	$('.dispatch').click(function(){ldlck._start_dispatch_load();});
 	$('.emp-select').click(function(){ldlck._select_employee(this);});
 	$('.emptable').tableh({ 'url': '/dispatch/emptabulardata' });
 	$('.loadtable').tableh({ 'url': '/dispatch/loadtabulardata' });

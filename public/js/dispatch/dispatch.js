@@ -2,7 +2,7 @@ function lockload()
 {
 	var load_obj = new Array();
 	var row_color;
-	var employee = null;
+	var employee = {'emp_id': null,'compartments':null,'delayed_dispatch':0,'load_ids':null,'multi_dispatch':0,'name':null,'html':null};
 	return{
 	
 		
@@ -27,26 +27,108 @@ function lockload()
 		
 			},
 
-		_dispatch_load:function(){
-				if(employee == null){
+		_start_dispatch_load:function(){
+				if(employee.emp_id == null){
 					alert('You must select a driver before you can dispatch loads');
 				}
 				else
 				{
 					var ids = new Array();
+					var html = new Array();
 					$('.locked-by-me').each(function(i){
-						//alert($(this).attr('load_id'));
 						ids[i]= $(this).attr('load_id');
-						//{'checkBox': [x, y, z, ...]} 
+						html[i]=$(this).closest('tr').html();
 					});
 					
-					$.post("/dispatch/dispatch",{'load_id':ids},
-							function(data){
-						console.log(data);
-					});
+					employee.load_ids = ids;
+					employee.html = html;
+					
+					if(employee.compartments>1){
+						this._multiple_compartments();
+					}
+					else{
+						this._delayed_dispatch();
+					}
+					
 					
 					
 				}
+			},
+			
+		_dispatch_load:function(){
+				
+				$.post("/dispatch/dispatch",employee,
+				function(data){
+					$('.emp-container').append('<div id="dispatch-modal">'+data+'</div>');
+					
+					$( "#dispatch-modal" ).dialog({
+						resizable: false,
+						height:300,
+						width:500,
+						modal: true,
+						buttons: {
+							'No': function() {
+								$( this ).dialog( "close" );
+								//employee.delayed_dispatch = 0;
+								//thislockload._dispatch_load();
+							},
+							'Yes': function() {
+								$( this ).dialog( "close" );
+								//employee.delayed_dispatch = 1;
+								//thislockload._dispatch_load();
+							}
+						}
+					});
+					
+					
+		},'html');
+			},
+			
+		_delayed_dispatch:function(){
+
+				$('.emp-container').append('<div id="delayed-dispatch">Do you want to do delayed dispatch?</div>');
+				thislockload = this;
+				$( "#delayed-dispatch" ).dialog({
+					resizable: false,
+					height:200,
+					modal: true,
+					buttons: {
+						'No': function() {
+							$( this ).dialog( "close" );
+							employee.delayed_dispatch = 0;
+							thislockload._dispatch_load();
+						},
+						'Yes': function() {
+							$( this ).dialog( "close" );
+							employee.delayed_dispatch = 1;
+							thislockload._dispatch_load();
+						}
+					}
+				});
+			},
+			
+		_multiple_compartments:function(){
+				
+				$('.emp-container').append('<div id="multi-container">'+employee.name+' has multiple compartments.<br> Do you want to dispatch to multiple compartments?</div>')
+				thislockload = this;
+				$( "#multi-container" ).dialog({
+					resizable: false,
+					height:200,
+					modal: true,
+					buttons: {
+						'No': function() {
+							$( this ).dialog( "close" );
+							employee.multi_dispatch = 0;
+							thislockload._delayed_dispatch(employee);
+						},
+						'Yes': function() {
+							$( this ).dialog( "close" );
+							employee.multi_dispatch = 1;
+							thislockload._delayed_dispatch(employee);
+						}
+					}
+				});
+			
 			},
 			
 		_lockload: function(_this){
@@ -91,7 +173,7 @@ function lockload()
 		
 		_select_employee: function(_this){
 			
-			employee = $(_this).attr('emp_id');
+			employee = {'emp_id':$(_this).attr('emp_id'),'compartments':$(_this).attr('compartments'),'name':$(_this).attr('emp_name')};
 			this._reset_employee_table_color(_this);
 
 			$(_this).closest('tr').css('background-color', '#306754');

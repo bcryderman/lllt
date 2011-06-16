@@ -18,7 +18,7 @@ class DispatchController extends Zend_Controller_SecureAction {
     
     public function getdriversAction(){
     	
-    	$employeeMapper = new LLLT_Model_EmployeeMapper();
+    	$employeeMapper = new LLLT_Model_VemploadsMapper();
     	$employees = $employeeMapper->fetchAll(null, array('e.last_name asc', 'e.first_name asc'));
 
     	$this->view->employees = $employees;
@@ -27,9 +27,20 @@ class DispatchController extends Zend_Controller_SecureAction {
     public function dispatchAction(){
     	$this->_helper->layout()->disableLayout();
     	$request = $this->getRequest();
-    	$params = $request->getParams();
-    	echo json_encode($params);
+    	$params = $this->_request->getParams();
+    	
+    	if(isset($params['emp_id'])){
+    		
+    		if($params['delayed_dispatch']==0 && $params['multi_dispatch']==0)
+    		{
+    			$this->view->load_data = $params;
+    		}
+    	
+    	}
+    	//echo json_encode($params);
     }
+    
+
     
 	public function emptabulardataAction() {
 		
@@ -137,6 +148,7 @@ class DispatchController extends Zend_Controller_SecureAction {
     	$vemploadsMapper = new LLLT_Model_VemploadsMapper();
         $where= NULL;
     	$employees = $vemploadsMapper->fetchAll($where,'last_name asc');
+    	
 
     	$loadMapper = new LLLT_Model_LoadMapper();
     	$loads = $loadMapper->fetchAll(null, 'l.delivery_date asc');

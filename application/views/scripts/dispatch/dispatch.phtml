@@ -1,1 +1,14 @@
-<?php
+<div>
+<table>
+<?php foreach($this->load_data['html']as $row){?>
+<tr class="disp-modal-tr">
+<?php echo $row;}?>
+</tr>
+</table>
+
+</div>
+
+<script>
+$('.disp-modal-tr .disp-load-select input').removeClass('load-locked').addClass('delayed-dispatch').attr('checked',false);
+$('.disp-modal-tr .disp-load-driver,.disp-modal-tr .disp-load-delivered').hide(); 
+</script>
