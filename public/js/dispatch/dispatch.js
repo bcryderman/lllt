@@ -3,6 +3,7 @@ function lockload()
 	var load_obj = new Array();
 	var row_color;
 	var employee = {'emp_id': null,'compartments':null,'delayed_dispatch':0,'load_ids':null,'multi_dispatch':0,'name':null,'html':null};
+	var dispatch_obj = {'load_id':null,'delayed_dispatch':0,'emp_id':null,'dispatch_order':0,'bill-rate':0,'fuel_surcharge':0};
 	return{
 	
 		
@@ -16,7 +17,7 @@ function lockload()
 				load_obj.unshift($(this).attr('load_id'));
 			});
 		},
-		
+	
 		_checkloadstatus:function(data,_this){
 			if(data['lock_status']==3)
 			{
@@ -37,17 +38,18 @@ function lockload()
 					var html = new Array();
 					$('.locked-by-me').each(function(i){
 						ids[i]= $(this).attr('load_id');
-						html[i]=$(this).closest('tr').html();
+						//html[i]=$(this).closest('tr').html();
 					});
 					
 					employee.load_ids = ids;
-					employee.html = html;
+					//employee.html = html;
 					
 					if(employee.compartments>1){
 						this._multiple_compartments();
 					}
 					else{
-						this._delayed_dispatch();
+						//this._delayed_dispatch();
+						this._dispatch_load();
 					}
 					
 					
@@ -56,24 +58,28 @@ function lockload()
 			},
 			
 		_dispatch_load:function(){
-				
+				thislockload = this;
 				$.post("/dispatch/dispatch",employee,
 				function(data){
-					$('.emp-container').append('<div id="dispatch-modal">'+data+'</div>');
+					$('#dispatch-modal').html(data);
 					
 					$( "#dispatch-modal" ).dialog({
 						resizable: false,
+						title:'Dispatch for ' + employee.name,
 						height:300,
-						width:500,
+						width:800,
 						modal: true,
 						buttons: {
-							'No': function() {
+							'Cancel': function() {
+							
 								$( this ).dialog( "close" );
 								//employee.delayed_dispatch = 0;
 								//thislockload._dispatch_load();
+								
 							},
-							'Yes': function() {
-								$( this ).dialog( "close" );
+							'DISPATCH': function() {
+								//$( this ).dialog( "close" );
+								thislockload._perform_dispatch();
 								//employee.delayed_dispatch = 1;
 								//thislockload._dispatch_load();
 							}
@@ -86,11 +92,12 @@ function lockload()
 			
 		_delayed_dispatch:function(){
 
-				$('.emp-container').append('<div id="delayed-dispatch">Do you want to do delayed dispatch?</div>');
+				$('#dispatch-modal').html('<div id="delayed-dispatch">Do you want to do delayed dispatch?</div>');
 				thislockload = this;
-				$( "#delayed-dispatch" ).dialog({
+				$( "#dispatch-modal" ).dialog({
 					resizable: false,
 					height:200,
+					width:100,
 					modal: true,
 					buttons: {
 						'No': function() {
@@ -108,10 +115,10 @@ function lockload()
 			},
 			
 		_multiple_compartments:function(){
-				
-				$('.emp-container').append('<div id="multi-container">'+employee.name+' has multiple compartments.<br> Do you want to dispatch to multiple compartments?</div>')
+				$('#dispatch-modal').html('<div id="multi-container">'+employee.name+' has multiple compartments.<br> Do you want to dispatch to multiple compartments?</div>');
+
 				thislockload = this;
-				$( "#multi-container" ).dialog({
+				$( "#dispatch-modal" ).dialog({
 					resizable: false,
 					height:200,
 					modal: true,
@@ -173,7 +180,10 @@ function lockload()
 		
 		_select_employee: function(_this){
 			
-			employee = {'emp_id':$(_this).attr('emp_id'),'compartments':$(_this).attr('compartments'),'name':$(_this).attr('emp_name')};
+			employee.emp_id = $(_this).attr('emp_id');
+			employee.compartments = $(_this).attr('compartments');
+			employee.name = $(_this).attr('emp_name');
+			
 			this._reset_employee_table_color(_this);
 
 			$(_this).closest('tr').css('background-color', '#306754');
@@ -185,6 +195,38 @@ function lockload()
 			$(_this).closest('tbody').children('tr:odd').css('background-color', '#ffffff');
 			$(_this).closest('tbody').children('tr').css('color', '#444444');
 
+		},
+		
+		_dispatch_modal:function(){
+			$($('.locked-by-me').parents('tr')).clone().appendTo('#disp-modal');
+			$('<td class="disp-ordernm"></td><td class="disp-billrate"></td><td class="disp-fuelsur"></td>').appendTo('#disp-modal tr');
+			$('.bill-rate').appendTo($('.disp-billrate'));
+			$('.fuel-surcharge').appendTo($('.disp-fuelsur'));
+			$('.dispatch-order').appendTo($('.disp-ordernm'));
+			
+			$('#disp-modal tr input').unbind('click');
+			$('#disp-modal tr .disp-load-select input').removeClass('load-locked').addClass('delayed-dispatch').attr('checked',false);
+			$('#disp-modal tr .disp-load-driver,#disp-modal tr .disp-load-delivered').hide();
+			$('#disp-modal tr .disp-order-number').each(function(index){
+				console.log($(this).html());
+			})
+		},
+		
+		_perform_dispatch:function(){
+			$('.delayed-dispatch').each(function(index){
+				dispatch_obj.load_id = $(this).attr('load_id');
+				//dispatch_loads.emp_id=employee.emp_id;
+//				if($(this).is(':checked')){
+//					dispatch_loads.delayed_dispatch=1;
+//				}
+//				else
+//				{
+//					dispatch_loads.delayed_dispatch=0;
+//				}
+				load_obj=dispatch_obj;
+				
+			});
+//			console.log(load_obj);
 		}
 	};
 }

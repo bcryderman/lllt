@@ -28,7 +28,10 @@ class DispatchController extends Zend_Controller_SecureAction {
     	$this->_helper->layout()->disableLayout();
     	$request = $this->getRequest();
     	$params = $this->_request->getParams();
-    	
+    	var_dump($params);
+    	$fuelsurcharge = new LLLT_Model_FuelSurchargeMapper();
+    	var_dump($fuelsurcharge->getlatest(875));
+
     	if(isset($params['emp_id'])){
     		
     		if($params['delayed_dispatch']==0 && $params['multi_dispatch']==0)
@@ -153,7 +156,19 @@ class DispatchController extends Zend_Controller_SecureAction {
     	$loadMapper = new LLLT_Model_LoadMapper();
     	$loads = $loadMapper->fetchAll(null, 'l.delivery_date asc');
 
-    	$this->view->loads = $loads;	
+		
+    	$this->view->loads = $loads;
+    	$this->view->loadsarray = $this->buildloadarray($loads);	
     	$this->view->data = $employees;
+    }
+    
+    private function buildloadarray($loads){
+        $loadsarray = array();
+    	foreach ($loads as $item){
+    		$loadsarray[$item->getLoad_id()]= array('bill_to_id'	=>$item->getBill_to_id(),
+    												'shipper_id'	=>$item->getShipper_id(),
+    												'destination_id'=>$item->getDestination_id());
+    	}
+    	return $loadsarray;
     }
 }

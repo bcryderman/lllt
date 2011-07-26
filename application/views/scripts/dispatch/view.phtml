@@ -1,7 +1,7 @@
 <script src="/js/tableh.js"></script>
 <script src="/js/dispatch/dispatch.js"></script>
 <script>
-
+var loadobj = <?php echo json_encode($this->loadsarray);?>;
 var ldlck = new lockload();
 $(document).ready(function() {
 	$('.loadlock').click(function(){ldlck._lockload(this);});
@@ -67,10 +67,17 @@ $(document).ready(function() {
 					<div class="header">Customer</div>
 					<div class="sort"></div>
 				</th>
+				
+				<th column="load_id">
+					<div class="header">Order Num</div>
+					<div class="sort"></div>
+				</th>
 				<th column="driver">
 					<div class="header">Driver</div>
 					<div class="sort"></div>
 				</th>
+				
+
 	
 				<th column="l.delivered">
 					<div class="header">Delivered</div>
@@ -81,3 +88,5 @@ $(document).ready(function() {
 		<?php echo $this->partial('/dispatch/loadtabulardata.phtml', array('loads' => $this->loads,'emp_id'=>$this->emp_id)); ?>
 	</table>
 </div>
+
+<div id="dispatch-modal"></div>

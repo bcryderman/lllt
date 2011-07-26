@@ -1,5 +1,5 @@
 <tbody>
-<?php foreach ($this->loads as $item) { ?>
+<?php foreach ($this->loads as $item) {?>
 	<tr>
 		
 		<td class="disp-load-select">
@@ -8,11 +8,13 @@
 			?>
 			<input class="loadlock <?php if($item->getLocked_by()==$this->emp_id && $item->getLoad_locked()==1){echo 'locked-by-me';}elseif($item->getLocked_by()!=$this->emp_id && $item->getLoad_locked()==1){echo'locked-by-other';}?>" type="checkbox" load_id="<?php echo $item->getLoad_id();?>" <?php if($item->load_locked ==1){echo 'checked';}?>></input>
 			<?php }?>
+			
 		</td>
-		<td class="disp-load-shipper"><?php echo $item->getShipper(); ?></td>
-		<td class="disp-load-orgin"><div style="background-color:#<?php echo $item->getOrigin_color();?>"><?php echo $item->getOrigin(); ?></div></td>
-		<td class="disp-load-destination"><div style="background-color:#<?php echo $item->getDestination_color();?>"><?php echo $item->getDestination(); ?></div></td>
-		<td class="disp-load-customer"><div style="background-color:#<?php echo $item->getCustomer_color();?>"><?php echo $item->getCustomer(); ?></div></td>
+		<td class="disp-load-shipper color-block" shipper_id="<?php echo $item->getShipper_id();?>"><div><?php echo $item->getShipper(); ?></div></td>
+		<td class="disp-load-orgin color-block" style="background-color:#<?php echo $item->getOrigin_color();?>"><div ><?php echo $item->getOrigin(); ?></div></td>
+		<td class="disp-load-destination color-block" style="background-color:#<?php echo $item->getDestination_color();?>"><div><?php echo $item->getDestination(); ?></div></td>
+		<td class="disp-load-customer color-block" style="background-color:#<?php echo $item->getCustomer_color();?>"><div ><?php echo $item->getCustomer(); ?></div></td>
+		<td class="disp-order-number"><?php echo $item->getOrder_number();?></td>
 		<td class="disp-load-driver">
 			<span class="<?php if($item->getDispatched()==1){echo 'dispatched-driver';}else{echo 'no-class';}?>">
 				<?php echo $item->getDriver(); ?></span>

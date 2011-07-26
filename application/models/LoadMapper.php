@@ -157,7 +157,7 @@ class LLLT_Model_LoadMapper {
 				FROM tbl_load l
 				LEFT JOIN tbl_customer AS c1 ON l.carrier_id = c1.customer_id
 				LEFT JOIN tbl_customer AS c2 ON l.bill_to_id = c2.customer_id
-				LEFT JOIN tbl_customer AS c3 ON l.shipper_id = c2.customer_id
+				LEFT JOIN tbl_customer AS c3 ON l.shipper_id = c3.customer_id
 				LEFT JOIN tbl_customer AS c4 ON l.origin_id = c4.customer_id
 				LEFT JOIN tbl_customer AS c5 ON l.customer_id = c5.customer_id
 				LEFT JOIN tbl_customer AS c6 ON l.destination_id = c6.customer_id
