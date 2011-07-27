@@ -51,9 +51,6 @@ function lockload()
 						//this._delayed_dispatch();
 						this._dispatch_load();
 					}
-					
-					
-					
 				}
 			},
 			
