@@ -48,6 +48,7 @@ class LLLT_Model_Load {
 	protected $_last_updated_by;
 	protected $_active;
 	protected $_driver_compartment_number;
+	protected $_json_obj;
  	 	
     public function __construct(array $options = null) {
         
@@ -97,6 +98,22 @@ class LLLT_Model_Load {
         
         return $this;
     }  
+    
+    public function settonull($val){
+		if(strlen($val) < 1)
+		{$val = null;}
+		return $val;
+	}
+	
+	public function formatdate($date1){
+			$date1 =date_parse_from_format('Y-m-d H:i:s',$date1);
+			return date('m-d-Y', mktime($date1['hour'],$date1['minute'], 0, $date1['month'], $date1['day'], $date1['year']));
+	}
+	
+	public function formattime12($date1){
+		$date1 =date_parse_from_format('H:i',$date1);
+			return date('h:i A', mktime($date1['hour'],$date1['minute'], 0, $date1['month'], $date1['day'], $date1['year']));
+	}
     
  	public function setLoad_id($val) {
     	
@@ -234,7 +251,7 @@ class LLLT_Model_Load {
 		
 		if (!empty($arr['city']) && !empty($arr['state']) && !empty($arr['name'])) {
 			
-			$this->_origin = $arr['city'] . ', ' . $arr['state'] . ' - ' . $arr['name'];
+			$this->_origin =$arr['name'] . ' - ' . $arr['city'] . ', ' . $arr['state']  ;
 		}
 		else if (!empty($arr['state']) && !empty($arr['name'])) {
 			
@@ -246,7 +263,7 @@ class LLLT_Model_Load {
 		}
 		else if (!empty($arr['city']) && !empty($arr['name'])) {
 			
-			$this->_origin = $arr['city'] . ' - ' . $arr['name'];
+			$this->_origin = $arr['name'] . ' - ' . $arr['city'] ;
 		}
 		else if (!empty($arr['name'])) {
 			
@@ -337,11 +354,11 @@ class LLLT_Model_Load {
 		
 		if (!empty($arr['city']) && !empty($arr['state']) && !empty($arr['name'])) {
 			
-			$this->_destination = $arr['city'] . ', ' . $arr['state'] . ' - ' . $arr['name'];
+			$this->_destination = $arr['name']. ' - ' . $arr['city'] . ', ' . $arr['state']  ;
 		}
 		else if (!empty($arr['state']) && !empty($arr['name'])) {
 			
-			$this->_destination = $arr['state'] . ' - ' . $arr['name'];
+			$this->_destination = $arr['name'] . ' - ' . $arr['state'];
 		}
 		else if (!empty($arr['city']) && !empty($arr['state'])) {
 			
@@ -349,7 +366,7 @@ class LLLT_Model_Load {
 		}
 		else if (!empty($arr['city']) && !empty($arr['name'])) {
 			
-			$this->_destination = $arr['city'] . ' - ' . $arr['name'];
+			$this->_destination = $arr['name'] . ' - ' . $arr['city'];
 		}
 		else if (!empty($arr['name'])) {
 			
@@ -413,8 +430,8 @@ class LLLT_Model_Load {
     }
 
  	public function setDriver_id($val) {
-    	
-        $this->_driver_id = $val;
+
+        $this->_driver_id = $this->settonull($val);
         
         return $this;
     }
@@ -483,9 +500,16 @@ class LLLT_Model_Load {
         return $this;
     }
  
-    public function getLoad_date() {
-    	
-        return $this->_load_date;
+    public function getLoad_date($format = false) {
+    	if($format)
+    	{
+    		return $this->formatdate($this->_load_date);
+    	}
+    	else
+    	{
+    		return $this->_load_date;
+    	}
+        
     }
 
  	public function setLoad_time($val) {
@@ -495,9 +519,18 @@ class LLLT_Model_Load {
         return $this;
     }
  
-    public function getLoad_time() {
+    public function getLoad_time($format = false) {
     	
-        return $this->_load_time;
+    	if($format)
+    	{
+    		return $this->formattime12($this->_load_time);
+    	}
+    	else
+    	{
+    		return $this->_load_time;
+    	}
+    	
+
     }
 
  	public function setDelivery_date($val, $submit = false) {
@@ -514,9 +547,16 @@ class LLLT_Model_Load {
         return $this;
     }
  
-    public function getDelivery_date() {
+    public function getDelivery_date($format = false) {
+    	if($format)
+    	{
+    		return $this->formatdate($this->_delivery_date);
+    	}
+        else
+        {
+        	return $this->_delivery_date;
+        }
     	
-        return $this->_delivery_date;
     }
 
  	public function setDelivery_time($val) {
@@ -526,9 +566,17 @@ class LLLT_Model_Load {
         return $this;
     }
  
-    public function getDelivery_time() {
+    public function getDelivery_time($format = false) {
     	
-        return $this->_delivery_time;
+        if($format)
+    	{
+    		return $this->formattime12($this->_delivery_time);
+    	}
+        else
+        {
+        	return $this->_delivery_time;
+        }
+        
     }	 	 
 
  	public function setOrder_number($val) {
@@ -569,7 +617,9 @@ class LLLT_Model_Load {
 
  	public function setBill_rate($val) {
     	
-        $this->_bill_rate = $val;
+       
+ 		
+ 		$this->_bill_rate =  $this->settonull($val);
         
         return $this;
     }
@@ -581,7 +631,7 @@ class LLLT_Model_Load {
 
  	public function setFuel_surcharge($val) {
     	
-        $this->_fuel_surcharge = $val;
+        $this->_fuel_surcharge = $this->settonull($val);
         
         return $this;
     }
@@ -610,9 +660,16 @@ class LLLT_Model_Load {
         return $this;
     }
  
-    public function getInvoice_date() {
-    	
-        return $this->_invoice_date;
+    public function getInvoice_date($format = false) {
+        if($format)
+    	{
+    		return $this->formatdate($this->_invoice_date);
+    	}
+        else
+        {
+        	return $this->_invoice_date;
+        }
+
     }
 
  	public function setDispatched($val) {
@@ -759,5 +816,17 @@ class LLLT_Model_Load {
     public function getDriver_compartment_number() {
     	
         return $this->_driver_compartment_number;
+    }
+    
+    public function setJson_obj($val) {
+    	
+        $this->_json_obj = $val;
+        
+        return $this;
+    }
+    
+    public function getJson_obj() {
+    	
+        return $this->_json_obj;
     }
 }

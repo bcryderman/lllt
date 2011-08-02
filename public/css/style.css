@@ -114,3 +114,9 @@ textarea {
 .datepicker, .timepicker {
 	width: 75px;
 }
+
+.info-header {height:20px;background-color:gray;color:#FFFFFF;line-height:20px;font-size:18px;padding-left:10px}
+.info-label div{font-weight:bold;padding-right:5px;text-align:right;font-size:14px;height:18px;line-height:18px}
+.info-content div{line-height:18px;height:18px}
+
+.info-button{text-align:right;padding-top:10px}

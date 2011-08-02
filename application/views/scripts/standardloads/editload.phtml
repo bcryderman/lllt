@@ -1,0 +1,282 @@
+<?php
+//var_dump($this->load);
+$load = $this->load;
+?>
+
+<style>
+#load-view{border:1px solid gray;padding:5px}
+
+</style>
+<form id="standardloads-entry-form" action="/standardloads/editload" method="post">
+<input type="hidden" name="load_id" value="<?php echo $load->getLoad_id();?>"></input>
+<div id="load-view">
+<div id="info-label" class="info-header">Edit load:<?php echo $load->getLoad_id(); ?></div>
+<table class="no-color">
+<tr>
+	<td class="info-label"><div>Active:</div></td>
+	<td class="info-content"><div><input type="checkbox" name="active" <?php if($load->getActive()==1){echo 'checked';}?>></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Carrier:</div></td>
+	<td class="info-content">
+		<div>
+			<select name="carrier_id">
+				<option></option>
+			<?php 
+			
+			foreach ($this->carriers() as $item) {
+				if($load->getCarrier_id()== $item->getCustomer_id()){$carrier_selected = 'selected';}
+				else{$carrier_selected = '';}
+				echo '<option value="' . $item->getCustomer_id() . '" '.$carrier_selected.'>' . $item->getName() . '</option>';
+			}?>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Bill-To:</div></td>
+	<td class="info-content">
+		<div>
+			<select name="bill_to_id">
+				<option></option>
+			<?php 
+			
+			foreach ($this->Billtos() as $item) {
+				if($load->getBill_to_id()== $item->getCustomer_id()){$carrier_selected = 'selected';}
+				else{$carrier_selected = '';}
+				echo '<option value="' . $item->getCustomer_id() . '" '.$carrier_selected.'>' . $item->getName() . '</option>';
+			}?>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Shipper:</div></td>
+	<td class="info-content">
+		<div>
+			<select name="shipper_id">
+				<option></option>
+			<?php 
+			
+			foreach ($this->Shippers() as $item) {
+				if($load->getShipper_id()== $item->getCustomer_id()){$carrier_selected = 'selected';}
+				else{$carrier_selected = '';}
+				echo '<option value="' . $item->getCustomer_id() . '" '.$carrier_selected.'>' . $item->getName() . '</option>';
+			}?>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Origin:</div></td>
+	<td class="info-content">
+		<div>
+			<select name="origin_id">
+				<option></option>
+			<?php 
+			
+			foreach ($this->Origins() as $item) {
+				if($load->getOrigin_id()== $item->getCustomer_id()){$carrier_selected = 'selected';}
+				else{$carrier_selected = '';}
+				echo '<option value="' . $item->getCustomer_id() . '" '.$carrier_selected.'>' . $item->getName() . '</option>';
+			}?>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Customer:</div></td>
+	<td class="info-content">
+		<div>
+			<select name="customer_id">
+				<option></option>
+			<?php 
+			
+			foreach ($this->Customers() as $item) {
+				if($load->getCustomer_id()== $item->getCustomer_id()){$carrier_selected = 'selected';}
+				else{$carrier_selected = '';}
+				echo '<option value="' . $item->getCustomer_id() . '" '.$carrier_selected.'>' . $item->getName() . '</option>';
+			}?>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Destination:</div></td>
+	<td class="info-content">
+		<div>
+			<select name="destination_id">
+				<option></option>
+			<?php 
+			
+			foreach ($this->Destinations() as $item) {
+				if($load->getDestination_id()== $item->getCustomer_id()){$carrier_selected = 'selected';}
+				else{$carrier_selected = '';}
+				echo '<option value="' . $item->getCustomer_id() . '" '.$carrier_selected.'>' . $item->getName() . '</option>';
+			}?>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Product:</div></td>
+	<td class="info-content">
+		<div>
+			<select name="product_id">
+				<option></option>
+			<?php 
+			
+			foreach ($this->producttypes() as $item) {
+				if($load->getProduct_id()== $item->getProduct_type_id()){$carrier_selected = 'selected';}
+				else{$carrier_selected = '';}
+				echo '<option value="' . $item->getProduct_type_id() . '" '.$carrier_selected.'>' . $item->getProduct_type() . '</option>';
+			}?>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Driver:</div></td>
+	<td class="info-content">
+		<div>
+			<select name="driver_id">
+				<option></option>
+			<?php 
+			
+			foreach ($this->drivers() as $item) {
+				if($load->getdriver_id()== $item->getEmp_id()){$selected = 'selected';}
+				else{$selected = '';}
+				echo '<option value="' . $item->getEmp_id() . '" '.$selected.'>' . $item->getLast_name() . ', ' . $item->getFirst_name() . '</option>';
+			}?>
+		</div>
+	</td>
+</tr>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Delayed Dispatched:</div></td>
+	<td class="info-content">
+		<div>
+		<input type="checkbox" name="delayed_dispatch" <?php if($load->getDelayed_dispatch()==1){echo 'checked';}?>/>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Load Date:</div></td>
+	<td class="info-content">
+		<div>
+			<input type="text" name="load_date" class="datepicker" 
+			<?php if (strlen($load->getLoad_date())>4) { echo 'value="' . $load->getLoad_date(true) . '"'; } ?> />
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Load Time:</div></td>
+	<td class="info-content">
+		<div>
+			<input type="text" name="load_time" class="timepicker2"  
+			<?php if (strlen($load->getLoad_time())>4) { echo 'value="' . $load->getLoad_time(true) . '"'; } ?> />
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Delivery Date:</div></td>
+	<td class="info-content">
+		<div>
+			<input type="text" name="delivery_date" class="datepicker" 
+			<?php if (strlen($load->getDelivery_date())>4) { echo 'value="' . $load->getDelivery_date(true) . '"'; } ?> />
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Delivery Time:</div></td>
+	<td class="info-content">
+		<div>
+			<input type="text" name="delivery_time"  class="timepicker2" 
+			<?php if (strlen($load->getDelivery_time())>4) { echo 'value="' . $load->getDelivery_time(true) . '"'; } ?> />
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Order Number:</div></td>
+	<td class="info-content">
+		<div>
+			<input type="text" name="order_number" value="<?php echo $load->getOrder_number()?>"</input>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Bill of Lading Number:</div></td>
+	<td class="info-content">
+		<div>
+			<input type="text" name="bill_of_lading" value="<?php echo $load->getBill_of_lading()?>"</input>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Net Gallons:</div></td>
+	<td class="info-content">
+		<div>
+			<input type="text" name="net_gallons" value="<?php echo $load->getNet_gallons()?>"</input>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Bill Rate:</div></td>
+	<td class="info-content"><div><input name="bill_rate"></input></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Fuel Surcharge:</div></td>
+	<td class="info-content">
+		<div>
+			<select name="fuel_surcharge">
+				<option></option>
+			</select>
+			<?php 
+//			
+//			foreach ($this->fuelsurchargelatest($load->getCustomer) as $item) {
+//				if($load->getdriver_id()== $item->getEmp_id()){$selected = 'selected';}
+//				else{$selected = '';}
+//				echo '<option value="' . $item->getEmp_id() . '" '.$selected.'>' . $item->getLast_name() . ', ' . $item->getFirst_name() . '</option>';
+//			}?>
+		</div>
+	</td>
+</tr>
+
+
+
+<tr>
+	<td class="info-label"><div>Notes:</div></td>
+	<td class="info-content">
+		<div>
+		<textarea name="notes" rows="1" cols="7" ><?php  echo $load->getNotes();?></textarea>
+		</div>
+	</td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Invoice Date:</div></td>
+	<td class="info-content">
+		<div>
+			<input type="text" name="invoice_date" class="datepicker" 
+			<?php if (strlen($load->getInvoice_date())>4) { echo 'value="' . $load->getInvoice_date(true) . '"'; } ?> />
+		</div>
+	</td>
+</tr>
+
+</table>
+<div class="info-button">
+	<button id="save-button" type="submit">Save</button><button>Close</button>
+</div>
+</div>
+</form>

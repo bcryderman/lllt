@@ -65,7 +65,8 @@ class LLLT_Model_VemploadsMapper {
 				 ->setLast_name($row->last_name)
 	        	 ->setCompartments($row->compartments)
 	 			 ->setDispatched_loads($row->dispatched_loads)
-	        	 ->setPending_loads($row->pending_loads);
+	        	 ->setPending_loads($row->pending_loads)
+	        	 ->setLast_dispatch($row->last_dispatch);
                   
             $entries[] = $load;            
         }

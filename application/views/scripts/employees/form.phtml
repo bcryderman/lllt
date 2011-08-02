@@ -204,11 +204,22 @@ $(document).ready(function() {
 		</select>
 	</div>	
 	<?php if (isset($this->errors['user_type_id'])) { ?><div class="error-wrapper"><?php echo $this->errors['user_type_id']; ?></div><?php } ?>
-	<!--<div class="form-wrapper">
+	<div class="form-wrapper">
 		<label for="navman_vehicle_id">Navman Vehicle ID:</label>
-		<input type="text" name="vehicle_id" size="45"
-			<?php //if (isset($this->params['vehicle_id'])) { echo 'value="' . $this->params['vehicle_id'] . '"'; } ?> />
-	</div>-->
+		<select name= "vehicle_id">
+			<option></option>
+			<?php foreach($this->assets as $assets){
+				
+				if (isset($this->params['vehicle_id'])&& $this->params['vehicle_id']== $assets->getAsset_id())
+				{ echo'<option value="'.$assets->getAsset_id(). '" selected>'.$assets->getAsset_name(). '</option>';}
+				else
+				{echo'<option value="'.$assets->getAsset_id(). '">'.$assets->getAsset_name(). '</option>';}
+				
+			}?>
+			
+		</select>
+		
+	</div>
 	<div id="comm-options-wrapper">
 		<div id="show-hide-comm-options">+ Communication Options</div>
 		<div id="comm-options">

@@ -151,20 +151,64 @@ class LLLT_Model_AssetMapper {
         }
         
         $asset = new LLLT_Model_Asset();
- 		$asset->setAsset_id($result->asset_id)        		
-	          ->setAsset_type_id($result->asset_type_id)
-			  ->setAsset_type($result->asset_type)
-	          ->setAsset_name($result->asset_name)
-	          ->setCompartment_count($result->compartment_count)
-	          ->setActive($result->active)
-	          ->setCustomer_id($result->customer_id)
-			  ->setCustomer_name($result->name)
-	          ->setNavman_vehicle_id($result->navman_vehicle_id)
-	          ->setCreated($result->created)
-	          ->setCreated_by($result->created_by)
-	       	  ->setLast_updated($result->last_updated)
-	       	  ->setLast_updated_by($result->last_updated_by);
+ 		$asset->setAsset_id($row->asset_id)        		
+	          ->setAsset_type_id($row->asset_type_id)
+			  ->setAsset_type($row->asset_type)
+	          ->setAsset_name($row->asset_name)
+	          ->setCompartment_count($row->compartment_count)
+	          ->setActive($row->active)
+	          ->setCustomer_id($row->customer_id)
+			  ->setCustomer_name($row->name)
+	          ->setNavman_vehicle_id($row->navman_vehicle_id)
+	          ->setCreated($row->created)
+	          ->setCreated_by($row->created_by)
+	       	  ->setLast_updated($row->last_updated)
+	       	  ->setLast_updated_by($row->last_updated_by);
 
 	    return $asset;
     }
+    
+    
+public function find_type($type) {
+
+		$sql = 'SELECT tbl_asset.*, tbl_asset_type.asset_type, tbl_customer.name
+				FROM tbl_asset
+				LEFT JOIN tbl_asset_type ON tbl_asset.asset_type_id = tbl_asset_type.asset_type_id
+				LEFT JOIN tbl_customer ON tbl_asset.customer_id = tbl_customer.customer_id
+				WHERE tbl_asset.asset_type_id = ' . $type;
+
+					
+		$stmt = $this->getDbTable()
+					 ->getAdapter()
+					 ->query($sql);
+		
+		$stmt->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$resultSet = $stmt->fetchAll();
+
+        $assets = array();
+        
+        foreach ($resultSet as $row) {
+      
+        $asset = new LLLT_Model_Asset();
+ 		$asset->setAsset_id($row->asset_id)        		
+	          ->setAsset_type_id($row->asset_type_id)
+			  ->setAsset_type($row->asset_type)
+	          ->setAsset_name($row->asset_name)
+	          ->setCompartment_count($row->compartment_count)
+	          ->setActive($row->active)
+	          ->setCustomer_id($row->customer_id)
+			  ->setCustomer_name($row->name)
+	          ->setNavman_vehicle_id($row->navman_vehicle_id)
+	          ->setCreated($row->created)
+	          ->setCreated_by($row->created_by)
+	       	  ->setLast_updated($row->last_updated)
+	       	  ->setLast_updated_by($row->last_updated_by);
+	       	  
+	    $assets[] = $asset;
+        
+        }
+	    return $assets;
+    }
+    
 }

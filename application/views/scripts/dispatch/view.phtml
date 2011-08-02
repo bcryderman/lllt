@@ -11,11 +11,12 @@ $(document).ready(function() {
 	$('.emptable').tableh({ 'url': '/dispatch/emptabulardata' });
 	$('.loadtable').tableh({ 'url': '/dispatch/loadtabulardata' });
 });
+
 </script>
 <link rel="stylesheet" href="/css/tableh.css" />
 <link rel="stylesheet" href="/css/dispatch.css" />
 
-<input class="dispatch" type="button">Dispatch</input>
+<button class="dispatch" >Dispatch</button>
 <div class="emp-container">
 
 	<table class="tableh emptable" width="250">
@@ -24,15 +25,12 @@ $(document).ready(function() {
 				<th class="select"></th>
 				<th column="last_name">
 					<div class="header">Name</div>
-					<div class="sort"></div>
 				</th>
 				<th column="dispatched_loads">
 					<div class="header">Disp</div>
-					<div class="sort"></div>
 				</th>
 				<th column="pending_loads">
 					<div class="header">Pend</div>
-					<div class="sort"></div>
 				</th>
 				<th class="load_info"></th>
 			</tr>

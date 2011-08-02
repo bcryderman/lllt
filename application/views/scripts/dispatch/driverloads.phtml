@@ -1,0 +1,125 @@
+<script src="/js/dispatch/driver_info.js"></script>
+<script>
+var driverinfo = new driverinfo();
+$(document).ready(function() {
+	$('.timeselector').click(function(){
+		$(this).val(driverinfo._insert_time());}
+	);
+
+	$('#update-driver-info').click(function(){
+			driverinfo._update_driver_info('#driver-info-load table tbody tr');
+		});
+});
+</script>
+
+<style>
+	#driver-info-load table tbody div,#driver-info-info{font-size:14px;}
+	.driver-info-title{font-weight:bold;padding-right:5px;text-align:right}
+	#driver-info-load th,#driver-info-load td{padding:0 3px;border:1px solid gray;text-align:center}
+	#driver-info-load td{height:25px;line-height:25px}
+	#driver-info-load th{background-color:#306754;color:#FFFFFF}
+	#driver-info-load-header, #driver-info-header{height:20px;background-color:gray;color:#FFFFFF;line-height:20px;font-size:18px;padding-left:10px}
+	#driver-info-load{margin-top:20px}
+</style>
+
+<?php
+//var_dump($this->loads);
+?>
+
+
+
+<div id="driver-info-info">
+	<div id="driver-info-header">
+		Driver Info for <?php echo $this->driverinfo->getFirst_name().' '.$this->driverinfo->getLast_name();?>
+	</div>
+	<table>
+	<tr>
+		<td class="driver-info-title"><div>Name:</div></td>
+		<td class="driver-info-name"><div><?php echo $this->driverinfo->getFirst_name().' '.$this->driverinfo->getLast_name();?></div></td>
+	</tr>
+	
+	<tr>
+		<td class="driver-info-title"><div>Address:</div></td>
+		<td class="driver-info-address">
+			<div>
+				<?php echo $this->driverinfo->getAddr();?><br>
+				<?php echo $this->driverinfo->getAddr2();?><br>
+				<?php echo $this->driverinfo->getCity().' '. $this->driverinfo->getState();?>
+			</div>
+		</td>
+	</tr>
+	</table>
+</div>
+
+
+
+<div id="driver-info-load">
+<div id="driver-info-load-header">
+Loads
+</div>
+<table>
+	<thead>
+		<tr>
+			<th>Shipper</th>
+			<th>Origin</th>
+			<th>Destination</th>
+			<th>Customer</th>
+			<th>Order Number</th>
+			<th>Notes</th>
+			<th>Load Date</th>
+			<th>Delivery Date</th>
+			<th>BOL #</th>
+			<th>Net Gallons</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		<?php foreach($this->loads as $loads){
+			?>
+		
+		<tr>
+			<td><div><?php echo $loads->getShipper();?></div></td>
+			<td><div><?php echo $loads->getOrigin()?><div></td>
+			<td><div><?php echo $loads->getDestination()?><div></td>
+			<td><div><?php echo $loads->getCustomer()?><div></td>
+			<td><div><?php echo $loads->getOrder_number()?><div></td>
+			<td><div><?php echo $loads->getNotes()?><div></td>
+			<td><div><?php echo $loads->getLoad_date(true).' '.$loads->getLoad_time(true)?></div></td>
+			<td>
+				<div>
+					<?php if($loads->getDelivery_date() == null){?>
+						<input type="text" name="delivery_date" class="datepicker delivery-date"></input>
+						<input type="text" name="delivery_time" class="timeselector delivery-time"></input>
+					<?php }else{
+						echo $loads->getDelivery_date(true).' '.$loads->getDelivery_time(true);
+								}
+						?>
+				</div>
+			</td>
+			<td>
+				<div>
+					<?php if($loads->getBill_of_lading() == null){?>
+					<input type="text" class="bol" name="bill_of_lading" class="numeric" maxlength="30" size="30" ></input>
+					<?php }else{
+					echo $loads->getBill_of_lading();}
+						?>
+				<div>
+			</td>
+			<td>
+				<div>
+					<?php if($loads->getNet_gallons() == null){				
+					?>
+					<input class="net-gallons" type="text" name="net_gallons" class="decimal" maxlength="10" size="10" ></input>
+					<?php }else{
+					echo $loads->getNet_gallons();}
+						?>
+				<div>
+			</td>
+			<td><a href="/standardloads/editload/load_id/<?php echo $loads->getLoad_id();?>"><div class="ui-icon ui-icon-wrench"></div></a></td>
+		</tr>
+		<?php }?>
+	</tbody>
+	</tbody>
+</table>
+<button id="update-driver-info">Save</button>
+</div>

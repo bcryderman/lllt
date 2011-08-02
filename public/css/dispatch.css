@@ -5,3 +5,6 @@
 #disp-modal-tbl thead tr th{font-weight:normal; padding:0 5px}
 #disp-modal-tbl .color-block div{line-height:25px;padding:0 5px}
 #disp-modal-tbl{text-align:center}
+.red-highlight{background-color:#ff2144;}
+.emptable{font-size:12px}
+.emptable td, .emptable th{padding:3px}

@@ -40,7 +40,7 @@ class EmployeesController extends Zend_Controller_SecureAction {
 							 ->setState($params['state'])
 	 						 ->setZip($params['zip'])
 	 						 ->setZip4($params['zip4'])
-	 						 //->setVehicle_id($params['vehicle_id'])
+	 						 ->setVehicle_id($params['vehicle_id'])
 							 ->setRole_id($params['role_id'])
 							 ->setUser_type_id($params['user_type_id'])
 							 ->setActive(1)
@@ -122,7 +122,7 @@ class EmployeesController extends Zend_Controller_SecureAction {
 						 ->setState($params['state'])
  						 ->setZip($params['zip'])
  						 ->setZip4($params['zip4'])
- 						 //->setVehicle_id($params['vehicle_id'])
+ 						 ->setVehicle_id($params['vehicle_id'])
 						 ->setRole_id($params['role_id'])
 						 ->setUser_type_id($params['user_type_id'])
 						 ->setActive(1)
@@ -157,7 +157,10 @@ class EmployeesController extends Zend_Controller_SecureAction {
 			$object2Array = new LLLT_Model_Object2Array();
 	    	$object2Array->setFields($employee);
 
-	    	$this->view->params = $object2Array->getFields();  
+	    	$this->view->params = $object2Array->getFields();
+	    	//Get All asset type 2's for vehicle ID which will give you
+	    	//Naveman ID and trailer compartments.
+	    	$this->view->assets = $this->getassets(2);  
 		}
 		
 		$this->view->type = 'edit';
@@ -251,5 +254,13 @@ class EmployeesController extends Zend_Controller_SecureAction {
     	}
      	    		
     	return $errors;
+    }
+    
+    public function getassets($asset_type){
+    		$assetMapper = new LLLT_Model_AssetMapper();
+	    	$asset = $assetMapper->find_type($asset_type);
+
+	    	return $asset;
+	    	
     }
 }

@@ -24,13 +24,13 @@ class DispatchController extends Zend_Controller_SecureAction {
     	$this->view->employees = $employees;
     }
     
-    public function dispatchAction(){
+    public function dispatchmodalAction(){
     	$this->_helper->layout()->disableLayout();
     	$request = $this->getRequest();
     	$params = $this->_request->getParams();
-    	var_dump($params);
+    	//var_dump($params);
     	$fuelsurcharge = new LLLT_Model_FuelSurchargeMapper();
-    	var_dump($fuelsurcharge->getlatest(875));
+    	//var_dump($fuelsurcharge->getlatest(875));
 
     	if(isset($params['emp_id'])){
     		
@@ -43,7 +43,114 @@ class DispatchController extends Zend_Controller_SecureAction {
     	//echo json_encode($params);
     }
     
+    public function dispatchAction(){
+    $this->_helper->layout()->disableLayout();
+    $this->_helper->viewRenderer->setNoRender(true);
+    $request = $this->getRequest();
+    $params = $request->getParams();
+    foreach ($params['dispatch']as $row)
+    {
+    	$this->updateload($row);
+    	if($row['delayed_dispatch']==1)
+    	{
+    		$this->buildloadlog($row,7);
+    	}
+    	else
+    	{
+    		$this->buildloadlog($row,6);
+    	}
 
+    }
+    //var_dump($params);
+    //echo json_encode($params);
+    
+    }
+    
+    public function driverloadsAction(){
+    	$request = $this->getRequest();
+    	$params = $request->getParams();
+    	
+    	if(isset($params['driverid']))
+    	{
+    		$this->view->driverinfo = $this->getemployeedata($params['driverid']);
+    		$loadMapper = new LLLT_Model_LoadMapper();
+    		$this->view->loads = $loadMapper->fetchAll('e.emp_id = '.$params['driverid'], 'l.load_date desc');
+    	}
+    	
+    }
+    
+    public function buildloadlog($load,$load_type){
+    	$load_log_obj = new LLLT_Model_LoadLog();
+    	$load_log = new LLLT_Model_LoadLogMapper();
+    	$auth = Zend_Auth::getInstance()->getIdentity();
+    	
+    	$load_log_obj->setLoad_id($load['load_id'])
+    	->setLoad_activity_type_id($load_type)
+    	->setActivity_time(date('Y-m-d H:i:s'))
+    	->setActivity_by($auth['Employee']->getEmp_id());
+    	
+    	$load_log->add($load_log_obj);
+    }
+    
+    public function updateload($load){
+    	$load_obj = new LLLT_Model_Load();
+    	$load_dispatch = new LLLT_Model_LoadMapper();
+    	$auth = Zend_Auth::getInstance()->getIdentity();
+    	
+    	$load_obj->setLoad_id($load['load_id'])
+    	->setDriver_id($load['driver_id'])
+    	->setDelayed_dispatch($load['delayed_dispatch'])
+    	//->setBill_rate($load['bill_rate'])
+    	//->setFuel_surcharge($load['fuel_surcharge'])
+    	->setLast_updated(date('Y-m-d H:i:s'))
+    	->setLast_updated_by($auth['Employee']->getEmp_id())
+    	->setDispatched(1)
+    	->setNotes($load['notes'])
+    	->setLoad_date(date('Y-m-d H:i:s'));
+    	
+    	$load_dispatch->dispatchload($load_obj);
+    	
+    }
+    
+    public function updatedriverloadAction(){
+    	$this->_helper->layout()->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(true);
+		$auth = Zend_Auth::getInstance()->getIdentity(); 
+	    $date = date('Y-m-d H:i:s');
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+    	
+    	$load_dispatch = new LLLT_Model_LoadMapper();
+    	foreach($params['load_data']as $load){
+
+			if(isset($load['delivery_date'])&& strlen($load['delivery_date'])>9)
+			{
+				$load['delivery_date']=$this->formatdrivertimes($load['delivery_date']);
+			}
+			else
+			{
+				unset($load['delivery_date']);
+			}
+
+			if(count($load)>1){
+				$load_dispatch->updatedriverload($load, $load['load_id']);
+			}
+    	}
+    	
+    }
+    
+    public function formatdrivertimes($data){
+    	$day = substr($data,0,2);
+    	$month = substr($data,3,2);
+    	$year = substr($data,6,4);
+    	$hour = substr($data,11,2);
+    	$minute = substr($data,14,2);
+    	$date1 =date_parse_from_format('m/d/Y h:i A',$data);
+    	$retval =  date("Y-m-d H:i:s", mktime($date1['hour'],$date1['minute'], 0, $date1['month'], $date1['day'], $date1['year']));
+    	echo $retval;
+    	return $retval;
+    }
+    
     
 	public function emptabulardataAction() {
 		
@@ -167,8 +274,20 @@ class DispatchController extends Zend_Controller_SecureAction {
     	foreach ($loads as $item){
     		$loadsarray[$item->getLoad_id()]= array('bill_to_id'	=>$item->getBill_to_id(),
     												'shipper_id'	=>$item->getShipper_id(),
-    												'destination_id'=>$item->getDestination_id());
+    												'destination_id'=>$item->getDestination_id(),
+    												'origin_id'		=>$item->getOrigin_id(),
+    												'order_number'	=>$item->getOrder_number(),
+    												'customer_id'	=>$item->getCustomer_id(),
+    												'load_id'		=>$item->getLoad_id());
     	}
     	return $loadsarray;
     }
+    
+    public function getemployeedata($emp_id){
+    	$emp_data = new LLLT_Model_EmployeeMapper();
+    	$retval = $emp_data->find($emp_id);
+
+    	return $retval;
+    }
+    
 }

@@ -25,7 +25,7 @@ class FuelsurchargeController extends Zend_Controller_Action {
 		    	$data->setCustomer_id($params['customer_id']);
 		    	$data->setFuel_surcharge($params['fuel_surcharge']);
 		    	$data->setStart_date(date('Y-m-d', strtotime($params['start_date'])));
-		    	$data->setEnd_date('');
+		    	$data->setEnd_date(null);
 		    	$data->setCreated($date);
 	    		$data->setCreated_by($this->auth['Employee']->getEmp_id());
 	    		$data->setLast_updated($date);
@@ -85,7 +85,7 @@ class FuelsurchargeController extends Zend_Controller_Action {
 		    	$data->setCustomer_id($params['customer_id']);
 		    	$data->setFuel_surcharge($params['fuel_surcharge']);
 		    	$data->setStart_date(date('Y-m-d', strtotime($params['start_date'])));
-		    	$data->setEnd_date('');
+		    	$data->setEnd_date(null);
 		    	$data->setCreated($date);
 	    		$data->setCreated_by($this->auth['Employee']->getEmp_id());
 	    		$data->setLast_updated($date);

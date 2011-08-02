@@ -23,7 +23,7 @@ class Zend_View_Helper_Carriers {
     
     public function getdata(){
     	$custMapper = new LLLT_Model_CustomerMapper();
-    	$this->_carriers = $custMapper->fetchAll('customer_type_id = 2', 'name asc');
+    	$this->_carriers = $custMapper->fetchAll('customer_type_id = 6', 'name asc');
     	
     	return $this->_carriers; 
     }

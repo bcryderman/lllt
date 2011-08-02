@@ -132,6 +132,37 @@ class LLLT_Model_LoadMapper {
     	
     }
     
+    public function dispatchload(LLLT_Model_Load $load){
+    	$data = array('driver_id'     	 => $load->getDriver_id(),
+					  'delayed_dispatch' => $load->getDelayed_dispatch(),
+					  //'bill_rate'		 => $load->getBill_rate(),
+    				  //'fuel_surchage'	 => $load->getFuel_surcharge(),
+					  'last_updated'     => $load->getLast_updated(),
+					  'last_updated_by'  => $load->getLast_updated_by(),
+    				  'dispatched'		 => $load->getDispatched(),
+    				  'notes'			 => $load->getNotes(),
+    				  'load_date'		 => $load->getLoad_date());
+    			$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('load_id = ?', $load->getLoad_id());
+
+		$this->getDbTable()
+			 ->update($data, $where);
+    	
+    }
+    
+	public function updatedriverload($data,$load_id){
+ 
+    			$where = $this->getDbTable()
+					  ->getAdapter()
+					  ->quoteInto('load_id = ?', $load_id);
+
+		$this->getDbTable()
+			 ->update($data, $where);
+    	
+    }
+    
+    
     public function fetchAll($where, $order = null) {
     	
 		$sql = 'SELECT l.*, 
@@ -153,7 +184,7 @@ class LLLT_Model_LoadMapper {
                        c6.color_code AS destination_color,
 					   pt.product_type AS product,
 					   e.first_name AS driver_first_name,
-					   e.last_name AS driver_last_name
+					   e.last_name AS driver_last_name					   
 				FROM tbl_load l
 				LEFT JOIN tbl_customer AS c1 ON l.carrier_id = c1.customer_id
 				LEFT JOIN tbl_customer AS c2 ON l.bill_to_id = c2.customer_id
@@ -237,7 +268,9 @@ class LLLT_Model_LoadMapper {
 	        	 ->setLast_updated($row->last_updated)
 	        	 ->setLast_updated_by($row->last_updated_by)
 				 ->setActive($row->active)
-				 ->setDriver_compartment_number($row->driver_compartment_number);
+				 ->setDriver_compartment_number($row->driver_compartment_number)
+				 ->setJson_obj($this->build_json_obj($row));
+				 
                   
             $entries[] = $load;            
         }
@@ -270,7 +303,7 @@ class LLLT_Model_LoadMapper {
 				FROM tbl_load l
 				LEFT JOIN tbl_customer AS c1 ON l.carrier_id = c1.customer_id
 				LEFT JOIN tbl_customer AS c2 ON l.bill_to_id = c2.customer_id
-				LEFT JOIN tbl_customer AS c3 ON l.shipper_id = c2.customer_id
+				LEFT JOIN tbl_customer AS c3 ON l.shipper_id = c3.customer_id
 				LEFT JOIN tbl_customer AS c4 ON l.origin_id = c4.customer_id
 				LEFT JOIN tbl_customer AS c5 ON l.customer_id = c5.customer_id
 				LEFT JOIN tbl_customer AS c6 ON l.destination_id = c6.customer_id
@@ -341,4 +374,11 @@ class LLLT_Model_LoadMapper {
 	        	
 	    return $load;
     }
+    
+    public function build_json_obj($load){
+    
+    	$obj = new LLLT_Model_Object2Array();
+    	return json_encode($load);
+    }
+
 }

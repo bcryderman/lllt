@@ -1,0 +1,109 @@
+<?php //var_dump($this->load);
+$load= $this->load;
+?>
+<style>
+#load-view{border:1px solid gray;padding:5px}
+
+</style>
+
+<div id="load-view">
+<div id="info-label" class="info-header">Load Information for load:<?php echo $load->getLoad_id(); ?></div>
+<table class="no-color">
+<tr>
+	<td class="info-label"><div>Bill-To:</div></td>
+	<td class="info-content"><div><?php echo $load->getBill_to();?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Shipper:</div></td>
+	<td class="info-content"><div><?php echo $load->getShipper();?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Origin:</div></td>
+	<td class="info-content"><div><?php echo $load->getOrigin();?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Customer:</div></td>
+	<td class="info-content"><div><?php echo $load->getCustomer();?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Destination:</div></td>
+	<td class="info-content"><div><?php echo $load->getDestination();?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Driver:</div></td>
+	<td class="info-content"><div><?php echo $load->getDriver();?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Dispatched:</div></td>
+	<td class="info-content"><div><?php if($load->getDispatched()== 1){echo 'Yes';}else{echo 'No';}?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Load Date:</div></td>
+	<td class="info-content"><div><?php if(strlen($load->getload_date())>4){ echo $load->getLoad_date(true).' '.$load->getLoad_time(true);}?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Delivery Date:</div></td>
+	<td class="info-content"><div><?php if(strlen($load->getDelivery_date())>4){echo $load->getDelivery_date(true).' '.$load->getDelivery_time(true);}?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Order Number:</div></td>
+	<td class="info-content"><div><?php echo $load->getOrder_number()?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Bill of Lading Number:</div></td>
+	<td class="info-content"><div><?php echo $load->getBill_of_lading()?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Net Gallons:</div></td>
+	<td class="info-content"><div><?php echo $load->getNet_gallons()?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Bill Rate:</div></td>
+	<td class="info-content"><div><?php echo $load->getBill_rate()?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Pay Rate:</div></td>
+	<td class="info-content"><div><?php //echo $load->getRate()?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Discount:</div></td>
+	<td class="info-content"><div><?php echo $load->getDiscount()?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Fuel Surcharge:</div></td>
+	<td class="info-content"><div><?php echo $load->getFuel_surcharge()?></div></td>
+</tr>
+
+<tr>
+	<td class="info-label"><div>Notes:</div></td>
+	<td class="info-content"><div><?php echo $load->getNotes()?></div></td>
+</tr>
+
+</table>
+<div class="info-button">
+	<button id="edit-button">Edit</button><button>Close</button>
+</div>
+</div>
+<script>
+$(document).ready(function() {
+	$('#edit-button').click(function(){
+		window.location.assign('/standardloads/edit/load_id/'+<?php echo $load->getLoad_id();;?>);
+		})
+});
+
+</script>

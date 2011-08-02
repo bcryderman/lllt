@@ -1,11 +1,15 @@
 <tbody>
-<?php foreach ($this->data as $item) { ?>
-	<tr>
+<?php foreach ($this->data as $item) { 
+$date1 = new DateTime(date('Y-m-d'));
+$date2 = new DateTime(substr($item->getLast_dispatch(),0,10));
+//var_dump($date1==$date2);
+	?>
+	<tr <?php if($date1==$date2){echo 'class="red-highlight"';}?>>
 		<td><input class="emp-select" type="radio" name="emp_group" emp_id="<?php echo $item->getEmp_id();?>" compartments="<?php echo $item->getCompartments();?>" emp_name="<?php echo $item->getLast_name().', '.$item->getFirst_name(); ?>"></input></td>
 		<td><?php echo $item->getLast_name().', '.$item->getFirst_name(); ?></td>
 		<td><?php echo $item->getDispatched_loads(); ?></td>
 		<td><?php echo $item->getPending_loads(); ?></td>
-		<td></td>
+		<td><a href="/dispatch/driverloads/driverid/<?php echo $item->getEmp_id()?>"><div class="ui-icon ui-icon-wrench"></div></a></td>
 	</tr>
 <?php } ?>
 </tbody>

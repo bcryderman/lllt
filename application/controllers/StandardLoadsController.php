@@ -92,18 +92,14 @@ class StandardloadsController extends Zend_Controller_SecureAction {
     	$this->view->params = $params;
 	}
 	
-    public function editAction() {
-    
+	public function editloadAction(){
 		$request = $this->getRequest();
     	$params = $request->getParams();
     	
-	    if ($request->isPost()) {
-	    	
-	    	$errors = $this->validation($params);	    	
-
-		    if (empty($errors)) {
-		    	
-		    	$auth = Zend_Auth::getInstance()->getIdentity(); 
+    	if($request->isPost())
+    	{$this->_helper->viewRenderer->setNoRender(true);
+    	var_dump($params);
+    			$auth = Zend_Auth::getInstance()->getIdentity(); 
 	    		$date = date('Y-m-d H:i:s');
 
 				$load = new LLLT_Model_Load();
@@ -118,18 +114,18 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 					 ->setProduct_id($params['product_id'])
 					 ->setDriver_id($params['driver_id'])
 					 ->setDelayed_dispatch($params['delayed_dispatch'])
-					 ->setLoad_date(date('Y-m-d', strtotime($params['load_date'])) . ' ' . $params['load_time'] . ':00', true)
-					 ->setDelivery_date(date('Y-m-d', strtotime($params['delivery_date'])) . ' ' . $params['delivery_time'] . ':00', true)
+					 ->setLoad_date($this->formattimes($params['load_date'] . ' ' .$params['load_time']),true)
+				     ->setDelivery_date($this->formattimes($params['delivery_date'] . ' ' .$params['delivery_time']),true)
+					 //->setDelivery_date(date('Y-m-d', strtotime($params['delivery_date'])) . ' ' . $params['delivery_time'] . ':00', true)
 					 ->setOrder_number($params['order_number'])
 					 ->setBill_of_lading($params['bill_of_lading'])
 					 ->setNet_gallons($params['net_gallons'])
 					 ->setBill_rate($params['bill_rate'])
 					 ->setFuel_surcharge($params['fuel_surcharge'])
-					 ->setDiscount($params['discount'])
+					// ->setDiscount($params['discount'])
 					 ->setInvoice_date(date('Y-m-d', strtotime($params['invoice_date'])))
-					 ->setDispatched($params['dispatched'])
+					// ->setDispatched($params['dispatched'])
 					 ->setNotes(trim($params['notes']))
-					 ->setLoad_locked($params['load_locked'])
 					 ->setLast_updated($date)
 					 ->setLast_updated_by($auth['Employee']->getEmp_id())
 					 ->setActive($params['active']);
@@ -138,33 +134,97 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 				$loadMapper->edit($load);
 		    	
 		    	$this->_redirect('standardloads/view');
-		    }
-		    else {
-		    	
-		    	$this->view->errors = $errors;
-		    	$this->view->params = $params;	
-		    	$this->view->type = 'edit';	    	
-		    }
-		}		
-    	else {
-    		
-	    	$loadMapper = new LLLT_Model_LoadMapper();
-	    	$load = (array) $loadMapper->find($params['load_id']);
-	    	    	
-	    	$fields = array();
-	    	
-	    	foreach ($load as $k => $v) {
-	  
-	    		$fields[substr($k, 4)] = $load[$k];
-	    	}
-	    	
-	    	$this->view->loadId = $params['load_id'];
-	    	$this->view->params = $fields;  
-	    	$this->view->type = 'edit';
-    	}    	
-
-    	$this->renderScript('standardloads/form.phtml');
-    }
+    	}
+    	else
+    	{
+    		if(isset($params['load_id']))
+    		{
+    			$request = $this->getRequest();
+    			$params = $request->getParams();
+    			$loadMapper = new LLLT_Model_LoadMapper();
+    	
+    			$this->view->load = $loadMapper->find($params['load_id']);
+    		}
+    		else//no load id
+    		{
+    		}
+    	}
+	}
+	
+//    public function editAction() {
+//    
+//		$request = $this->getRequest();
+//    	$params = $request->getParams();
+//    	
+//	    if ($request->isPost()) {
+//	    	
+//	    	$errors = $this->validation($params);	    	
+//
+//		    if (empty($errors)) {
+//		    	
+//		    	$auth = Zend_Auth::getInstance()->getIdentity(); 
+//	    		$date = date('Y-m-d H:i:s');
+//
+//				$load = new LLLT_Model_Load();
+//								
+//				$load->setLoad_id($params['load_id'])
+//					 ->setCarrier_id($params['carrier_id'])
+//					 ->setBill_to_id($params['bill_to_id'])
+//					 ->setShipper_id($params['shipper_id'])
+//					 ->setOrigin_id($params['origin_id'])
+//					 ->setCustomer_id($params['customer_id'])
+//					 ->setDestination_id($params['destination_id'])
+//					 ->setProduct_id($params['product_id'])
+//					 ->setDriver_id($params['driver_id'])
+//					 ->setDelayed_dispatch($params['delayed_dispatch'])
+//					 ->setLoad_date(date('Y-m-d', strtotime($params['load_date'])) . ' ' . $params['load_time'] . ':00', true)
+//					 ->setDelivery_date(date('Y-m-d', strtotime($params['delivery_date'])) . ' ' . $params['delivery_time'] . ':00', true)
+//					 ->setOrder_number($params['order_number'])
+//					 ->setBill_of_lading($params['bill_of_lading'])
+//					 ->setNet_gallons($params['net_gallons'])
+//					 ->setBill_rate($params['bill_rate'])
+//					 ->setFuel_surcharge($params['fuel_surcharge'])
+//					 ->setDiscount($params['discount'])
+//					 ->setInvoice_date(date('Y-m-d', strtotime($params['invoice_date'])))
+//					 ->setDispatched($params['dispatched'])
+//					 ->setNotes(trim($params['notes']))
+//					 ->setLoad_locked($params['load_locked'])
+//					 ->setLast_updated($date)
+//					 ->setLast_updated_by($auth['Employee']->getEmp_id())
+//					 ->setActive($params['active']);
+//					
+//				$loadMapper = new LLLT_Model_LoadMapper();				
+//				$loadMapper->edit($load);
+//		    	
+//		    	$this->_redirect('standardloads/view');
+//		    }
+//		    else {
+//		    	
+//		    	$this->view->errors = $errors;
+//		    	$this->view->params = $params;	
+//		    	$this->view->type = 'edit';	    	
+//		    }
+//		}		
+//    	else {
+//    		
+//	    	$loadMapper = new LLLT_Model_LoadMapper();
+//	    	//$load = (array) $loadMapper->find($params['load_id']);
+//	    	$load = $loadMapper->find($params['load_id']);	
+//	    	$fields = array();
+//	    	
+//	    	foreach ($load as $k => $v) {
+//	  
+//	    		$fields[substr($k, 4)] = $load[$k];
+//	    	}
+//	    	
+//	    	$this->view->loadId = $params['load_id'];
+//	    	//$this->view->params = $fields;
+//	    	$$this->view->params = $load;  
+//	    	$this->view->type = 'edit';
+//    	}    	
+//
+//    	$this->renderScript('standardloads/form.phtml');
+//    }
 	
 	public function tabulardataAction() {
 		
@@ -203,6 +263,16 @@ class StandardloadsController extends Zend_Controller_SecureAction {
     	$loads = $loadMapper->fetchAll(null, 'l.delivery_date asc');
     	  	
     	$this->view->loads = $loads;
+    }
+    
+    public function viewloadAction(){
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+    	$loadMapper = new LLLT_Model_LoadMapper();
+    	
+    	$this->view->load = $loadMapper->find($params['load_id']);
+
+    	
     }
 
 	public function validation($params) {
@@ -244,10 +314,10 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 			$errors['product_id'] = 'You must select a product type.';
 		}
 		
-		if (empty($params['driver_id'])) {
-			
-			$errors['driver_id'] = 'You must select a driver.';
-		}
+//		if (empty($params['driver_id'])) {
+//			
+//			$errors['driver_id'] = 'You must select a driver.';
+//		}
 		
 		if (!empty($params['load_date'])) {
 			
@@ -352,5 +422,14 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 		}
     	
 		return $errors;
+    }
+    
+public function formattimes($data){
+    
+    	$date1 =date_parse_from_format('m/d/Y h:i A',$data);
+
+    	$retval =  date("Y-m-d H:i:s", mktime($date1['hour'],$date1['minute'], 0, $date1['month'], $date1['day'], $date1['year']));
+
+    	return $retval;
     }
 }

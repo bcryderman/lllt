@@ -8,6 +8,7 @@ class LLLT_Model_Vemploads {
  	protected $_compartments;
  	protected $_dispatched_loads;
  	protected $_pending_loads;
+ 	protected $_last_dispatch;
  	
  	
     public function __construct(array $options = null) {
@@ -128,6 +129,18 @@ class LLLT_Model_Vemploads {
     public function getPending_loads() {
     	
         return $this->_pending_loads;
+    }
+    
+    public function setLast_dispatch($val) {
+    	
+        $this->_last_dispatch = (string) $val;
+        
+        return $this;
+    }
+ 
+    public function getLast_dispatch() {
+    	
+        return $this->_last_dispatch;
     }
     
 }

@@ -1,6 +1,6 @@
 function lockload()
 {
-	var load_obj = new Array();
+	var loads_selected = new Array();
 	var row_color;
 	var employee = {'emp_id': null,'compartments':null,'delayed_dispatch':0,'load_ids':null,'multi_dispatch':0,'name':null,'html':null};
 	var dispatch_obj = {'load_id':null,'delayed_dispatch':0,'emp_id':null,'dispatch_order':0,'bill-rate':0,'fuel_surcharge':0};
@@ -8,13 +8,25 @@ function lockload()
 	
 		
 		_add_load: function(loadid){
-			load_obj.unshift(loadid);		
+			loads_selected.unshift(loadid);
+		},
+		
+		_remove_load: function(loadid){
+			for(i=0;i<loads_selected.length;i++)
+			{
+				if(loads_selected[i]== loadid)
+				{loads_selected.splice(i, 1);}
+			}
+		},
+		
+		_loads_selected:function(){
+			
 		},
 		
 		_build_existing_loads:function(){
 			
 			$('.locked-by-me').each(function(index){
-				load_obj.unshift($(this).attr('load_id'));
+				loads_selected.unshift($(this).attr('load_id'));
 			});
 		},
 	
@@ -56,7 +68,7 @@ function lockload()
 			
 		_dispatch_load:function(){
 				thislockload = this;
-				$.post("/dispatch/dispatch",employee,
+				$.post("/dispatch/dispatchmodal",employee,
 				function(data){
 					$('#dispatch-modal').html(data);
 					
@@ -77,6 +89,7 @@ function lockload()
 							'DISPATCH': function() {
 								//$( this ).dialog( "close" );
 								thislockload._perform_dispatch();
+								//window.location.reload();
 								//employee.delayed_dispatch = 1;
 								//thislockload._dispatch_load();
 							}
@@ -151,6 +164,10 @@ function lockload()
 						{
 							thislockload._add_load($load_id);
 							$(_this).addClass('locked-by-me');
+							
+							var myObject = eval('(' + $(_this).attr('data') + ')');
+							//console.log(myObject);
+							
 						}
 						else if(status ==0)
 						{
@@ -166,14 +183,7 @@ function lockload()
 			$(_this).attr({checked:'checked'});
 		},
 		
-		_remove_load: function(loadid){
-			for(i=0;i<load_obj.length;i++)
-			{
-				if(load_obj[i]== loadid)
-				{load_obj.splice(i, 1);}
-			}
-			
-		},
+
 		
 		_select_employee: function(_this){
 			
@@ -185,6 +195,7 @@ function lockload()
 
 			$(_this).closest('tr').css('background-color', '#306754');
 			$(_this).closest('tr').css('color', '#ffffff');
+			console.log(employee);
 		},
 		
 		_reset_employee_table_color: function(_this){
@@ -195,35 +206,70 @@ function lockload()
 		},
 		
 		_dispatch_modal:function(){
+			console.log($('.locked-by-me').parents('tr').length);
 			$($('.locked-by-me').parents('tr')).clone().appendTo('#disp-modal');
-			$('<td class="disp-ordernm"></td><td class="disp-billrate"></td><td class="disp-fuelsur"></td>').appendTo('#disp-modal tr');
-			$('.bill-rate').appendTo($('.disp-billrate'));
-			$('.fuel-surcharge').appendTo($('.disp-fuelsur'));
-			$('.dispatch-order').appendTo($('.disp-ordernm'));
+			$('<td class="disp-ordernm"></td>').appendTo('#disp-modal tr');
+			$('<td class="disp-notes"><textarea class="disp-notes-input" rows="1" cols="7" class="notes"></textarea></td>').appendTo('#disp-modal tr');
+			
+			//$('.bill-rate').appendTo($('.disp-billrate'));
+			//$('.fuel-surcharge').appendTo($('.disp-fuelsur'));
+
+				$('.dispatch-order').appendTo($('.disp-ordernm'));
 			
 			$('#disp-modal tr input').unbind('click');
 			$('#disp-modal tr .disp-load-select input').removeClass('load-locked').addClass('delayed-dispatch').attr('checked',false);
 			$('#disp-modal tr .disp-load-driver,#disp-modal tr .disp-load-delivered').hide();
 			$('#disp-modal tr .disp-order-number').each(function(index){
-				console.log($(this).html());
-			})
+				//console.log($(this).html());
+			});
+			
+			if($('#disp-modal tr').length > 1){
+				$('.delayed-dispatch').attr('checked','checked');
+				}
+			else
+			{$('#disp-modal tr #disp-load-select').hide();}
 		},
 		
 		_perform_dispatch:function(){
-			$('.delayed-dispatch').each(function(index){
-				dispatch_obj.load_id = $(this).attr('load_id');
-				//dispatch_loads.emp_id=employee.emp_id;
-//				if($(this).is(':checked')){
-//					dispatch_loads.delayed_dispatch=1;
-//				}
-//				else
-//				{
-//					dispatch_loads.delayed_dispatch=0;
-//				}
-				load_obj=dispatch_obj;
+			dispatcharr= new Array();
+			$('#disp-modal tr').each(function(index){
+				if($(this).find('.delayed-dispatch').is(':checked'))
+				{
+					delayed = 1;
+				}
+				else
+				{
+					delayed = 0;
+				}
+				//Handle dispatch order. If no dispatch order is set then set the dispporder
+				//variable to 99
+				if($(this).find('.dispatch-order').val()>= 1)
+				{disporder = $(this).find('.dispatch-order').val();}
+				else
+				{disporder = 99;}
+				
+				dispatcharr[index]={order_number:loadobj[$(this).find('.locked-by-me').attr('load_id')].order_number,
+									delayed_dispatch:delayed,
+									bill_rate:$(this).find('.bill-rate').val(),
+									fuel_surcharge:$(this).find('.fuel-surcharge').val(),
+									driver_id:employee.emp_id,
+									compartments:employee.compartments,
+									dispatch_order:disporder,
+									load_id:$(this).find('.locked-by-me').attr('load_id'),
+									notes:$(this).find('.disp-notes-input').val()};
+
 				
 			});
-//			console.log(load_obj);
+			
+			//sort loads by dispatch order
+			dispatcharr.sort(function(a, b){
+				 return a.dispatch_order-b.dispatch_order
+				});
+
+			$.post('/dispatch/dispatch',{dispatch:dispatcharr},function(data){
+				console.log(data);
+			},'html');
 		}
+
 	};
 }
