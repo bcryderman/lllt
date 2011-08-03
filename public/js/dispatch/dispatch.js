@@ -72,10 +72,11 @@ function lockload()
 				function(data){
 					$('#dispatch-modal').html(data);
 					
+					var win_height = $('#disp-modal-tbl').height(); 
 					$( "#dispatch-modal" ).dialog({
 						resizable: false,
 						title:'Dispatch for ' + employee.name,
-						height:300,
+						//height:win_height,
 						width:800,
 						modal: true,
 						buttons: {
@@ -89,7 +90,7 @@ function lockload()
 							'DISPATCH': function() {
 								//$( this ).dialog( "close" );
 								thislockload._perform_dispatch();
-								//window.location.reload();
+								window.location.reload();
 								//employee.delayed_dispatch = 1;
 								//thislockload._dispatch_load();
 							}
@@ -206,7 +207,7 @@ function lockload()
 		},
 		
 		_dispatch_modal:function(){
-			console.log($('.locked-by-me').parents('tr').length);
+			//console.log($('.locked-by-me').parents('tr').length);
 			$($('.locked-by-me').parents('tr')).clone().appendTo('#disp-modal');
 			$('<td class="disp-ordernm"></td>').appendTo('#disp-modal tr');
 			$('<td class="disp-notes"><textarea class="disp-notes-input" rows="1" cols="7" class="notes"></textarea></td>').appendTo('#disp-modal tr');

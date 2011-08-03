@@ -14,63 +14,80 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 
 	    if ($request->isPost()) {
 
-	    	$errors = $this->validation($params);	    	
+	    	//$errors = $this->validation($params);	
 
-		    if (($params['multiple'] && empty($errors['errors'])) || empty($errors)) {
+	    //Check if delayed dispatch is set, if not default the value to zero
+		//this is done because if the value is not checked the field is not passed in post.
+				if(!isset($params['delayed_dispatch']))
+				{$params['delayed_dispatch']=0;}
+
+		//Sets date to NULL if no date is given fro load and delivery dates.
+	    if(strlen($params['load_date'] . ' ' .$params['load_time'])>9)
+				{$params['load_date'] =$this->formattimes($params['load_date'] . ' ' .$params['load_time']);}
+				else
+				{$params['load_date']=null;}
+				
+	    if(strlen($params['delivery_date'] . ' ' .$params['delivery_time'])>9)
+				{$params['delivery_date'] =$this->formattimes($params['delivery_date'] . ' ' .$params['delivery_time']);}
+				else
+				{$params['delivery_date']=null;}
+
+		  	$orders = explode(',',$params['order_number']);
+		  	
+			foreach ($orders as $row) {
+				$params['order_number']=$row;
+				
+				$load=$this->buildloadobj($params);	
+				$loadMapper = new LLLT_Model_LoadMapper();				
+				$loadMapper->add($load);
+			}				
+
 		    	
-		    	$auth = Zend_Auth::getInstance()->getIdentity(); 
-	    		$date = date('Y-m-d H:i:s');
-		    
-				if ($params['multiple']) {
-			
-					foreach ($errors['params']['order_number'] as $key => $val) {
-						
-						$load = new LLLT_Model_Load();
-								
-						$load->setCarrier_id($params['carrier_id'])
-							 ->setBill_to_id($params['bill_to_id'])
-							 ->setShipper_id($params['shipper_id'])
-							 ->setOrigin_id($params['origin_id'])
-							 ->setCustomer_id($params['customer_id'])
-							 ->setDestination_id($params['destination_id'])
-							 ->setProduct_id($params['product_id'])
-							 ->setDriver_id($params['driver_id'])
-							 ->setDelayed_dispatch($params['delayed_dispatch'])
-							 ->setLoad_date(date('Y-m-d', strtotime($params['load_date'])) . ' ' . $params['load_time'] . ':00', true)
-							 ->setDelivery_date(date('Y-m-d', strtotime($params['delivery_date'])) . ' ' . $params['delivery_time'] . ':00', true)
-							 ->setOrder_number($errors['params']['order_number'][$key])
-							 ->setBill_of_lading($params['bill_of_lading'])
-							 ->setNet_gallons($params['net_gallons'])
-							 ->setBill_rate($params['bill_rate'])
-							 ->setFuel_surcharge($params['fuel_surcharge'])
-							 ->setDiscount($params['discount'])
-							 ->setInvoice_date(date('Y-m-d', strtotime($params['invoice_date'])))
-							 ->setDispatched(0)
-							 ->setNotes(trim($params['notes']))
-							 ->setLoad_locked(0)
-							 ->setCreated($date)
-							 ->setCreated_by($auth['Employee']->getEmp_id())
-							 ->setLast_updated($date)
-							 ->setLast_updated_by($auth['Employee']->getEmp_id())
-							 ->setActive(1);
-					
-						$loadMapper = new LLLT_Model_LoadMapper();				
-						$loadMapper->add($load);
-					}				
-				}
-		    	
-		    	$this->_redirect('standardloads/view');
-		    }
-		    else {
-		    	
-		    	$this->view->errors = $errors['errors'];
-		    	$this->view->params = $params;	
-		    }
-		}
+		    	//$this->_redirect('standardloads/view');
+		   }
+
+	
 		
 		$this->view->type = 'add';
 		$this->view->params = $params;
 		$this->renderScript('standardloads/form.phtml');
+	}
+	
+	public function buildloadobj($params){
+		
+		$auth = Zend_Auth::getInstance()->getIdentity(); 
+	    $date = date('Y-m-d H:i:s');
+		$load = new LLLT_Model_Load();
+							
+		$load->setCarrier_id($params['carrier_id'])
+			 ->setBill_to_id($params['bill_to_id'])
+			 ->setShipper_id($params['shipper_id'])
+			 ->setOrigin_id($params['origin_id'])
+			 ->setCustomer_id($params['customer_id'])
+			 ->setDestination_id($params['destination_id'])
+			 ->setProduct_id($params['product_id'])
+			 ->setDriver_id($params['driver_id'])
+			 ->setDelayed_dispatch($params['delayed_dispatch'])
+			 ->setLoad_date($params['load_date'], true)
+			 ->setDelivery_date($params['delivery_date'], true)
+			 ->setOrder_number($params['order_number'])
+			 ->setBill_of_lading($params['bill_of_lading'])
+			 ->setNet_gallons($params['net_gallons'])
+			 ->setBill_rate($params['bill_rate'])
+			 ->setFuel_surcharge($params['fuel_surcharge'])
+			 ->setDiscount($params['discount'])
+			 ->setInvoice_date(date('Y-m-d', strtotime($params['invoice_date'])))
+			 ->setDispatched(0)
+			 ->setNotes(trim($params['notes']))
+			 ->setLoad_locked(0)
+			 ->setCreated($date)
+			 ->setCreated_by($auth['Employee']->getEmp_id())
+			 ->setLast_updated($date)
+			 ->setLast_updated_by($auth['Employee']->getEmp_id())
+			 ->setActive(1)
+			 ->setDriver_compartment_number(0);
+			 
+		return $load;
 	}
 	
 	public function deleteAction() {
@@ -416,10 +433,10 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 			$errors['notes'] = 'Notes cannot exceed 1,000 characters.';
 		}
     	
-		if ($params['multiple']) {
-			
-			return array('errors' => $errors, 'params' => $params);	
-		}
+//		if ($params['multiple']) {
+//			
+//			return array('errors' => $errors, 'params' => $params);	
+//		}
     	
 		return $errors;
     }
