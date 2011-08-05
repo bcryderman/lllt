@@ -49,6 +49,7 @@ class LLLT_Model_Load {
 	protected $_active;
 	protected $_driver_compartment_number;
 	protected $_json_obj;
+	protected $_dispatch_order = 1;//DB default is 1
  	 	
     public function __construct(array $options = null) {
         
@@ -828,5 +829,17 @@ class LLLT_Model_Load {
     public function getJson_obj() {
     	
         return $this->_json_obj;
+    }
+    
+    public function setDispatch_order($val) {
+    	
+        $this->_dispatch_order = $val;
+        
+        return $this;
+    }
+    
+    public function getDispatch_order() {
+    	
+        return $this->_dispatch_order;
     }
 }

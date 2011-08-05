@@ -58,7 +58,7 @@ class DispatchController extends Zend_Controller_SecureAction {
     	if($row['delayed_dispatch']==1)
     	{
     		$dispatcher->dispatchload($row,0);
-    		//$dispatcher->buildloadlog($row,7);
+    		$dispatcher->buildloadlog($row,7);
     	}
     	else
     	{
