@@ -29,7 +29,7 @@ class DispatchController extends Zend_Controller_SecureAction {
     	$request = $this->getRequest();
     	$params = $this->_request->getParams();
     	//var_dump($params);
-    	$fuelsurcharge = new LLLT_Model_FuelSurchargeMapper();
+    	$fuelsurcharge = new LLLT_Model_FuelsurchargeMapper();
     	//var_dump($fuelsurcharge->getlatest(875));
 
     	if(isset($params['emp_id'])){
@@ -48,16 +48,23 @@ class DispatchController extends Zend_Controller_SecureAction {
     $this->_helper->viewRenderer->setNoRender(true);
     $request = $this->getRequest();
     $params = $request->getParams();
+    
+    //Instantiate loads helper
+    $dispatcher = $this->_helper->getHelper('loads');
+    
     foreach ($params['dispatch']as $row)
     {
-    	$this->updateload($row);
+    	
     	if($row['delayed_dispatch']==1)
     	{
-    		$this->buildloadlog($row,7);
+    		$dispatcher->dispatchload($row,0);
+    		//$dispatcher->buildloadlog($row,7);
     	}
     	else
     	{
-    		$this->buildloadlog($row,6);
+    		$dispatcher->dispatchload($row);
+    		$dispatcher->buildloadlog($row,6);
+    		$dispatcher->sendnavmanmessage($row['load_id'],$row['driver_id']);
     	}
 
     }
@@ -104,7 +111,7 @@ class DispatchController extends Zend_Controller_SecureAction {
     	//->setFuel_surcharge($load['fuel_surcharge'])
     	->setLast_updated(date('Y-m-d H:i:s'))
     	->setLast_updated_by($auth['Employee']->getEmp_id())
-    	->setDispatched(1)
+    	->setDispatched(0)
     	->setNotes($load['notes'])
     	->setLoad_date(date('Y-m-d H:i:s'));
     	

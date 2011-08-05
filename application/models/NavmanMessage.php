@@ -6,8 +6,9 @@ class LLLT_Model_NavmanMessage {
 	protected $_message_thread_id;
 	protected $_navman_vehicle_id;
 	protected $_message_body;
-	protected $_processed;
+	protected $_processed = 0;//db defaults to zero but cannot be null.
 	protected $_message_date;
+
  	 	
     public function __construct(array $options = null) {
         
@@ -129,4 +130,12 @@ class LLLT_Model_NavmanMessage {
     	
         return $this->_message_date;
     }
+    
+    public function setMessage_dispatch($val) {
+    	
+        $this->_message_dispatch = $val;
+        
+        return $this;
+    }
+ 
 }

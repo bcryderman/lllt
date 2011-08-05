@@ -32,8 +32,11 @@ class LLLT_Model_NavmanMessageMapper {
     }
     
     public function add(LLLT_Model_NavmanMessage $navmanMessage) {
-    	    			    	
-	    $data = array('message_thread_id' => $navmanMessage->getMessage_thread_id(),
+    	$result = $this->getDbTable()->find($navmanMessage->getMessage_id());
+    	if (0 == count($result)) {
+    	
+	    $data = array('message_id'		  => $navmanMessage->getMessage_id(),
+	    			  'message_thread_id' => $navmanMessage->getMessage_thread_id(),
 				      'navman_vehicle_id' => $navmanMessage->getNavman_vehicle_id(),
 	    			  'message_body'      => $navmanMessage->getMessage_body(),
 	    			  'processed'         => $navmanMessage->getProcessed(),
@@ -41,7 +44,10 @@ class LLLT_Model_NavmanMessageMapper {
 	  	    	    	
 	    $navmanMessageId = $this->getDbTable()->insert($data);
 	    
-	    return $navmanMessageId;
+	    return $navmanMessageId;}
+	    else{
+	    	return $navmanMessage->getMessage_id().' id already exists';
+	    }
     }
     
  	public function delete(LLLT_Model_NavmanMessage $navmanMessage) {

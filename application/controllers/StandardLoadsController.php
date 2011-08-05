@@ -78,6 +78,7 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 			 ->setDiscount($params['discount'])
 			 ->setInvoice_date(date('Y-m-d', strtotime($params['invoice_date'])))
 			 ->setDispatched(0)
+			 ->setDelivered(0)
 			 ->setNotes(trim($params['notes']))
 			 ->setLoad_locked(0)
 			 ->setCreated($date)
@@ -85,7 +86,7 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 			 ->setLast_updated($date)
 			 ->setLast_updated_by($auth['Employee']->getEmp_id())
 			 ->setActive(1)
-			 ->setDriver_compartment_number(0);
+			 ->setDriver_compartment_number(1);
 			 
 		return $load;
 	}

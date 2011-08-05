@@ -90,7 +90,7 @@ function lockload()
 							'DISPATCH': function() {
 								//$( this ).dialog( "close" );
 								thislockload._perform_dispatch();
-								window.location.reload();
+								//window.location.reload();
 								//employee.delayed_dispatch = 1;
 								//thislockload._dispatch_load();
 							}
@@ -196,7 +196,7 @@ function lockload()
 
 			$(_this).closest('tr').css('background-color', '#306754');
 			$(_this).closest('tr').css('color', '#ffffff');
-			console.log(employee);
+			//console.log(employee);
 		},
 		
 		_reset_employee_table_color: function(_this){
@@ -268,7 +268,7 @@ function lockload()
 				});
 
 			$.post('/dispatch/dispatch',{dispatch:dispatcharr},function(data){
-				console.log(data);
+				//console.log(data);
 			},'html');
 		}
 

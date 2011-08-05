@@ -34,7 +34,7 @@ class LLLT_Model_NavmanDispatchMapper {
     public function add(LLLT_Model_NavmanDispatch $navmanDispatch) {
     	    			    	
 	    $data = array('load_id'          => $navmanDispatch->getLoad_id(),
-				      'emp_id'           => $navmanDispatch->getEmp_id(),
+				      //'emp_id'           => $navmanDispatch->getEmp_id(),
 	    			  'sent_date'        => $navmanDispatch->getSent_date(),
 	    			  'message_id'       => $navmanDispatch->getMessage_id(),
 	    			  'system_post_date' => $navmanDispatch->getSystem_post_date(),
@@ -113,5 +113,10 @@ class LLLT_Model_NavmanDispatchMapper {
         	  		   ->setNavman_post_date($row->navman_post_date);
 	        	
 	    return $navmanDispatch;
+    }
+    
+    public function getloadid($message){
+    	$str = explode('*',$message);
+    	 return $str[count($str)-1];
     }
 }

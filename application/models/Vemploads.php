@@ -9,6 +9,7 @@ class LLLT_Model_Vemploads {
  	protected $_dispatched_loads;
  	protected $_pending_loads;
  	protected $_last_dispatch;
+ 	protected $_navman_vehicle_id;
  	
  	
     public function __construct(array $options = null) {
@@ -141,6 +142,18 @@ class LLLT_Model_Vemploads {
     public function getLast_dispatch() {
     	
         return $this->_last_dispatch;
+    }
+    
+    public function setNavman_vehicle_id($val) {
+    	
+        $this->_navman_vehicle_id = (string) $val;
+        
+        return $this;
+    }
+ 
+    public function getNavman_vehicle_id() {
+    	
+        return $this->_navman_vehicle_id;
     }
     
 }

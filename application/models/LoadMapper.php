@@ -161,7 +161,7 @@ class LLLT_Model_LoadMapper {
 			 ->update($data, $where);
     	
     }
-    
+
     
     public function fetchAll($where, $order = null) {
     	
@@ -276,6 +276,31 @@ class LLLT_Model_LoadMapper {
         }
         
         return $entries;
+    }
+    
+    public function orderexists($order_num){
+    	//This function is used by Navman tools to find if an order number exists
+    	//This function will return boolean value if no load exists Load obj
+    	$sql = 'SELECT * from tbl_load l where l.order_number = \''.$order_num.'\' and l.delivered !=1';
+
+    	$this->getDbTable()
+			 ->getAdapter()
+			 ->setFetchMode(Zend_Db::FETCH_OBJ);
+    	$result = $this->getDbTable()->getAdapter()->fetchRow($sql);
+
+		if($result == false)
+		{return false;}
+		else
+		{
+			$load = new LLLT_Model_Load();
+			$load->setLoad_id($result->load_id)
+				->setOrder_number($result->order_number)
+				->setDriver_id($result->driver_id)
+				->setDispatched($result->dispatched);
+			 
+			return $load;
+		};
+		
     }
     
 	public function find($id) {
