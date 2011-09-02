@@ -1,0 +1,34 @@
+<tbody>
+<?php foreach ($this->loads as $item) {?>
+	<tr id="load_id-<?php echo $item->getLoad_id()?>">
+		
+		<td class="disp-load-select">
+			<?php if($item->getDispatched()==0)
+			{
+			?>
+			<input data="{order_number:1}" class="loadlock <?php if($item->getLocked_by()==$this->emp_id && $item->getLoad_locked()==1){echo 'locked-by-me';}elseif($item->getLocked_by()!=$this->emp_id && $item->getLoad_locked()==1){echo'locked-by-other';}?>" type="checkbox" load_id="<?php echo $item->getLoad_id();?>" <?php if($item->load_locked ==1){echo 'checked';}?>></input>
+			<?php }?>
+			
+		</td>
+		<td class="qb-invoice_date color-block"> <?php echo $item->getInvoice_date(); ?></td>
+		<td class="disp-order-number"><?php echo $item->getOrder_number();?></td>
+		<td class="qb-carrier color-block" style="background-color:#<?php echo $item->getCarrier_color();?>"><div ><?php echo $item->getCarrier(); ?></div></td>
+		<td class="qb-bill_to color-block" style="background-color:#<?php echo $item->getBill_to_color();?>"><div ><?php echo $item->getBill_to(); ?></div></td>
+		<td class="qb-shipper color-block" style="background-color:#<?php echo $item->getShipper_color();?>"><div><?php echo $item->getShipper(); ?></div></td>
+		<td class="qb-orgin color-block" style="background-color:#<?php echo $item->getOrigin_color();?>"><div ><?php echo $item->getOrigin()?></div></td>
+		<td class="qb-customer color-block" style="background-color:#<?php echo $item->getCustomer_color();?>"><div ><?php echo $item->getCustomer(); ?></div></td>
+		<td class="qb-destination color-block" style="background-color:#<?php echo $item->getDestination_color();?>"><div><?php echo $item->getDestination(); ?></div></td>
+		<td class="qb-delivery_date"> <?php echo $this->formatdate($item->getDelivery_date()); ?></td>
+		<td class="qb-bill_of_lading"> <?php echo $item->getBill_of_lading(); ?></td>
+		<td class="qb-net_gallons"> <?php echo $item->getNet_gallons(); ?></td>
+		<td class="qb-fuel_surcharge"> <?php echo $item->getFuel_surcharge(); ?></td>
+		<td class="qb-pay_rate"></td>
+		<td class="qb-discount"> <?php echo $item->getDiscount(); ?></td>
+
+		<td><div class="qb-edit" load_id="<?php echo $item->getLoad_id()?>">edit</div></td>
+	</tr>
+
+<?php } ?>
+
+</tbody>
+

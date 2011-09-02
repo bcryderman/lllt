@@ -1,0 +1,111 @@
+<?php include 'search.phtml'?>
+<div class="loads-container">
+
+	<table class="tableh loadtable">
+		<thead>
+			<tr>
+				<th>
+					<div class="select"></div>
+				</th>
+				<th column="invoice_date">
+					<div class="header">Invoice date</div>
+					<div class="sort"></div>
+				</th>
+				<th column="order_number">
+					<div class="header">Order Number</div>
+					<div class="sort"></div>
+				</th>
+				<th column="carrier">
+					<div class="header">Carrier</div>
+					<div class="sort"></div>
+				</th>
+				<th column="bill_to">
+					<div class="header">Bill To</div>
+					<div class="sort"></div>
+				</th>
+				
+				<th column="shipper">
+					<div class="header">Shipper</div>
+					<div class="sort"></div>
+				</th>
+				<th column="origin">
+					<div class="header">Origin</div>
+					<div class="sort"></div>
+				</th>
+				<th column="customer">
+					<div class="header">Customer</div>
+					<div class="sort"></div>
+				</th>
+				<th column="destination">
+					<div class="header">Destination</div>
+					<div class="sort"></div>
+				</th>
+				<th column="delivery_date">
+					<div class="header">Delivery Date</div>
+					<div class="sort"></div>
+				</th>
+				<th column="bill_of_lading">
+					<div class="header">BOL</div>
+					<div class="sort"></div>
+				</th>
+				<th column="net_gallons">
+					<div class="header">Net Gallons</div>
+					<div class="sort"></div>
+				</th>
+				<th column="fuel_surcharge">
+					<div class="header">Fuel Surcharge</div>
+					<div class="sort"></div>
+				</th>
+				<th column="pay_rate">
+					<div class="header">Pay Rate</div>
+					<div class="sort"></div>
+				</th>
+				<th column="discount">
+					<div class="header">Discount</div>
+					<div class="sort"></div>
+				</th>
+
+	
+				<th column="edit">
+					<div class="header"></div>
+					<div class="sort"></div>
+				</th>
+			</tr>
+		</thead>
+		<?php echo $this->partial('/quickbooks/loadtabulardata.phtml', array('loads' => $this->loads));?>
+	</table>
+</div>
+
+<div id="qb-inline-editor">
+<form  id="qb-inline-editor-form" action="/quickbooks/verifyloads?search" method="post">
+<input name="load_id" type="hidden"></input>
+<input name="delivery_date" class="datepicker"></input>
+<input name="bill_of_lading" type="text"></input>
+<input name="net_gallons" type="text"></input>
+<button type="submit">Save</button>
+</form>
+</div>
+
+<script>
+$(document).ready(function() {
+	$('.qb-edit').click(function(){
+		var parentelem = $(this).parents().filter('tr');
+		var formobj = '#qb-inline-editor';
+		$(formobj +' input[name=bill_of_lading]').val($.trim(parentelem.find('.qb-bill_of_lading').html())) ;
+		$(formobj +' input[name=net_gallons]').val($.trim(parentelem.find('.qb-net_gallons').html())) ;
+		$(formobj +' input[name=delivery_date]').val($.trim(parentelem.find('.qb-delivery_date').html())) ;
+		$(formobj +' input[name=load_id]').val($.trim($(this).attr('load_id'))) ;
+		});
+
+	$('#qb-inline-editor-form').submit(function(e){
+		e.preventDefault();
+		submitstring=$(this).serialize();
+		$.post('/quickbooks/updateload?' + submitstring,function(data){
+			$('#load_id-' + data.load_id + ' .qb-bill_of_lading').html(data.bill_of_lading);
+			$('#load_id-' + data.load_id + ' .qb-net_gallons').html(data.net_gallons);
+			$('#load_id-' + data.load_id + ' .qb-delivery_date').html(data.delivery_date);
+			},'json');
+		});
+});
+
+</script>

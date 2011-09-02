@@ -3,7 +3,7 @@
 class DispatchController extends Zend_Controller_SecureAction {
 
     public function init() {
-    	    	  	  $auth = Zend_Auth::getInstance()->getIdentity();
+    	$auth = Zend_Auth::getInstance()->getIdentity();
     	$this->view->emp_id = $auth['Employee']->getEmp_id();
     		   }
 

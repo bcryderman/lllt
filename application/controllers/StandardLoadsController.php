@@ -21,7 +21,7 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 				if(!isset($params['delayed_dispatch']))
 				{$params['delayed_dispatch']=0;}
 
-		//Sets date to NULL if no date is given fro load and delivery dates.
+		//Sets date to NULL if no date is given for load and delivery dates.
 	    if(strlen($params['load_date'] . ' ' .$params['load_time'])>9)
 				{$params['load_date'] =$this->formattimes($params['load_date'] . ' ' .$params['load_time']);}
 				else
@@ -31,14 +31,29 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 				{$params['delivery_date'] =$this->formattimes($params['delivery_date'] . ' ' .$params['delivery_time']);}
 				else
 				{$params['delivery_date']=null;}
-
-		  	$orders = explode(',',$params['order_number']);
+		
+		if(strpos($params['order_number'],'-'))
+		{	
+				$range =explode('-',$params['order_number']);
+				if(!isset($range[1])||$range[0]>$range[1])
+				{
+					$range[1]=$range[0];
+				}
+				$orders = array();
+				for ($i = $range[0]; $i <= $range[1]; $i++) {
+					array_push($orders,$i);echo $i;
+				}
+		}
+		else
+		{
+			$orders = explode(',',$params['order_number']);
+		}
 		  	
 			foreach ($orders as $row) {
 				$params['order_number']=$row;
 				
 				$load=$this->buildloadobj($params);	
-				$loadMapper = new LLLT_Model_LoadMapper();				
+				$loadMapper = new LLLT_Model_LoadMapper();			
 				$loadMapper->add($load);
 			}				
 
@@ -49,8 +64,8 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 	
 		
 		$this->view->type = 'add';
-		$this->view->params = $params;
-		$this->renderScript('standardloads/form.phtml');
+	$this->view->params = $params;
+	$this->renderScript('standardloads/form.phtml');
 	}
 	
 	public function buildloadobj($params){
