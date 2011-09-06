@@ -1,11 +1,17 @@
+<link rel="stylesheet" href="/css/invoice/invoice.css" 												type="text/css" />
+
+
 <?php include 'search.phtml'?>
 <div class="loads-container">
 
-	<table class="tableh loadtable">
+	<table class="loadtable" id="verify-loads">
 		<thead>
 			<tr>
 				<th>
 					<div class="select"></div>
+				</th>
+				<th>
+					<div class="email_invoice"></div>
 				</th>
 				<th column="invoice_date">
 					<div class="header">Invoice date</div>
@@ -56,8 +62,8 @@
 					<div class="header">Fuel Surcharge</div>
 					<div class="sort"></div>
 				</th>
-				<th column="pay_rate">
-					<div class="header">Pay Rate</div>
+				<th column="bill_rate">
+					<div class="header">Rate</div>
 					<div class="sort"></div>
 				</th>
 				<th column="discount">
@@ -76,25 +82,49 @@
 	</table>
 </div>
 
-<div id="qb-inline-editor">
+<div id="qb-inline-editor" class="dialog omaha" style="display:none">
 <form  id="qb-inline-editor-form" action="/quickbooks/verifyloads?search" method="post">
 <input name="load_id" type="hidden"></input>
-<input name="delivery_date" class="datepicker"></input>
-<input name="bill_of_lading" type="text"></input>
-<input name="net_gallons" type="text"></input>
+	<table>
+		<tr>
+			<td>Del Date</td>
+			<td>Bill of Lading</td>
+			<td>Net Gallons</td>
+			<td>Fuel Sur.</td>
+			<td>Rate</td>
+		</tr>
+		<tr>
+			<td><input name="delivery_date" class="datepicker"></input></td>
+			<td><input name="bill_of_lading" type="text"></input></td>
+			<td><input name="net_gallons" type="text"></input></td>
+			<td><input name="fuel_surcharge" type="text" size="5"></input></td>
+			<td><input name="bill_rate" type="text" size="4"></input></td>
+		</tr>
+</table>
 <button type="submit">Save</button>
+<button id="form-reset" type="reset">Cancel</button>
 </form>
 </div>
 
 <script>
 $(document).ready(function() {
 	$('.qb-edit').click(function(){
+		obj= this;
 		var parentelem = $(this).parents().filter('tr');
 		var formobj = '#qb-inline-editor';
 		$(formobj +' input[name=bill_of_lading]').val($.trim(parentelem.find('.qb-bill_of_lading').html())) ;
 		$(formobj +' input[name=net_gallons]').val($.trim(parentelem.find('.qb-net_gallons').html())) ;
 		$(formobj +' input[name=delivery_date]').val($.trim(parentelem.find('.qb-delivery_date').html())) ;
 		$(formobj +' input[name=load_id]').val($.trim($(this).attr('load_id'))) ;
+		$(formobj +' input[name=bill_rate]').val($.trim(parentelem.find('.qb-bill_rate').html())) ;
+		$(formobj +' input[name=fuel_surcharge]').val($.trim(parentelem.find('.qb-fuel_surcharge').html())) ;
+		
+
+		
+		$('#qb-inline-editor').css({
+			'left' : $(obj).width() + $(obj).position().left - 480,
+			'top' : $(obj).height() + $(obj).position().top - 30
+		}).show();
 		});
 
 	$('#qb-inline-editor-form').submit(function(e){
@@ -104,8 +134,48 @@ $(document).ready(function() {
 			$('#load_id-' + data.load_id + ' .qb-bill_of_lading').html(data.bill_of_lading);
 			$('#load_id-' + data.load_id + ' .qb-net_gallons').html(data.net_gallons);
 			$('#load_id-' + data.load_id + ' .qb-delivery_date').html(data.delivery_date);
+			$('#load_id-' + data.load_id + ' .qb-fuel_surcharge').html(data.fuel_surchage);
+			$('#load_id-' + data.load_id + ' .qb-bill_rate').html(data.bill_rate);
+
+			$('#qb-inline-editor').hide();
 			},'json');
 		});
+	$('#form-reset').click(function(){
+		$('#qb-inline-editor').hide();
+	});
+
+	$('.qb-select-load').click(function(){
+		load_id= $(this).attr('load_id');
+		_this=this;
+		$.post('/qbintegration/addinvoice/load_id/'+load_id,function(data){
+			$(_this).addClass('ui-icon-circle-check').removeClass('ui-icon-circle-plus');
+			});
+		
+		});
+
+	$('.qb-email-invoice').click(function(){
+		load_id = $(this).attr('load_id');
+		send_email = $(this).attr('email');
+		_this=this;
+		if(send_email == 1)
+		{
+			$(_this).attr('email','0');
+			email=0;
+			$(_this).next('div').hide();
+		}
+		else
+		{
+			$(_this).attr('email','1');
+			email=1;
+			$(_this).next('div').show();
+		}
+
+			$.post('/quickbooks/sendemail/',{load_id:load_id,email_invoice:email},function(data){
+				
+			});
+		});
+
+	
 });
 
 </script>

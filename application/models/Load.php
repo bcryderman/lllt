@@ -50,6 +50,7 @@ class LLLT_Model_Load {
 	protected $_driver_compartment_number;
 	protected $_json_obj;
 	protected $_dispatch_order = 1;//DB default is 1
+	protected $_email_invoice =0;
  	 	
     public function __construct(array $options = null) {
         
@@ -841,5 +842,17 @@ class LLLT_Model_Load {
     public function getDispatch_order() {
     	
         return $this->_dispatch_order;
+    }
+    
+    public function setEmail_invoice($val) {
+    	
+        $this->_email_invoice = $val;
+        
+        return $this;
+    }
+    
+    public function getEmail_invoice() {
+    	
+        return $this->_email_invoice;
     }
 }

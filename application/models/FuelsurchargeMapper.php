@@ -145,10 +145,11 @@ class LLLT_Model_FuelsurchargeMapper {
     
     public function getlatest($customer_id){
     	$today = date('Y-m-d');
-
-    	$sql = 'select * from tbl_fuel_surcharge where customer_id = '.$customer_id. ' and start_date >= \''. $today.'\''.
-    			' order by start_date ASC LIMIT 1,1';
+		/***Query Changed to remove start date*/
+    	//$sql = 'select * from tbl_fuel_surcharge where customer_id = '.$customer_id. ' and start_date >= \''. $today.'\''.
+    //			' order by start_date ASC LIMIT 1,1';
     	
+    	$sql = 'select * from tbl_fuel_surcharge where customer_id = '.$customer_id. ' order by start_date ASC LIMIT 1,1';
     	
     	$this->getDbTable()
 			 ->getAdapter()
@@ -171,6 +172,39 @@ class LLLT_Model_FuelsurchargeMapper {
 	        $obj->setLast_updated($row->last_updated);
 	        $obj->setLast_updated_by($row->last_updated_by);
 		}
+        return $obj;
+		
+    }
+    
+    public function getLatestByLoadId($load_id){
+
+    	$sql = 'select fs.* from tbl_fuel_surcharge fs, tbl_load l '.
+    			'where l.load_id = '.$load_id.
+				' and l.bill_to_id = fs.customer_id '.
+				'order by fs.start_date ASC LIMIT 1,1';
+
+    	$this->getDbTable()
+			 ->getAdapter()
+			 ->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$row = $this->getDbTable()
+					->getAdapter()
+					->fetchRow($sql);
+		
+					
+		$obj = new LLLT_Model_Fuelsurcharge();
+		if (isset($row->id))
+		{
+	        $obj->setId($row->id);
+	        $obj->setCustomer_id($row->customer_id);
+	        $obj->setStart_date($row->start_date);
+	        $obj->setEnd_date($row->end_date);
+	        $obj->setFuel_surcharge($row->fuel_surcharge);
+	        $obj->setCreated($row->created);
+	        $obj->setCreated_by($row->created_by);
+	        $obj->setLast_updated($row->last_updated);
+	        $obj->setLast_updated_by($row->last_updated_by);
+		}			
         return $obj;
 		
     }

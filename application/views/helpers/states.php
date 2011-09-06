@@ -9,9 +9,9 @@ class Zend_View_Helper_States extends
 		$x='';
 		if($selected == $row['value'])
 		{$x = 'SELECTED';}
-		
 		$retval=$retval.'<option value="'.$row['value'].'" '.$x.'>'.$row['display'].'</option>';
-		}
+	}
+
 		return $retval;
 	}
 

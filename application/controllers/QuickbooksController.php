@@ -27,6 +27,7 @@ class QuickbooksController extends Zend_Controller_SecureAction {
 		
 		//Default Search params
 		$wherearr['delivery_date']= ' IS NOT NULL ';
+		$wherearr['invoice_date']= ' IS NULL';
 		
 		
 		
@@ -139,7 +140,7 @@ class QuickbooksController extends Zend_Controller_SecureAction {
 	
 	public function updateloadAction(){
 	
-	    	$this->_helper->layout()->disableLayout();
+	    $this->_helper->layout()->disableLayout();
 		$this->_helper->viewRenderer->setNoRender(true);
 		$auth = Zend_Auth::getInstance()->getIdentity(); 
 	    $date = date('Y-m-d H:i:s');
@@ -151,7 +152,9 @@ class QuickbooksController extends Zend_Controller_SecureAction {
 		$load['load_id']= $params['load_id'];
 		$load['bill_of_lading']=$params['bill_of_lading'];
 		$load['net_gallons']=$params['net_gallons'];
-		$date1 =date_parse_from_format('m/d/Y',$params['delivery_date']);  
+		$date1 =date_parse_from_format('m/d/Y',$params['delivery_date']); 
+		$load['bill_rate']=$params['bill_rate'];
+		$load['fuel_surchage']=$params['fuel_surcharge']; 
 		$load['delivery_date']=date("Y-m-d", mktime($date1['hour'],$date1['minute'], 0, $date1['month'], $date1['day'], $date1['year']));
 		$load_dispatch->updatedriverload($load, $load['load_id']);
 		//reformat date for screen update only
@@ -159,6 +162,115 @@ class QuickbooksController extends Zend_Controller_SecureAction {
 		echo json_encode($load);
 
     	}
+    	
+    	
+    public function sendemailAction(){
+    	$this->_helper->layout()->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(true);
+		$auth = Zend_Auth::getInstance()->getIdentity(); 
+	    $date = date('Y-m-d H:i:s');
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+    	
+    	$load = array();
+    	$load_dispatch = new LLLT_Model_LoadMapper();
+		$load['load_id']= $params['load_id'];
+		$load['email_invoice']=$params['email_invoice'];
+		
+		$load_dispatch->updatedriverload($load, $load['load_id']);
+		
+    }
+	public function testAction(){
+$this->_helper->layout()->disableLayout();
+		$this->_helper->viewRenderer->setNoRender(true);
+
+/**
+ * 
+ * 
+ * @package QuickBooks
+ * @subpackage Documentation
+ */
+
+// 
+error_reporting(E_ALL | E_STRICT);
+ini_set('display_errors', 1);
+
+// 
+if (function_exists('date_default_timezone_set'))
+{
+	date_default_timezone_set('America/New_York');
+}
+
+// 
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . 'C:/Users/Brian/workspace/quickbooks/v153');
+
+/**
+ * 
+ */
+require_once 'QuickBooks.php';
+
+$user = 'api';
+$source_type = QUICKBOOKS_API_SOURCE_WEB;
+$api_driver_dsn = 'mysql://lllt:21dive@localhost/qb_lllt';
+//$api_driver_dsn = 'pgsql://pgsql@localhost/quickbooks';
+//$source_dsn = 'http://quickbooks:test@localhost/path/to/server.php';
+$source_dsn = 'http://qbtest.localhost:test@localhostQuickBooks/server.php';
+$api_options = array();
+$source_options = array();
+$driver_options = array();
+
+if (!QuickBooks_Utilities::initialized($api_driver_dsn))
+{
+	// 
+	QuickBooks_Utilities::initialize($api_driver_dsn);
+	
+	// 
+	QuickBooks_Utilities::createUser($api_driver_dsn, 'api', 'password');
+}
+
+$API = new QuickBooks_API($api_driver_dsn, $user, $source_type, $source_dsn, $api_options, $source_options, $driver_options);
+
+$date = date('Y-m-d');
+
+// INVOICES
+$Invoice = new QuickBooks_Object_Invoice();
+//$Invoice->setOther('test of other');		// for some reason this field doesn't work...
+$Invoice->setCustomerName('Brian Cryderman');
+$Invoice->setTransactionDate($date);
+$Invoice->setBillAddress('address1', 'address2', '',  '',  '', $city = 'City', 'State', '',  'zip','', '');
+$Invoice->setShipAddress('address1', 'address2', '',  '',  '', $city = 'City', 'State', '',  'zip','', '');
+$Invoice->setIsToBePrinted('true');
+$Invoice->setIsToBeEmailed('true');///Not sure if it will work in QB
+
+$IL1 = new QuickBooks_Object_Invoice_InvoiceLine();
+$IL1->setItemName('Freight Chg');
+$IL1->setDescription('BOL#');
+$IL1->setQuantity('Net Gallons');
+$IL1->setRate('Bill Rate');
+$IL1->getCustomOrigin('City, Zip');
+$IL1->setCustomShipdate('date');
+
+
+
+$InvoiceLine2 = new QuickBooks_Object_Invoice_InvoiceLine();
+$InvoiceLine2->setItemApplicationID(11);
+$InvoiceLine2->setAmount(225.00);
+$InvoiceLine2->setQuantity(5);
+
+$Invoice->addInvoiceLine($IL1);
+$Invoice->addInvoiceLine($InvoiceLine2);
+
+$API->addInvoice($Invoice, '_quickbooks_ca_invoice_add_callback','loadid');
+
+
+
+/*
+// QUERYING FOR ACCOUNTS
+$datetime = '2009-01-02 01:02:03';
+$API->listAccountsModifiedAfter($datetime, '_quickbooks_account_query_callback');
+*/
+		
+	}
 	
 	
 }

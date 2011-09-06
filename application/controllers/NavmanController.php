@@ -143,12 +143,18 @@ class NavmanController extends Zend_Controller_Action {
 
    		if(count($arr)==3){
    			$load = new LLLT_Model_LoadMapper();
+   			$load_helper = $this->_helper->getHelper('loads');
    			
    			$load_obj = $load->orderexists($arr[0]);
    			//echo $arr[0];var_dump($load_obj);
    			if($load_obj)
-   			{  	$load_arr = array('bill_of_lading'=>$arr[1],
+   			{  	
+   				$fs = $load_helper->getFuelSurcharge($load_obj->getLoad_id());
+   				$rate = $load_helper->getRate($load_obj->getLoad_id());
+   				$load_arr = array('bill_of_lading'=>$arr[1],
    								  'net_gallons'=>$arr[2],
+   								  'fuel_surchage'=>$fs->getFuel_surcharge(),
+   								  'bill_rate'=>$rate->getRate(),
    								  'last_updated'=>date('Y-m-d H:i:s'),
    								  'last_updated_by'=>$this->emp_id,
    								  'delivery_date'=>date('Y-m-d H:i'),
@@ -156,8 +162,8 @@ class NavmanController extends Zend_Controller_Action {
    				$load->updatedriverload($load_arr, $load_obj->getLoad_id());
    				
    				//Send load deliverd message from loads controller helper
-    			$dispatcher = $this->_helper->getHelper('loads');
-   				$dispatcher->send_load_delivered_message($load_obj->getOrder_number(),$load_obj->getDriver_id());
+    			
+   				$load_helper->send_load_delivered_message($load_obj->getOrder_number(),$load_obj->getDriver_id());
    				
    			}
    		}
@@ -226,6 +232,10 @@ class NavmanController extends Zend_Controller_Action {
 				return $message;
     }
     
-
+public function testAction(){
+	    	$this->_helper->layout()->disableLayout();
+    	$this->_helper->viewRenderer->setNoRender(true);
+    	$this->updateMessageLoad('9999992*111*222');
+}
     
 }

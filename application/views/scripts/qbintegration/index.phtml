@@ -1,0 +1,147 @@
+<?php
+/**
+ * Example QuickBooks SOAP Server / Web Service
+ * 
+ * This is an example Web Service which adds customers to QuickBooks desktop 
+ * editions via the QuickBooks Web Connector. 
+ * 
+ * This is additional documentation in the docs/example_server.php file. This 
+ * particular example is an extension of the docs/example_server.php example 
+ * which illustrates using an instantiated object in $map and $onerr. 
+ * 
+ * @author Keith Palmer <keith@consolibyte.com>
+ * 
+ * @package QuickBooks
+ * @subpackage Documentation
+ */
+
+// We need to make sure the correct timezone is set, or some PHP installations will complain
+if (function_exists('date_default_timezone_set'))
+{
+	// * MAKE SURE YOU SET THIS TO THE CORRECT TIMEZONE! *
+	// List of valid timezones is here: http://us3.php.net/manual/en/timezones.php
+	date_default_timezone_set('America/Chicago');
+}
+
+// Include path for the QuickBooks library
+ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . 'C:/Users/Brian/workspace/quickbooks/v153');
+
+// I always program in E_STRICT error mode... 
+//error_reporting(E_ALL | E_STRICT);
+
+// There are some constants you can define to override some default... 
+//define('QUICKBOOKS_DRIVER_SQL_MYSQL_PREFIX', 'myqb_');
+//define('QUICKBOOKS_DRIVER_SQL_MYSQLI_PREFIX', 'myqb_');
+
+// Require the framework
+require_once 'QuickBooks.php';
+
+// A username and password you'll use in: 
+//	a) Your .QWC file
+//	b) The Web Connector
+//	c) The QuickBooks framework
+//
+// 	NOTE: This has *no relationship* with QuickBooks usernames, Windows usernames, etc. 
+// 		It is *only* used for the Web Connector and SOAP server! 
+$user = 'llltdispatch';
+$pass = 'a5b5lllt';
+
+// The next three parameters, $map, $errmap, and $hooks, are callbacks which 
+//	will be called when certain actions/events/requests/responses occur within 
+//	the framework. 
+
+// Callback object instance methods
+//  Important! If you're using this method, remember that QuickBooks requests 
+//	and responses happen during *different* HTTP connections! So, you won't be 
+//	able to preserve instance variables from a request handler to a response 
+//	handler without writing it to a database or file or something. 
+// 
+//	example:
+//		HTTP connect
+//			ask for request
+//			framework calls request handler, sends qbXML request
+//		HTTP disconnect
+//
+//		HTTP connect
+//			send the response
+//			framework calls response handler, calls any error handlers
+//			framework sends back a percentage done
+//		HTTP disconnect
+
+$my_example_var1 = null;
+$my_example_var2 = null;
+
+$obj = new LLLT_Model_QuickbookMapper($my_example_var1, $my_example_var2);
+// Map QuickBooks actions to handler functions
+$map = array(
+	//QUICKBOOKS_ADD_CUSTOMER => array( array( $obj, 'addCustomerRequest' ), array( $obj, 'addCustomerResponse' ) ),
+	QUICKBOOKS_ADD_INVOICE	=> array( array($obj,'addInvoice'),array($obj,'addInvoiceResponse')) 
+	);
+
+// This is entirely optional, use it to trigger actions when an error is returned by QuickBooks
+$errmap = array(
+	500 => array( $obj, 'handleError500' ), 
+	);
+
+// An array of callback hooks
+$hooks = array(
+	//HOOK_LOGINSUCCESS => array( array( $obj, 'hookLoginSuccess' ) ), 
+	);
+// Logging level
+//$log_level = QUICKBOOKS_LOG_NORMAL;
+//$log_level = QUICKBOOKS_LOG_VERBOSE;
+//$log_level = QUICKBOOKS_LOG_DEBUG;				
+$log_level = QUICKBOOKS_LOG_DEVELOP;		// Use this level until you're sure everything works!!!
+
+// What SOAP server you're using 
+//$soapserver = QUICKBOOKS_SOAPSERVER_PHP;			// The PHP SOAP extension, see: www.php.net/soap
+$soapserver = QUICKBOOKS_SOAPSERVER_BUILTIN;		// A pure-PHP SOAP server (no PHP ext/soap extension required, also makes debugging easier)
+
+$soap_options = array(		// See http://www.php.net/soap
+	);
+
+$handler_options = array(
+	//'authenticate_dsn' => ' *** YOU DO NOT NEED TO PROVIDE THIS CONFIGURATION VARIABLE TO USE THE DEFAULT AUTHENTICATION METHOD FOR THE DRIVER YOU'RE USING (I.E.: MYSQL) *** '
+	//'authenticate_dsn' => 'ldapv3://ldap.example.com:389/ou=People,dc=example,dc=com',
+	//'authenticate_dsn' => 'mysql://user:pass@localhost/database?quickbooks_user',  
+	//'authenticate_dsn' => 'postgresql://user:pass@localhost/database?quickbooks_user', 
+	//'authenticate_dsn' => 'function://your_function_name_here', 
+	);		// See the comments in the QuickBooks/Server/Handlers.php file
+
+$driver_options = array(		// See the comments in the QuickBooks/Driver/<YOUR DRIVER HERE>.php file ( i.e. 'Mysql.php', etc. )
+	//'max_log_history' => 1024,	// Limit the number of quickbooks_log entries to 1024
+	//'max_queue_history' => 64, 	// Limit the number of *successfully processed* quickbooks_queue entries to 64
+	);
+
+$callback_options = array(
+	);
+
+
+$dsn = 'mysql://lllt:21dive@localhost/qb_lllt';
+
+
+if (!QuickBooks_Utilities::initialized($dsn))
+{
+	// Initialize creates the neccessary database schema for queueing up requests and logging
+	QuickBooks_Utilities::initialize($dsn);
+	
+	// This creates a username and password which is used by the Web Connector to authenticate
+	QuickBooks_Utilities::createUser($dsn, $user, $pass);
+	
+			
+}
+	
+// Set the DSN string because some of our callbacks will use it
+$obj->setDSN($dsn);
+
+// Create a new server and tell it to handle the requests
+// __construct($dsn_or_conn, $map, $errmap = array(), $hooks = array(), $log_level = QUICKBOOKS_LOG_NORMAL, $soap = QUICKBOOKS_SOAPSERVER_PHP, $wsdl = QUICKBOOKS_WSDL, $soap_options = array(), $handler_options = array(), $driver_options = array(), $callback_options = array()
+$Server = new QuickBooks_Server($dsn, $map, $errmap, $hooks, $log_level, $soapserver, QUICKBOOKS_WSDL, $soap_options, $handler_options, $driver_options, $callback_options);
+$response = $Server->handle(true, true);
+
+/*
+// If you wanted, you could do something with $response here for debugging
+*/
+$fp = fopen('C:/file.log', 'a+');
+fwrite($fp, $response);
+fclose($fp);

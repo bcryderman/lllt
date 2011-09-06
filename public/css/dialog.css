@@ -1,0 +1,66 @@
+.ui-dialog {
+	border-radius: 0;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;	
+	padding: 0;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+	display: none;	
+}
+
+.ui-dialog .ui-dialog-content {
+	padding: 0;	
+}
+
+.sword {
+	background: #fff;
+	border: 3px solid #ddd;
+	font-family: Arial;
+	font-size: 12px;	
+	padding: 20px;
+}
+
+.sword .header {
+	margin-bottom: 10px;	
+}
+
+.sword .header .left {
+	background: url(/images/styles/bgs/dialog-header-left.png) no-repeat;
+	float: left;
+	height: 30px;	
+	width: 5px;
+}
+
+.sword .header .center {
+	background: #82c0ee;
+	color: #fff;
+	float: left;
+	font-size: 14px;
+	font-weight: bold;
+	height: 30px;
+	line-height: 30px;
+	padding: 0 25px;	
+}
+
+.sword .header .right {
+	background: url(/images/styles/bgs/dialog-header-right.png) no-repeat;
+	float: left;
+	height: 30px;
+	width: 5px;	
+}
+
+.sword .footer {
+	margin-top: 20px;	
+	width: 100%;
+}
+
+.sword .footer .right {
+	float: right;	
+}
+
+.sword + .ui-widget-overlay {
+	background: #333;	
+	filter: Alpha(Opacity=40);
+	opacity: .40;
+}

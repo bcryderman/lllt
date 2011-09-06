@@ -154,4 +154,46 @@ class LLLT_Model_RatesMapper {
 			
     	$this->getDbTable()->delete($where);
     }
+    
+	 public function getLatestByLoadId($load_id){
+
+    	$sql = 'select r.* from  tbl_load l, tbl_rate r '.
+				'where l.load_id = '.$load_id .' '.
+				'and l.bill_to_id = r.bill_to_id '.
+				'and l.origin_id = r.origin_id '.
+				'and l.destination_id = r.destination_id '.
+				'order by r.start_date ASC LIMIT 1';
+
+    	$this->getDbTable()
+			 ->getAdapter()
+			 ->setFetchMode(Zend_Db::FETCH_OBJ);
+		
+		$row = $this->getDbTable()
+					->getAdapter()
+					->fetchRow($sql);
+
+		$rate= new LLLT_Model_Rates();
+
+		if ($row)
+		{
+			
+		
+	        $rate->setRate_id($row->rate_id);
+	        $rate->setBill_to_id($row->bill_to_id);
+	        $rate->setOrigin_id($row->origin_id);
+	        $rate->setDestination_id($row->destination_id);
+	        $rate->setStart_date($row->start_date);
+	        $rate->setEnd_date($row->end_date);
+	        $rate->setRoute_type_id($row->route_type_id);
+	        $rate->setRate($row->rate);
+	        $rate->setCreated($row->created);
+	        $rate->setCreated_by($row->created_by);
+	        $rate->setLast_updated($row->last_updated);
+	        $rate->setLast_updated_by($row->last_Updated_by);
+
+		}			
+        return $rate;
+		
+    }
+    
 }

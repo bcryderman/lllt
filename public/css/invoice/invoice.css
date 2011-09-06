@@ -1,0 +1,20 @@
+#qb-inline-editor{
+width:470px;height:60px;
+background-color:#FFFFFF;
+border: 2px solid gray;
+padding:10px;
+}
+.omaha{position:absolute}
+
+#verify-loads{
+	font-size:14px;
+	
+}
+#verify-loads td{
+	padding:0px 3px;
+	line-height:20px;
+	vertical-align:center;
+	}
+.qb-select-load,.qb-edit,.qb-email-invoice{
+	cursor:pointer}
+	

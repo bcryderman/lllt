@@ -1,0 +1,46 @@
+<table>
+	<thead>
+		<tr>
+			<th>Products</th>
+			<th>State</th>
+			<th>Type</th>
+			<th>Month/Year</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>
+				<select name="product_type">
+					<?php 
+						foreach($this->producttypes()as $row)
+						{
+							echo '<option value="'.$row->getProduct_type_id().'">'.$row->getProduct_type().'</option>';
+						}
+					?>
+				</select>
+			</td>
+			<td>
+				<select name="state">
+					<?php echo $this->states('');?>
+				</select>
+			</td>
+			<td>
+				<select name="load_type">
+					<?php 
+						foreach($this->deliverytype as $row)
+						{
+							echo '<option value="'.$row['value'].'">'.$row['description'].'</option>';
+						}
+					?>
+				</select>
+			</td>
+			
+			<td>
+				<select name="month">
+					<?php echo $this->months();?>
+				</select>
+				<input type="text" name="year" size="5"></input>
+			</td>
+		</tr>
+	</tbody>
+</table>

@@ -3,12 +3,15 @@
 	<tr id="load_id-<?php echo $item->getLoad_id()?>">
 		
 		<td class="disp-load-select">
-			<?php if($item->getDispatched()==0)
-			{
-			?>
-			<input data="{order_number:1}" class="loadlock <?php if($item->getLocked_by()==$this->emp_id && $item->getLoad_locked()==1){echo 'locked-by-me';}elseif($item->getLocked_by()!=$this->emp_id && $item->getLoad_locked()==1){echo'locked-by-other';}?>" type="checkbox" load_id="<?php echo $item->getLoad_id();?>" <?php if($item->load_locked ==1){echo 'checked';}?>></input>
-			<?php }?>
-			
+			<span class="ui-icon ui-icon-circle-plus qb-select-load" load_id="<?php echo $item->getLoad_id()?>"></span>
+		</td>
+		<td width="35">
+			<div style="float:left" class="qb-email-invoice" load_id="<?php echo $item->getLoad_id()?>" email="<?php echo $item->getEmail_invoice();?>">
+				<span class="ui-icon ui-icon-mail-closed ui-icon-arrowthick-1-ne "></span>
+			</div>
+			<div class="qb-email-invoice" style="float:right;<?php if($item->getEmail_invoice() !=1){echo 'display:none"';}?>">
+				<span class="ui-icon ui-icon-arrowthick-1-ne" ></span>
+			</div>
 		</td>
 		<td class="qb-invoice_date color-block"> <?php echo $item->getInvoice_date(); ?></td>
 		<td class="disp-order-number"><?php echo $item->getOrder_number();?></td>
@@ -22,10 +25,10 @@
 		<td class="qb-bill_of_lading"> <?php echo $item->getBill_of_lading(); ?></td>
 		<td class="qb-net_gallons"> <?php echo $item->getNet_gallons(); ?></td>
 		<td class="qb-fuel_surcharge"> <?php echo $item->getFuel_surcharge(); ?></td>
-		<td class="qb-pay_rate"></td>
+		<td class="qb-bill_rate"><?php echo $item->getBill_rate();?></td>
 		<td class="qb-discount"> <?php echo $item->getDiscount(); ?></td>
 
-		<td><div class="qb-edit" load_id="<?php echo $item->getLoad_id()?>">edit</div></td>
+		<td><div class="qb-edit ui-icon ui-icon-pencil" load_id="<?php echo $item->getLoad_id()?>">edit</div></td>
 	</tr>
 
 <?php } ?>

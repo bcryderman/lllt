@@ -90,4 +90,16 @@ Zend_Controller_Action_Helper_Abstract {
 		return $data->getNavman_vehicle_id();
 	}
 	
+	public function getFuelSurcharge($load_id){
+		$fs = new LLLT_Model_FuelsurchargeMapper();
+		$retval = $fs->getLatestByLoadId($load_id);
+		return $retval;
+	}
+	
+	public function getRate($load_id){
+		$rate = new LLLT_Model_RatesMapper();
+		$retval = $rate->getLatestByLoadId($load_id);
+		return $retval;
+	}
+	
 }

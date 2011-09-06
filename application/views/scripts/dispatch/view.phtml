@@ -10,6 +10,7 @@ $(document).ready(function() {
 	$('.emp-select').click(function(){ldlck._select_employee(this);});
 	$('.emptable').tableh({ 'url': '/dispatch/emptabulardata' });
 	$('.loadtable').tableh({ 'url': '/dispatch/loadtabulardata' });
+	
 });
 
 </script>
@@ -86,5 +87,170 @@ $(document).ready(function() {
 		<?php echo $this->partial('/dispatch/loadtabulardata.phtml', array('loads' => $this->loads,'emp_id'=>$this->emp_id)); ?>
 	</table>
 </div>
+<div id="dispatch-search">
+<form id="dispatch-search-form" method="post">
+	<table>
+		<tr>
+			<td>
+				<div class="form-wrapper">
+					<label>Load Date:</label>
+						<input type="text" name="load_start_date" class="datepicker" value="<?php echo $this->searchdata['load_start_date'];?>"></input>
+								to
+						<input type="text" name="load_end_date" class="datepicker" value="<?php echo $this->searchdata['load_start_date'];?>" />
+				</div>	
+			</td>
+					<td>
+				<div class="form-wrapper">
+					<label>Delivery Date:</label>
+						<input type="text" name="delivery_start_date" class="datepicker" />	to
+						<input type="text" name="delivery_end_date" class="datepicker"  />
+				</div>	
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div class="form-wrapper">
+					<label for="shipper_id">Shipper:</label>
+					<select name="shipper_id">
+						<option></option>
+						<?php 
+						
+						foreach ($this->shippers() as $item) {
+			 
+							if (isset($this->params['shipper_id']) && $this->params['shipper_id'] === $item->getCustomer_id()) {
+								
+								echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+							}
+							else {
+								
+								echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+							}   		
+			    		}
+			    		
+			    		?>
+					</select>
+				</div>
+			</td>
+			<td>
+				<div class="form-wrapper">
+					<label for="shipper_id">Customer:</label>
+					<select name="shipper_id">
+						<option></option>
+						<?php 
+						
+						foreach ($this->customers() as $item) {
+			 
+							if (isset($this->params['customer_id']) && $this->params['customer_id'] === $item->getCustomer_id()) {
+								
+								echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+							}
+							else {
+								
+								echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+							}   		
+			    		}
+			    		
+			    		?>
+					</select>
+				</div>
+			</td>
+			
+		</tr>
+		
+		<tr>
+		
+			<td>
+				<div class="form-wrapper">
+					<label for="origin_id">Origins:</label>
+					<select name="origin_id">
+						<option></option>
+						<?php 
+						
+						foreach ($this->origins() as $item) {
+			 
+							if (isset($this->params['origin_id']) && $this->params['origin_id'] === $item->getCustomer_id()) {
+								
+								echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+							}
+							else {
+								
+								echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+							}   		
+			    		}
+			    		
+			    		?>
+					</select>
+				</div>
+			
+			</td>
+			
+			
+			<td>
+				<div class="form-wrapper">
+				<label for="destination_id">Destination:</label>
+				<select name="destination_id">
+					<option></option>
+					<?php 
+					
+					foreach ($this->destinations() as $item) {
+		 
+						if (isset($this->params['destination_id']) && $this->params['destination_id'] === $item->getCustomer_id()) {
+							
+							echo '<option value="' . $item->getCustomer_id() . '" selected>' . $item->getName() . '</option>';
+						}
+						else {
+							
+							echo '<option value="' . $item->getCustomer_id() . '">' . $item->getName() . '</option>';
+						}   		
+		    		}
+		    		
+		    		?>
+				</select>
+			</div>
+			</td>
+		</tr>
+	
+			
+		<tr>
+		
+			<td>
+				<div class="form-wrapper">
+					<label for="origin_id">Driver:</label>
+					<select name="origin_id">
+						<option></option>
+						<?php 
+						
+						foreach ($this->drivers() as $item) {
+			 
+							if (isset($this->params['emp_id']) && $this->params['emp_id'] === $item->getCustomer_id()) {
+								
+								echo '<option value="' . $item->getEmp_id() . '" selected>' . $item->getFirst_name() .' '.$item->getLast_name(). '</option>';
+							}
+							else {
+								
+								echo '<option value="' . $item->getEmp_id() . '">' . $item->getFirst_name() .' '.$item->getLast_name().  '</option>';
+							}   		
+			    		}
+			    		
+			    		?>
+					</select>
+				</div>
+			
+			</td>
+			
+			<td>
+				<div class="form-wrapper">
+				<label for="order_number">Order Number:</label>
+					<input name="order_number"></input>
+				</div>
+			
+			</td>
+	
+		</tr>
+		
+	</table>
+</form>
+</div>
+
 
 <div id="dispatch-modal"></div>

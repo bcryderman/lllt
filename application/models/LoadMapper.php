@@ -271,7 +271,8 @@ class LLLT_Model_LoadMapper {
 				 ->setActive($row->active)
 				 ->setDriver_compartment_number($row->driver_compartment_number)
 				 ->setJson_obj($this->build_json_obj($row))
-				 ->setDispatch_order($row->dispatch_order);
+				 ->setDispatch_order($row->dispatch_order)
+				 ->setEmail_invoice($row->email_invoice);
 				 
                   
             $entries[] = $load;            
@@ -398,7 +399,8 @@ class LLLT_Model_LoadMapper {
         	 ->setLast_updated_by($row->last_updated_by)
 			 ->setActive($row->active)
 			 ->setDriver_compartment_number($row->driver_compartment_number)
-			 ->setDispatch_order($row->dispatch_order);
+			 ->setDispatch_order($row->dispatch_order)
+			  ->setEmail_invoice($row->email_invoice);
 	        	
 	    return $load;
     }
@@ -505,7 +507,8 @@ class LLLT_Model_LoadMapper {
         	 ->setLast_updated_by($row->last_updated_by)
 			 ->setActive($row->active)
 			 ->setDriver_compartment_number($row->driver_compartment_number)
-			 ->setDispatch_order($row->dispatch_order);
+			 ->setDispatch_order($row->dispatch_order)
+			  ->setEmail_invoice($row->email_invoice);
 	        	
 	    return $load;
     }
