@@ -10,6 +10,17 @@ $(document).ready(function() {
 	$('.emp-select').click(function(){ldlck._select_employee(this);});
 	$('.emptable').tableh({ 'url': '/dispatch/emptabulardata' });
 	$('.loadtable').tableh({ 'url': '/dispatch/loadtabulardata' });
+
+	$('.filter').click(function(){
+		$('#dispatch-search').css({
+			"top":100,
+			"left":400
+			//'left' : $(this).width() + $(this).position().left - 480,
+			//'top' : $(this).height() + $(this).position().top - 30
+		}).show();
+
+		});
+
 	
 });
 
@@ -18,6 +29,7 @@ $(document).ready(function() {
 <link rel="stylesheet" href="/css/dispatch.css" />
 
 <button class="dispatch" >Dispatch</button>
+<button class="filter">Filter</button>
 <div class="emp-container">
 
 	<table class="tableh emptable" width="250">
@@ -87,9 +99,11 @@ $(document).ready(function() {
 		<?php echo $this->partial('/dispatch/loadtabulardata.phtml', array('loads' => $this->loads,'emp_id'=>$this->emp_id)); ?>
 	</table>
 </div>
-<div id="dispatch-search">
-<form id="dispatch-search-form" method="post">
-	<table>
+<div id="dispatch-search" class='omaha'>
+<h1>Load Filter</h1>
+<form id="dispatch-search-form" method="post" action="/dispatch/view">
+<input type="hidden" name="where" value="build"></input>
+	<table style="width:550px">
 		<tr>
 			<td>
 				<div class="form-wrapper">
@@ -133,8 +147,8 @@ $(document).ready(function() {
 			</td>
 			<td>
 				<div class="form-wrapper">
-					<label for="shipper_id">Customer:</label>
-					<select name="shipper_id">
+					<label for="customer_id">Customer:</label>
+					<select name="customer_id">
 						<option></option>
 						<?php 
 						
@@ -215,14 +229,14 @@ $(document).ready(function() {
 		
 			<td>
 				<div class="form-wrapper">
-					<label for="origin_id">Driver:</label>
-					<select name="origin_id">
+					<label for="driver_id">Driver:</label>
+					<select name="driver_id">
 						<option></option>
 						<?php 
 						
 						foreach ($this->drivers() as $item) {
 			 
-							if (isset($this->params['emp_id']) && $this->params['emp_id'] === $item->getCustomer_id()) {
+							if (isset($this->params['driver_id']) && $this->params['driver_id'] === $item->getEmp_id()) {
 								
 								echo '<option value="' . $item->getEmp_id() . '" selected>' . $item->getFirst_name() .' '.$item->getLast_name(). '</option>';
 							}
@@ -248,7 +262,10 @@ $(document).ready(function() {
 	
 		</tr>
 		
+		
 	</table>
+	
+	<button type="submit">Filter</button>
 </form>
 </div>
 

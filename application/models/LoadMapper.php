@@ -205,7 +205,7 @@ class LLLT_Model_LoadMapper {
 			
 			$sql .= ' ORDER BY ' . $order;
 		}
-		
+
 		$stmt = $this->getDbTable()
 					 ->getAdapter()
 					 ->query($sql);

@@ -8,3 +8,11 @@
 .red-highlight{background-color:#ff2144;}
 .emptable{font-size:12px}
 .emptable td, .emptable th{padding:3px}
+#dispatch-search{display:none}
+
+#dispatch-search{
+width:600px;height:200px;
+background-color:#FFFFFF;
+border: 2px solid gray;
+padding:10px;
+}

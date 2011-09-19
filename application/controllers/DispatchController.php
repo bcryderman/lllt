@@ -5,14 +5,17 @@ class DispatchController extends Zend_Controller_SecureAction {
 	private $_search;
 	
     public function init() {
+    	date_default_timezone_set('America/Chicago');
     	$auth = Zend_Auth::getInstance()->getIdentity();
     	$this->view->emp_id = $auth['Employee']->getEmp_id();
     	$search = new Zend_Session_Namespace('dispatchsearch');
     	$this->_search = $search;    	
     	
     	$this->defaultsearchsession();
-    		   }
 
+    	$this->buildwhere();
+    		   }
+		
     public function indexAction() {
         $vemploadsMapper = new LLLT_Model_VemploadsMapper();
         $where= NULL;
@@ -272,11 +275,15 @@ class DispatchController extends Zend_Controller_SecureAction {
     	$params = $request->getParams();
     	
     	$vemploadsMapper = new LLLT_Model_VemploadsMapper();
-        $where= NULL;
+        $where = null;
     	$employees = $vemploadsMapper->fetchAll($where,'last_name asc');
+    	if(isset($params['where'])&& $params['where']=='build'){
+    		$this->_search->dispatchsearch = $params;
+    	}
+		$dwhere= $this->buildwhere();
 
     	$loadMapper = new LLLT_Model_LoadMapper();
-    	$loads = $loadMapper->fetchAll(null, 'l.delivery_date asc');
+    	$loads = $loadMapper->fetchAll($dwhere, 'l.load_date asc');
 
 		
     	$this->view->loads = $loads;
@@ -290,10 +297,11 @@ class DispatchController extends Zend_Controller_SecureAction {
     
     	if(!is_array($this->_search->dispatchsearch))
     	{
+    	
     		$searchfields=array();
-    		$date = date('Y-m-d');
-    		$startdate = date_parse_from_format('Y-m-d',$date);
-		  	$enddate = date_parse_from_format('Y-m-d',$date);
+    		$date = date('m/d/Y');
+    		$startdate = date_parse_from_format('m/d/Y',$date);
+		  	$enddate = date_parse_from_format('m/d/Y',$date);
 		  	$searchfields['load_start_date'] = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
 		  	$searchfields['load_end_date'] = $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'];
 		  	$this->_search->dispatchsearch=$searchfields;
@@ -308,8 +316,8 @@ class DispatchController extends Zend_Controller_SecureAction {
     
     
     private function buildwhere(){
-    	$this->_params = $this->_search->dsipatchsearch;
-    	
+    	$this->_params = $this->_search->dispatchsearch;
+
     			$wherearr =array();
 		
 
@@ -354,24 +362,24 @@ class DispatchController extends Zend_Controller_SecureAction {
 			$wherearr['net_gallons'] = ' = '.$this->_params['net_gallons_start'];
 		}
 		
-		//If both Invoice start and end date have values.
-		if(isset($this->_params['invoice_start_date'])&&strlen($this->_params['invoice_start_date'])>0
-		  && isset($this->_params['invoice_end_date'])&&strlen($this->_params['invoice_end_date'])>0)
+		//If both Load start and end date have values.
+		if(isset($this->_params['load_start_date'])&&strlen($this->_params['load_start_date'])>0
+		  && isset($this->_params['load_end_date'])&&strlen($this->_params['load_end_date'])>0)
 		  {
-		  	$startdate = date_parse_from_format('m/d/Y',$this->_params['invoice_start_date']);
-		  	$enddate = date_parse_from_format('m/d/Y',$this->_params['invoice_end_date']);
+		  	$startdate = date_parse_from_format('Y-m-d',$this->_params['load_start_date']);
+		  	$enddate = date_parse_from_format('Y-m-d',$this->_params['load_end_date']);
 		  	$date1 = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
 		  	$date2 = $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'];
-		  	$wherearr['invoice_date']= ' >= \''.$date1.'\' and invoice_date <= \''.$date2.'\'';
+		  	$wherearr['load_date']= ' >= \''.$date1.'\' and load_date <= \''.$date2.'\'';
 		  }
-		//If only Invoice start date is set.  
-		if(isset($this->_params['invoice_start_date'])&&strlen($this->_params['invoice_start_date'])>0
-		  && (!isset($this->_params['invoice_end_date'])||strlen($this->_params['invoice_end_date'])<=0))
+		//If only Load start date is set.  
+		if(isset($this->_params['load_start_date'])&&strlen($this->_params['load_start_date'])>0
+		  && (!isset($this->_params['load_end_date'])||strlen($this->_params['load_end_date'])<=0))
 		  {
-		  	$startdate = date_parse_from_format('m/d/Y',$this->_params['invoice_start_date']);
+		  	$startdate = date_parse_from_format('Y-m-d',$this->_params['load_start_date']);
 		  	$date1 = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
 
-		  	$wherearr['invoice_date']= ' = \''.$date1.'\'' ;
+		  	$wherearr['load_date']= ' = \''.$date1.'\'' ;
 		  }
 		  
 			//If both Delivery start and end date have values.
@@ -393,7 +401,16 @@ class DispatchController extends Zend_Controller_SecureAction {
 
 		  	$wherearr['delivery_date']= ' = \''.$date1.'\'' ;
 		  }
-		
+    	if(isset($this->_params['delivery_start_date'])&&strlen($this->_params['delivery_start_date'])==0
+		  && isset($this->_params['delivery_end_date'])&&strlen($this->_params['delivery_end_date'])==0)
+		  {
+		  	$wherearr['delivery_date']= ' is null';
+		  }
+		  
+		  if(isset($this->_params['driver_id'])&& strlen($this->_params['driver_id'])>0)
+		  {
+		  	$where['driver_id']= ' = '. $this->_params['driver_id'];
+		  }
 			
 
 		$retval='';
@@ -401,9 +418,8 @@ class DispatchController extends Zend_Controller_SecureAction {
 		{
 			$retval = $retval. 'l.'.$k .$v .' and ';
 		}
-		echo $retval;
-		return null;
-		//return rtrim($retval,' and ');
+
+		return rtrim($retval,' and ');
     }
     
     private function buildloadarray($loads){

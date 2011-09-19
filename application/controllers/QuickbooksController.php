@@ -198,7 +198,7 @@ ini_set('display_errors', 1);
 // 
 if (function_exists('date_default_timezone_set'))
 {
-	date_default_timezone_set('America/New_York');
+	date_default_timezone_set('America/Chicago');
 }
 
 // 
