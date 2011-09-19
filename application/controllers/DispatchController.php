@@ -21,8 +21,7 @@ class DispatchController extends Zend_Controller_SecureAction {
         $where= NULL;
     	$employees = $vemploadsMapper->fetchAll($where,'last_name asc');
 
-    	//$this->view->employees = $employees;
-   // var_dump($employees);
+
     }
     
     public function getdriversAction(){
@@ -273,12 +272,11 @@ class DispatchController extends Zend_Controller_SecureAction {
 	
     	$request = $this->getRequest();
     	$params = $request->getParams();
-    	
     	$vemploadsMapper = new LLLT_Model_VemploadsMapper();
         $where = null;
     	$employees = $vemploadsMapper->fetchAll($where,'last_name asc');
-    	if(isset($params['where'])&& $params['where']=='build'){
-    		$this->_search->dispatchsearch = $params;
+    	if(isset($params['where'])&& $params['where']=='build'){    		
+    		$this->_search->dispatchsearch = $this->checkfilterdates($params);
     	}
 		$dwhere= $this->buildwhere();
 
@@ -296,17 +294,18 @@ class DispatchController extends Zend_Controller_SecureAction {
     private function defaultsearchsession(){
     
     	if(!is_array($this->_search->dispatchsearch))
-    	{
-    	
-    		$searchfields=array();
-    		$date = date('m/d/Y');
-    		$startdate = date_parse_from_format('m/d/Y',$date);
-		  	$enddate = date_parse_from_format('m/d/Y',$date);
-		  	$searchfields['load_start_date'] = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
-		  	$searchfields['load_end_date'] = $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'];
-		  	$this->_search->dispatchsearch=$searchfields;
-    	}
+    	{$this->defaultsearchdata();}
 
+    }
+    
+    private function defaultsearchdata(){
+    	$searchfields=array();
+    	$date = date('m/d/Y');
+    	$startdate = date_parse_from_format('m/d/Y',$date);
+		$enddate = date_parse_from_format('m/d/Y',$date);
+		$searchfields['load_start_date'] = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
+		$searchfields['load_end_date'] = $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'];
+		$this->_search->dispatchsearch=$searchfields;
     }
     
     private function buildsearchsession($params){
@@ -320,68 +319,28 @@ class DispatchController extends Zend_Controller_SecureAction {
 
     			$wherearr =array();
 		
+    	/**Array of fields that are not date related
+    	 * and only need a single eval.
+    	 */
+    	$field1arr = array('shipper_id',
+    					   'bill_to_id',
+    						'customer_id',
+    						'origins_id',
+    						'destination_id',
+    						'order_number',
+    						'driver_id');
+    	// $empty count used to see if all of the fields are empty
+    	$empty = true;
+    	foreach($field1arr as $row)
+    	{
+	    	if(isset($this->_params[$row])&& $this->_params[$row]>0)
+	    	{
+				$wherearr[$row] = ' = '.$this->_params[$row];
+				$empty = false;
+			}
+    	}
 
-		if(isset($this->_params['shipper_id'])&& $this->_params['shipper_id']>0){
-			$wherearr['shipper_id'] = ' = '.$this->_params['shipper_id'];
-		}
-		if(isset($this->_params['bill_to_id'])&& $this->_params['bill_to_id']>0){
-			$wherearr['bill_to_id'] = ' = '.$this->_params['bill_to_id'];
-		}
-		if(isset($this->_params['customer_id'])&& $this->_params['customer_id']>0){
-			$wherearr['customer_id'] = ' = '.$this->_params['customer_id'];
-		}
-		if(isset($this->_params['customer_id'])&& $this->_params['customer_id']>0){
-			$wherearr['customer_id'] = ' = '.$this->_params['customer_id'];
-		}
-		if(isset($this->_params['origins_id'])&& $this->_params['origins_id']>0 && (!isset($this->_params['origin_id_location'])||strlen($this->_params['origin_id_location'])==0)){
-			$wherearr['origins_id'] = ' = '.$this->_params['origins_id'];
-		}
-		if(isset($this->_params['origins_id_location'])&& $this->_params['origins_id_location']>0){
-			$wherearr['origins_id'] = ' = '.$this->_params['origins_id_location'];
-		}
-		if(isset($this->_params['destination_id'])&& $this->_params['destination_id']>0 && (!isset($this->_params['destination_id_location'])||strlen($this->_params['destination_id_location'])==0)){
-			$wherearr['destination_id'] = ' = '. $this->_params['destination_id'];
-		}
-		if(isset($this->_params['destination_id_location'])&& $this->_params['destination_id_location']>0){
-			$wherearr['destination_id'] = ' = '. $this->_params['destination_id_location'];
-		}
-		if(isset($this->_params['order_number'])&& $this->_params['order_number']>0){
-			$wherearr['order_number'] = ' = '. $this->_params['order_number'];
-		}
-		if(isset($this->_params['bill_of_lading'])&& $this->_params['bill_of_lading']>0){
-			$wherearr['bill_of_lading'] = ' = '. $this->_params['bill_of_lading'];
-		}
-		//Both Net Gallons start and end have values greater than 0
-		if(isset($this->_params['net_gallons_start'])&& $this->_params['net_gallons_start']>0 &&
-		   isset($this->_params['net_gallons_end'])&& $this->_params['net_gallons_end']>0){
-			$wherearr['net_gallons'] = ' >= '. $this->_params['net_gallons_start'].' and net_gallons <= '. $this->_params['net_gallons_end'];
-		}
-		//If only Net Gallons start has a value
-		if(isset($this->_params['net_gallons_start'])&& $this->_params['net_gallons_start']>0 &&
-		   (!isset($this->_params['net_gallons_end'])|| $this->_params['net_gallons_end']<= 0 )){
-			$wherearr['net_gallons'] = ' = '.$this->_params['net_gallons_start'];
-		}
-		
-		//If both Load start and end date have values.
-		if(isset($this->_params['load_start_date'])&&strlen($this->_params['load_start_date'])>0
-		  && isset($this->_params['load_end_date'])&&strlen($this->_params['load_end_date'])>0)
-		  {
-		  	$startdate = date_parse_from_format('Y-m-d',$this->_params['load_start_date']);
-		  	$enddate = date_parse_from_format('Y-m-d',$this->_params['load_end_date']);
-		  	$date1 = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
-		  	$date2 = $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'];
-		  	$wherearr['load_date']= ' >= \''.$date1.'\' and load_date <= \''.$date2.'\'';
-		  }
-		//If only Load start date is set.  
-		if(isset($this->_params['load_start_date'])&&strlen($this->_params['load_start_date'])>0
-		  && (!isset($this->_params['load_end_date'])||strlen($this->_params['load_end_date'])<=0))
-		  {
-		  	$startdate = date_parse_from_format('Y-m-d',$this->_params['load_start_date']);
-		  	$date1 = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
-
-		  	$wherearr['load_date']= ' = \''.$date1.'\'' ;
-		  }
-		  
+	  
 			//If both Delivery start and end date have values.
 		if(isset($this->_params['delivery_start_date'])&&strlen($this->_params['delivery_start_date'])>0
 		  && isset($this->_params['delivery_end_date'])&&strlen($this->_params['delivery_end_date'])>0)
@@ -391,6 +350,7 @@ class DispatchController extends Zend_Controller_SecureAction {
 		  	$date1 = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
 		  	$date2 = $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'];
 		  	$wherearr['delivery_date']= ' >= \''.$date1.'\' and delivery_date <= \''.$date2.'\'';
+		  	$empty = false;
 		  }
 		//If only delivery start date is set.  
 		if(isset($this->_params['delivery_start_date'])&&strlen($this->_params['delivery_start_date'])>0
@@ -400,26 +360,58 @@ class DispatchController extends Zend_Controller_SecureAction {
 		  	$date1 = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
 
 		  	$wherearr['delivery_date']= ' = \''.$date1.'\'' ;
-		  }
-    	if(isset($this->_params['delivery_start_date'])&&strlen($this->_params['delivery_start_date'])==0
-		  && isset($this->_params['delivery_end_date'])&&strlen($this->_params['delivery_end_date'])==0)
-		  {
-		  	$wherearr['delivery_date']= ' is null';
+		  	$empty = false;
 		  }
 		  
-		  if(isset($this->_params['driver_id'])&& strlen($this->_params['driver_id'])>0)
+    		//If both Load start and end date have values.
+		if(isset($this->_params['load_start_date'])&&strlen($this->_params['load_start_date'])>0
+		  && isset($this->_params['load_end_date'])&&strlen($this->_params['load_end_date'])>0)
 		  {
-		  	$where['driver_id']= ' = '. $this->_params['driver_id'];
+		  	$startdate = date_parse_from_format('Y-m-d',$this->_params['load_start_date']);
+		  	$enddate = date_parse_from_format('Y-m-d',$this->_params['load_end_date']);
+		  	$date1 = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
+		  	$date2 = $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'];
+		  	$wherearr['load_date']= ' >= \''.$date1.'\' and load_date <= \''.$date2.'\'';
+		  	$empty = false;
 		  }
+		//If only Load start date is set.  
+		if(isset($this->_params['load_start_date'])&&strlen($this->_params['load_start_date'])>0
+		  && (!isset($this->_params['load_end_date'])||strlen($this->_params['load_end_date'])<=0))
+		  {
+		  	$startdate = date_parse_from_format('Y-m-d',$this->_params['load_start_date']);
+		  	$date1 = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
+
+		  	$wherearr['load_date']= ' = \''.$date1.'\'' ;
+		  	$empty = false;
+		  }
+
+		  
+		if($empty)
+		{
+			$this->defaultsearchdata();
 			
+			if(isset($this->_search->dispatchsearch['load_start_date'])&&strlen($this->_search->dispatchsearch['load_start_date'])>0
+		  	&& isset($this->_search->dispatchsearch['load_end_date'])&&strlen($this->_search->dispatchsearch['load_end_date'])>0)
+		  {
+		  	$startdate = date_parse_from_format('Y-m-d',$this->_search->dispatchsearch['load_start_date']);
+		  	$enddate = date_parse_from_format('Y-m-d',$this->_search->dispatchsearch['load_end_date']);
+		  	$date1 = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
+		  	$date2 = $enddate['year'].'-'.$enddate['month'].'-'.$enddate['day'];
+		  	$wherearr['load_date']= ' >= \''.$date1.'\' and load_date <= \''.$date2.'\'';
+
+		  }
+		}
 
 		$retval='';
+	
 		foreach ($wherearr as $k=>$v)
 		{
 			$retval = $retval. 'l.'.$k .$v .' and ';
 		}
-
+	
 		return rtrim($retval,' and ');
+
+		
     }
     
     private function buildloadarray($loads){
@@ -434,6 +426,26 @@ class DispatchController extends Zend_Controller_SecureAction {
     												'load_id'		=>$item->getLoad_id());
     	}
     	return $loadsarray;
+    }
+    
+    private function checkfilterdates($params){
+    	$datefields = array('load_start_date','load_end_date','delivery_start_date','delivery_end_date');
+    	
+    	foreach($datefields as $row)
+    	{
+    		if(isset($params[$row])&&strlen($params[$row]))
+	    	{
+	    		$params[$row]= $this->formatdates($params[$row]);
+	    	}
+    	}
+    	return $params;
+
+    }
+    
+    private function formatdates($date){
+    		$startdate = date_parse_from_format('m/d/Y',$date);
+		  	$date1 = $startdate['year'].'-'.$startdate['month'].'-'.$startdate['day'];
+		  	return $date1;
     }
     
     public function getemployeedata($emp_id){

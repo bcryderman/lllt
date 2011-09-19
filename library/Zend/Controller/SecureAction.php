@@ -9,4 +9,5 @@ class Zend_Controller_SecureAction extends Zend_Controller_Action {
         	$this->_redirect('/auth');
         }
     }
+
 }

@@ -21,12 +21,12 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 				if(!isset($params['delayed_dispatch']))
 				{$params['delayed_dispatch']=0;}
 
-		//Sets date to NULL if no date is given for load and delivery dates.
+		//Sets date to Today if no date is given for load date.
 	    if(strlen($params['load_date'] . ' ' .$params['load_time'])>9)
 				{$params['load_date'] =$this->formattimes($params['load_date'] . ' ' .$params['load_time']);}
 				else
-				{$params['load_date']=null;}
-				
+				{$params['load_date']=date('Y-m-d');;}
+		//Sets date to Today if no date is given for delivery date.		
 	    if(strlen($params['delivery_date'] . ' ' .$params['delivery_time'])>9)
 				{$params['delivery_date'] =$this->formattimes($params['delivery_date'] . ' ' .$params['delivery_time']);}
 				else
