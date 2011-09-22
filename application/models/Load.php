@@ -51,6 +51,7 @@ class LLLT_Model_Load {
 	protected $_json_obj;
 	protected $_dispatch_order = 1;//DB default is 1
 	protected $_email_invoice =0;
+	protected $_template_id;
  	 	
     public function __construct(array $options = null) {
         
@@ -854,5 +855,17 @@ class LLLT_Model_Load {
     public function getEmail_invoice() {
     	
         return $this->_email_invoice;
+    }
+    
+    public function setTemplate_id($val) {
+    	
+        $this->_template_id = $val;
+        
+        return $this;
+    }
+    
+    public function getTemplate_id() {
+    	
+        return $this->_template_id;
     }
 }

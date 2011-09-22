@@ -1,5 +1,5 @@
 <link rel="stylesheet" href="/css/standardloads/standardloads.css" />
-
+<?php include 'loadtemplates.phtml';?>
 <form id="standardloads-entry-form" action="/standardloads/<?php echo $this->type; ?>" method="post">
 	<?php if (isset($this->params['multiple']) && $this->params['multiple']) { ?>
 		<input type="hidden" name="multiple" value="true" />

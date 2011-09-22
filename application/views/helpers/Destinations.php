@@ -23,7 +23,7 @@ class Zend_View_Helper_Destinations {
     
     public function getdata(){
     	$custMapper = new LLLT_Model_CustomerMapper();
-    	$this->_dests = $custMapper->fetchAll('customer_type_id = 5', 'name asc');
+    	$this->_dests = $custMapper->fetchAll('customer_type_id = 5', 'city asc');
     	
     	return $this->_dests; 
     }

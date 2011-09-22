@@ -229,8 +229,10 @@ class LLLT_Model_Employee {
     }
     
     public function setVehicle_id($val) {
-    	
-        $this->_vehicle_id = (string) $val;
+    	if(strlen($val)>0)
+    	{$this->_vehicle_id = (string) $val;}
+    	else
+    	{$this->_vehicle_id = null;}
         
         return $this;
     }

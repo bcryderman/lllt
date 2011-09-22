@@ -134,8 +134,8 @@ class LLLT_Model_LoadTemplateMapper {
         foreach ($resultSet as $row) {
         	
             $load = new LLLT_Model_Load();
-        	$load->setLoad_id($row->load_id)        		  
-	        	 ->setCarrier_id($row->carrier_id)
+        	$load->setTemplate_id($row->template_id)
+        		 ->setCarrier_id($row->carrier_id)
 				 ->setCarrier($row->carrier)
 				 ->setCarrier_color($row->carrier_color)
 	        	 ->setBill_to_id($row->bill_to_id)
@@ -159,35 +159,10 @@ class LLLT_Model_LoadTemplateMapper {
 	 			 ->setDestination_color($row->destination_color)
 				 ->setProduct_id($row->product_id)
 				 ->setProduct($row->product)
-				 ->setDriver_id($row->driver_id)
-				 ->setDriver(array('first_name' => $row->driver_first_name,
-								   'last_name'  => $row->driver_last_name))
-				 ->setDelayed_dispatch($row->delayed_dispatch)
-				 ->setLoad_date($row->load_date)
-				 ->setLoad_time($row->load_date)
-				 ->setDelivery_date($row->delivery_date)
-				 ->setDelivery_time($row->delivery_date)
-				 ->setOrder_number($row->order_number)
-				 ->setBill_of_lading($row->bill_of_lading)
-				 ->setNet_gallons($row->net_gallons)
-				 ->setBill_rate($row->bill_rate)
-				 ->setFuel_surcharge($row->fuel_surchage)
-				 ->setDiscount($row->discount)
-				 ->setInvoice_date($row->invoice_date)
-				 ->setDispatched($row->dispatched)
-				 ->setNotes($row->notes)
-				 ->setLoad_locked($row->load_locked)
-				 ->setLocked_by($row->locked_by)
-				 ->setDelivered($row->delivered)
 	        	 ->setCreated($row->created)
 	        	 ->setCreated_by($row->created_by)
 	        	 ->setLast_updated($row->last_updated)
-	        	 ->setLast_updated_by($row->last_updated_by)
-				 ->setActive($row->active)
-				 ->setDriver_compartment_number($row->driver_compartment_number)
-				 ->setJson_obj($this->build_json_obj($row))
-				 ->setDispatch_order($row->dispatch_order)
-				 ->setEmail_invoice($row->email_invoice);
+	        	 ->setLast_updated_by($row->last_updated_by);
 				 
                   
             $entries[] = $load;            

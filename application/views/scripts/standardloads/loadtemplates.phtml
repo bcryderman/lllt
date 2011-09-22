@@ -1,0 +1,7 @@
+<select id="load-template">
+	<option></option>
+	<?php foreach($this->loadtemplates() as $row){
+		echo '<option value="'.$row->getTemplate_id().'">'.$row->getCarrier().'</option>';
+	}?>
+	
+</select>
