@@ -3,7 +3,7 @@
 <script>
 $(document).ready(function() {
 	
-	$('.tableh').tableh({ 'url': '/customer/tabulardata/customertype/5' });
+	$('.tableh').tableh({ 'url': '/customer/tabulardata/customertype/<?php echo $this->customertype;?>' });
 });
 </script>
 <?php $customertype = $this->customertypes(array('return'=>'arrayid'));
