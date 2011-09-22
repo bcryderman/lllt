@@ -239,4 +239,58 @@ class CustomerController extends Zend_Controller_Action {
     	return $retval;
     	
     }
+    
+	public function tabulardataAction() {
+		
+		$this->_helper->layout()->disableLayout();
+		
+		$request = $this->getRequest();
+    	$params = $request->getParams();
+
+		$auth = Zend_Auth::getInstance()->getIdentity();
+
+    	$dataMapper = new LLLT_Model_CustomerMapper();
+    	$where=array('active = ?'=>1,'customer_type_id = ?'=>$params['customertype']);
+
+		if ($params['column'] === 'c1.name') {
+			
+			$data = $dataMapper->fetchAll($where , 'name '.$params['sort']);
+			
+		}
+		else if ($params['column'] === 'c1.address') {
+			
+			$data = $dataMapper->fetchAll($where , 'addr '.$params['sort']);
+			
+		}
+		else if ($params['column'] === 'c1.city') {
+			
+			$data = $dataMapper->fetchAll($where , 'city '.$params['sort']);
+			
+		}
+		else if ($params['column'] === 'c1.state') {
+			
+			$data = $dataMapper->fetchAll($where , 'state '.$params['sort']);
+			
+		}
+		else if ($params['column'] === 'c1.zip') {
+			
+			$data = $dataMapper->fetchAll($where , 'zip '.$params['sort']);
+			
+		}
+		else if ($params['column'] === 'c1.fein') {
+			
+			$data = $dataMapper->fetchAll($where , 'fein '.$params['sort']);
+			
+		}
+		else if ($params['column'] === 'c1.color') {
+			
+			$data = $dataMapper->fetchAll($where , 'color_code '.$params['sort']);	
+		}
+		else {
+			
+				$data = $dataMapper->fetchAll($where , 'name '.$params['sort']);
+		}
+
+    	$this->view->data = $data;
+	}
 }

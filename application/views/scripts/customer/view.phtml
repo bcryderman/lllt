@@ -1,4 +1,11 @@
 <link rel="stylesheet" href="/css/tableh.css" />
+<script src="/js/tableh.js"></script>
+<script>
+$(document).ready(function() {
+	
+	$('.tableh').tableh({ 'url': '/customer/tabulardata/customertype/5' });
+});
+</script>
 <?php $customertype = $this->customertypes(array('return'=>'arrayid'));
 ?>
 <h3>
@@ -23,34 +30,39 @@ s</h3>
 <table class="tableh">
 	<thead>
 		<tr>
-			<th><?php echo $customertype[$this->customertype]['customer_type'];?> Name</th>
-			<th>Address</th>
-			<th>City</th>
-			<th>State</th>
-			<th>Zip</th>
-			<th>FEIN</th>
-			<th>Color</th>
+			<th column="c1.name">
+				<div class="header"><?php echo $customertype[$this->customertype]['customer_type'];?> Name</div>
+				<div class="sort"></div>
+			</th>
+			<th column="c1.address">
+				<div class="header">Address</div>
+				<div class="sort"></div>
+			</th>
+			<th column="c1.city">
+				<div class="header">City</div>
+				<div class="sort"></div>
+			</th>
+			<th column="c1.state">
+				<div class="header">State</div>
+				<div class="sort"></div>
+			</th>
+			<th column="c1.zip">
+				<div class="header">Zip</div>
+				<div class="sort"></div>
+			</th>
+			<th column="c1.fein">
+				<div class="header">FEIN</div>
+				<div class="sort"></div>
+			</th>
+			<th column="c1.color">
+				<div class="header">Color</div>
+				<div class="sort"></div>
+			</th>
 			<th>Show Contacts</th>
 			<th>Edit</th>
 			<th></th>
 			<th><?php if($this->active==1){echo 'De-Activate';}else{echo 'Activate';} ?></th>
 		</tr>
 	</thead>
-	<tbody>
-	<?php foreach ($this->data as $item) { ?>
-		<tr>
-			<td><?php echo $item->getName();?></td>
-			<td><?php echo $item->getAddr(); ?></td>
-			<td><?php echo $item->getCity(); ?></td>
-			<td><?php echo $item->getState(); ?></td>
-			<td><?php echo $item->getZip();if($item->getZip4()!= null){echo '-'.$item->getZip4();} ?></td>
-			<td><?php echo $item->getFEIN(); ?></td>
-			<td style="background-color:<?php echo '#'.$item->getColor_Code();?>"></td>
-			<td class="icon"><a href="/customercontact/view/customerid/<?php echo $item->getCustomer_id(); ?>"><div class="ui-icon ui-icon-person"></div></a></td>
-			<td class="icon"><a href="/customer/edit/customerid/<?php echo $item->getCustomer_id(); ?>"><div class="ui-icon ui-icon-pencil"></div></a></td>
-			<td><!--<a href="/customer/delete/customerid/<?php echo $item->getCustomer_id(); ?>">Delete</a>--></td>
-			<td class="icon"><a href="/customer/active/customerid/<?php echo $item->getCustomer_id(); ?>/active/<?php if($item->getActive()==1){echo 0;}else{echo 1;}?>/customertype/<?php echo $this->customertype?>"><div class="ui-icon ui-icon-wrench"></div></a></td>
-		</tr>
-	<?php } ?>
-	</tbody>
+	<?php echo $this->partial('/customer/tabulardata.phtml', array('data' => $this->data)); ?>
 </table>

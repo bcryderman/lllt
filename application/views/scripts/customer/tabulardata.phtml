@@ -1,0 +1,17 @@
+	<tbody>
+	<?php foreach ($this->data as $item) { ?>
+		<tr>
+			<td><?php echo $item->getName();?></td>
+			<td><?php echo $item->getAddr(); ?></td>
+			<td><?php echo $item->getCity(); ?></td>
+			<td><?php echo $item->getState(); ?></td>
+			<td><?php echo $item->getZip();if($item->getZip4()!= null){echo '-'.$item->getZip4();} ?></td>
+			<td><?php echo $item->getFEIN(); ?></td>
+			<td style="background-color:<?php echo '#'.$item->getColor_Code();?>"></td>
+			<td class="icon"><a href="/customercontact/view/customerid/<?php echo $item->getCustomer_id(); ?>"><div class="ui-icon ui-icon-person"></div></a></td>
+			<td class="icon"><a href="/customer/edit/customerid/<?php echo $item->getCustomer_id(); ?>"><div class="ui-icon ui-icon-pencil"></div></a></td>
+			<td><!--<a href="/customer/delete/customerid/<?php echo $item->getCustomer_id(); ?>">Delete</a>--></td>
+			<td class="icon"><a href="/customer/active/customerid/<?php echo $item->getCustomer_id(); ?>/active/<?php if($item->getActive()==1){echo 0;}else{echo 1;}?>/customertype/<?php echo $this->customertype?>"><div class="ui-icon ui-icon-wrench"></div></a></td>
+		</tr>
+	<?php } ?>
+	</tbody>
