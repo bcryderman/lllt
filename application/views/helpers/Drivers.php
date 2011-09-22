@@ -16,7 +16,7 @@ class Zend_View_Helper_Drivers {
     	
     		$this->_drivers = $employeeMapper->find($empId);
     	}
-var_dump($this->_drivers);
+
     	return $this->_drivers; 
     }
 }
