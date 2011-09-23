@@ -28,76 +28,83 @@ $(document).ready(function() {
 <link rel="stylesheet" href="/css/tableh.css" />
 <link rel="stylesheet" href="/css/dispatch.css" />
 
-<button class="dispatch" >Dispatch</button>
-<button class="filter">Filter</button>
-<div class="emp-container">
-
-	<table class="tableh emptable" width="250">
-		<thead>
-			<tr>
-				<th class="select"></th>
-				<th column="last_name">
-					<div class="header">Name</div>
-				</th>
-				<th column="dispatched_loads">
-					<div class="header">Disp</div>
-				</th>
-				<th column="pending_loads">
-					<div class="header">Pend</div>
-				</th>
-				<th class="load_info"></th>
-			</tr>
-		</thead>
-		<?php echo $this->partial('/dispatch/emptabulardata.phtml', array('data' => $this->data)); ?>
-	</table>
-
-</div>
-
-
-<div class="loads-container">
-
-	<table class="tableh loadtable">
-		<thead>
-			<tr>
-				<th>
-					<div class="select"></div>
-				</th>
-				<th column="c3.name">
-					<div class="header">Shipper</div>
-					<div class="sort"></div>
-				</th>
-				<th column="origin">
-					<div class="header">Origin</div>
-					<div class="sort"></div>
-				</th>
-				<th column="destination">
-					<div class="header">Destination</div>
-					<div class="sort"></div>
-				</th>
-				<th column="c5.name">
-					<div class="header">Customer</div>
-					<div class="sort"></div>
-				</th>
-				
-				<th column="load_id">
-					<div class="header">Order Num</div>
-					<div class="sort"></div>
-				</th>
-				<th column="driver">
-					<div class="header">Driver</div>
-					<div class="sort"></div>
-				</th>
-				
-
+<div style="width:1350px">
+	<div class="emp-container">
 	
-				<th column="l.delivered">
-					<div class="header">Delivered</div>
-					<div class="sort"></div>
-				</th>
-			</tr>
-		</thead>
-		<?php echo $this->partial('/dispatch/loadtabulardata.phtml', array('loads' => $this->loads,'emp_id'=>$this->emp_id)); ?>
-	</table>
+		<table class="tableh emptable" width="250">
+			<thead>
+				<tr>
+					<th class="select"></th>
+					<th column="last_name">
+						<div class="header">Name</div>
+					</th>
+					<th column="dispatched_loads">
+						<div class="header">Disp</div>
+					</th>
+					<th column="pending_loads">
+						<div class="header">Pend</div>
+					</th>
+					<th class="load_info"></th>
+				</tr>
+			</thead>
+			<?php echo $this->partial('/dispatch/emptabulardata.phtml', array('data' => $this->data)); ?>
+		</table>
+	
+	</div>
+
+
+	<div class="loads-container">
+		<div id="dispatch-controls">
+			<button class="dispatch" >Dispatch</button>
+			<button class="filter">Filter</button>
+		</div>
+		<table class="tableh loadtable">
+			<thead>
+				<tr>
+					<th>
+						<div class="select"></div>
+					</th>
+					<th column="c3.name">
+						<div class="header">Shipper</div>
+						<div class="sort"></div>
+					</th>
+					<th column="origin">
+						<div class="header">Origin</div>
+						<div class="sort"></div>
+					</th>
+					<th column="destination">
+						<div class="header">Destination</div>
+						<div class="sort"></div>
+					</th>
+					<th column="c5.name">
+						<div class="header">Customer</div>
+						<div class="sort"></div>
+					</th>
+					
+					<th column="load_id">
+						<div class="header">Order Num</div>
+						<div class="sort"></div>
+					</th>
+					<th column="driver">
+						<div class="header">Driver</div>
+						<div class="sort"></div>
+					</th>
+					
+	
+		
+					<th column="l.delivered">
+						<div class="header">Delivered</div>
+						<div class="sort"></div>
+					</th>
+					
+					<th>
+						<div></div>
+					</th>
+				</tr>
+			</thead>
+			<?php echo $this->partial('/dispatch/loadtabulardata.phtml', array('loads' => $this->loads,'emp_id'=>$this->emp_id)); ?>
+		</table>
+	</div>
 </div>
 <div id="dispatch-search" class='omaha'>
 <h1>Load Filter</h1>

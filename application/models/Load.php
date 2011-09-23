@@ -262,7 +262,7 @@ class LLLT_Model_Load {
 		}
 		else if (!empty($arr['city']) && !empty($arr['state'])) {
 			
-			$this->_origin = $arr['city'] . ', ' . $arr['state'];
+			$this->_origin = $this->_bill_to. ' ' . $arr['city'] . ', ' . $arr['state'];
 		}
 		else if (!empty($arr['city']) && !empty($arr['name'])) {
 			

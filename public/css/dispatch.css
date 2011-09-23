@@ -1,5 +1,6 @@
 .dispatched-driver{color:red;}
-.loads-container, .emp-container{float:left;}
+.emp-container{float:left;}
+.loads-container{float:right;}
 .emp-container{margin-right:10px;}
 .color-block{color:#000000}
 #disp-modal-tbl thead tr th{font-weight:normal; padding:0 5px}

@@ -132,7 +132,7 @@ class StandardloadsController extends Zend_Controller_SecureAction {
     	
     	if($request->isPost())
     	{$this->_helper->viewRenderer->setNoRender(true);
-    	var_dump($params);
+
     			$auth = Zend_Auth::getInstance()->getIdentity(); 
 	    		$date = date('Y-m-d H:i:s');
 
@@ -166,8 +166,10 @@ class StandardloadsController extends Zend_Controller_SecureAction {
 					
 				$loadMapper = new LLLT_Model_LoadMapper();				
 				$loadMapper->edit($load);
+
+		    	$this->_redirect($params['redirect']);
+
 		    	
-		    	$this->_redirect('standardloads/view');
     	}
     	else
     	{
@@ -176,6 +178,10 @@ class StandardloadsController extends Zend_Controller_SecureAction {
     			$request = $this->getRequest();
     			$params = $request->getParams();
     			$loadMapper = new LLLT_Model_LoadMapper();
+    			if(isset($params['dispatch']))
+    			{$this->view->redir = 'dispatch/view';}
+    			else
+    			{$this->view->redir = 'standardloads/view';}
     	
     			$this->view->load = $loadMapper->find($params['load_id']);
     		}

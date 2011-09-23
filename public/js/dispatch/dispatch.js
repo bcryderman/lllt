@@ -90,7 +90,7 @@ function lockload()
 							'DISPATCH': function() {
 								//$( this ).dialog( "close" );
 								thislockload._perform_dispatch();
-								//window.location.reload();
+								window.location.reload();
 								//employee.delayed_dispatch = 1;
 								//thislockload._dispatch_load();
 							}

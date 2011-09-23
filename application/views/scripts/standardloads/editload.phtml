@@ -9,6 +9,7 @@ $load = $this->load;
 </style>
 <form id="standardloads-entry-form" action="/standardloads/editload" method="post">
 <input type="hidden" name="load_id" value="<?php echo $load->getLoad_id();?>"></input>
+<input type="hidden" name="redirect" value="<?php echo $this->redir;?>"></input>
 <div id="load-view">
 <div id="info-label" class="info-header">Edit load:<?php echo $load->getLoad_id(); ?></div>
 <table class="no-color">
