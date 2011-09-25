@@ -232,6 +232,8 @@ class LLLT_Model_LoadMapper {
 				 ->setOrigin(array('city'  => $row->origin_city,
 								   'state' => $row->origin_state,
 								   'name'  => $row->origin_name))
+				 ->setOrigin_invoice(array('city'  => $row->origin_city,
+							   'state' => $row->origin_state))
 				 ->setOrigin_color($row->origin_color)
 	        	 ->setCustomer_id($row->customer_id)
 				 ->setCustomer($row->customer)
@@ -240,6 +242,8 @@ class LLLT_Model_LoadMapper {
 	 			 ->setDestination(array('city'  => $row->destination_city,
 								   		'state' => $row->destination_state,
 								   		'name'  => $row->destination_name))
+	 			 ->setDestination_invoice(array('city'  => $row->destination_city,
+							   'state' => $row->destination_state))
 	 			 ->setDestination_color($row->destination_color)
 				 ->setProduct_id($row->product_id)
 				 ->setProduct($row->product)
@@ -361,6 +365,8 @@ class LLLT_Model_LoadMapper {
 			 ->setOrigin(array('city'  => $row->origin_city,
 							   'state' => $row->origin_state,
 							   'name'  => $row->origin_name))
+			 ->setOrigin_invoice(array('city'  => $row->origin_city,
+							   'state' => $row->origin_state))
 			 ->setOrigin_color($row->origin_color)
 	         ->setCustomer_id($row->customer_id)
 			 ->setCustomer($row->customer)
@@ -369,6 +375,8 @@ class LLLT_Model_LoadMapper {
 	 		 ->setDestination(array('city'  => $row->destination_city,
 							   		'state' => $row->destination_state,
 							   		'name'  => $row->destination_name))
+	 		 ->setDestination_invoice(array('city'  => $row->destination_city,
+							   'state' => $row->destination_state))
 	 		 ->setDestination_color($row->destination_color)
 			 ->setProduct_id($row->product_id)
 			 ->setProduct($row->product)

@@ -14,12 +14,14 @@ class LLLT_Model_Load {
 	protected $_shipper_color;
 	protected $_origin_id;
 	protected $_origin;
+	protected $_origin_invoice;
 	protected $_origin_color;
 	protected $_customer_id;
 	protected $_customer;
 	protected $_customer_color;
 	protected $_destination_id;
 	protected $_destination;
+	protected $_destination_invoice;
 	protected $_destination_color;
 	protected $_product_id;
 	protected $_product;
@@ -293,6 +295,18 @@ class LLLT_Model_Load {
         return $this->_origin;
     }
     
+ 	public function setOrigin_invoice($arr) {
+		
+		$this->_origin_invoice = $arr['city'] . ', ' . $arr['state'];
+		        
+        return $this;
+    }
+ 
+    public function getOrigin_invoice() {
+    	
+        return $this->_origin_invoice;
+    }
+    
  	public function setOrigin_color($val) {
     	
         $this->_origin_color = $val;
@@ -394,6 +408,18 @@ class LLLT_Model_Load {
     public function getDestination() {
     	
         return $this->_destination;
+    }
+    
+ 	public function setDestination_invoice($arr) {
+		
+		$this->_destination_invoice = $arr['city'] . ', ' . $arr['state'];
+		        
+        return $this;
+    }
+ 
+    public function getDestination_invoice() {
+    	
+        return $this->_destination_invoice;
     }
     
  	public function setDestination_color($val) {

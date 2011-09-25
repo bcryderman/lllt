@@ -32,7 +32,7 @@ class LLLT_Model_EmployeeMapper {
     }
         
     public function add(LLLT_Model_Employee $employee) {
-    			   	
+    			    	
 	    $data = array('first_name'            => $employee->getFirst_name(),
 				      'last_name'             => $employee->getLast_name(),
 				      'addr'                  => $employee->getAddr(),
@@ -55,7 +55,7 @@ class LLLT_Model_EmployeeMapper {
 	    			  'created_by'            => $employee->getCreated_by(),
 	    			  'last_updated'          => $employee->getLast_updated(),
 	    			  'last_updated_by'       => $employee->getLast_updated_by());
-
+	    	    	
 	    $empId = $this->getDbTable()
 					 ->insert($data);
 					

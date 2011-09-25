@@ -25,7 +25,8 @@ class QbintegrationController extends Zend_Controller_Action {
     	$this->_load_id = $params['load_id'];
     	$this->getloaddata();
 
-		$invoice->buildInvoice($this->_load_obj);
+		//$invoice->buildInvoice($this->_load_obj);
+		$invoice->add_qb_queue($this->_load_obj);
 	}
 	
 	public function serverAction(){

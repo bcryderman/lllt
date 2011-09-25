@@ -2,7 +2,7 @@
 class Zend_Controller_Action_Helper_QbInvoice extends 
 Zend_Controller_Action_Helper_Abstract {
 
-	private $_db = 'mysql://lllt:21dive@localhost/qb_lllt';
+	private $_db = 'mysql://root:D1sp@tch3r@localhost/qb_lllt';
 	private $_user = 'llldispatch';
 	private $_customer_id;
 	
@@ -11,6 +11,20 @@ Zend_Controller_Action_Helper_Abstract {
 	private function setup(){
 
 			}
+			
+	public function add_qb_queue($obj){
+		$queue = new LLLT_Model_QbQueueMapper();
+		$queuedata = new LLLT_Model_QbQueue();
+		$queue_id = $obj->getOrigin_id().'-'.$obj->getDestination_id().'-'.$obj->getDriver_id();
+		
+		$queuedata->setQueue_id($queue_id)
+				  ->setLoad_id($obj->getLoad_id())
+				  ->setActive(1);
+		$queue->add($queuedata);
+		
+		$this->buildInvoice($obj);
+	}
+			
 	public function buildInvoice($obj){
 		
 		error_reporting(E_ALL | E_STRICT);
@@ -23,7 +37,9 @@ Zend_Controller_Action_Helper_Abstract {
 		}
 		
 		// 
-		ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . 'C:/Users/Brian/workspace/quickbooks/v153');
+		ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . 'C:/servers/qb/v153');
+		
+		
 		
 		/**
 		 * 
@@ -40,7 +56,7 @@ Zend_Controller_Action_Helper_Abstract {
 		$this->_customer_id = $obj->getShipper_id();
 		$shipaddy = $this->getcustomerinfo();
 		
-		
+		//QuickBooks_Utilities::createUser($this->_db, 'llltdispatch', 'p3terbu1lt');
 		
 		$user = 'llltdispatch';
 		$source_type = QuickBooks_API::SOURCE_WEB;
@@ -81,9 +97,9 @@ Zend_Controller_Action_Helper_Abstract {
 //		}
 		
 		
+		$queue_id = $obj->getOrigin_id().'-'.$obj->getDestination_id().'-'.$obj->getDriver_id();
 		
-		
-		$API->addInvoice($Invoice, '_quickbooks_ca_invoice_add_callback',$obj->getLoad_id());
+		$API->addInvoice($Invoice, '_quickbooks_ca_invoice_add_callback',$queue_id);
 
 		 
 		

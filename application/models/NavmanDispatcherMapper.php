@@ -41,13 +41,13 @@ class LLLT_Model_NavmanDispatcherMapper {
 		
 	public function DoLogin() {
 					
-		$client = new Zend_Soap_Client($this->_wsdl, array('soapVersion' => SOAP_1_2 ,'encoding' => 'UTF-8'));
+		$client = new Zend_Soap_Client($this->_wsdl, array('soapVersion' => SOAP_1_1 ,'encoding' => 'UTF-8'));
 		$request = array('request'=>array('Session'=>array('SessionId'=>'00000000-0000-0000-0000-000000000000'),
 					  'UserCredential'=>array('UserName'=>'apillltransport','Password'=>'45wSOTLK','ApplicationID'=>'00000000-0000-0000-0000-000000000000','ClientID'=>'00000000-0000-0000-0000-000000000000','ClientVersion'=>''),
-						'ClockVerificationUtc'=>0));									   	
+						'ClockVerificationUtc'=>0));						
 		$result = $client->DoLogin($request);
 		$this->_session_id = $result->DoLoginResult->SecurityProfile->Session->SessionId;
-		$this->_owner_id = $result->DoLoginResult->SecurityProfile->User->OwnerID;	
+		$this->_owner_id = $result->DoLoginResult->SecurityProfile->User->OwnerID;
 	}
 
 	public function DoLogoff(){
@@ -116,6 +116,7 @@ class LLLT_Model_NavmanDispatcherMapper {
     
     public function updateNavmanMessageTime($timearr=array('seconds'=>30)){
     	$currtime = $this->getNavmanUtil(1);
+		//$currtime = date('Y-m-d H:i:s.u');
     	$date1 = date_parse_from_format('Y-m-d H:i:s.u',$currtime);
     	$this->_start_time = date("Y-m-d H:i:s.u", mktime($date1['hour'],$date1['minute'], $date1['second'], $date1['month'], $date1['day'], $date1['year']));
     	$this->_end_time = date("Y-m-d H:i:s.u", mktime($date1['hour'],$date1['minute'], $date1['second']+ $timearr['seconds'], $date1['month'], $date1['day'], $date1['year']));

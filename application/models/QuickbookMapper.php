@@ -9,51 +9,83 @@ public function setDSN($dsn)
 	}
 
 public function addInvoice($requestID, $user, $action, $ID, $extra, &$err, $last_action_time, $last_actionident_time, $version, $locale){	
+//public function addInvoice($requestID, $user, $action, $ID, $extra,  $last_action_time, $last_actionident_time, $version, $locale){	
 		
 		$reqid = $requestID;
 		$date = date('Y-m-d');
-		/**Get Load DATA for building QbXML**/
+		/**Get data from qb_queue table**/
+		$qb_queue = new LLLT_Model_QbQueueMapper();
+		$queuedata = $qb_queue->fetchall('queue_id = \''.$ID.'\'',null);
+		$loadWhere = '';
+
+		foreach($queuedata as $row){
+			$loadWhere =$loadWhere .' load_id = '.$row->getLoad_id(). ' or ';
+		}
+		
+		
+		
+		
+		/**Get Load DATA for building QbXML**/ 
 		$load = new LLLT_Model_LoadMapper();
-		$obj = $load->find($ID);
+		$where = rtrim($loadWhere,'or ');
+
+		$obj = $load->fetchall($where, null);
 		
 		/****Get Bill address and Ship address*/
 		
 		//Bill to
-		$this->_customer_id = $obj->getBill_to_id();
+		$this->_customer_id = $obj[0]->getBill_to_id();
 		$billaddy = $this->getcustomerinfo();
 	
 		//Ship to
-		$this->_customer_id = $obj->getShipper_id();
+		$this->_customer_id = $obj[0]->getShipper_id();
 		$shipaddy = $this->getcustomerinfo();
 		
-		/**Check if there is a fuel surcharge**/
-		$fs='';
-		if($obj->getFuel_surcharge()>0)
-		{
-			$fs='<InvoiceLineAdd>
-						<ItemRef>
-							<FullName>Fuel Surcharge</FullName>
-						</ItemRef>
-						<RatePercent>'.$obj->getFuel_surcharge().'</RatePercent>
-					</InvoiceLineAdd>';
-		}
 		
-		/**Build data ext**/
-		$de1 = '<DataExt>
-					<OwnerID>0</OwnerID>
-					<DataExtName>Ship Date</DataExtName>
-					<DataExtValue>'.$obj->getDelivery_date().'</DataExtValue>
-				</DataExt>';
-		$de2 = '<DataExt>
-					<OwnerID>0</OwnerID>
-					<DataExtName>Origin</DataExtName>
-					<DataExtValue>'.$obj->getOrigin().'</DataExtValue>
-				</DataExt>';
-		$de3 = '<DataExt>
-					<OwnerID>0</OwnerID>
-					<DataExtName>Destination</DataExtName>
-					<DataExtValue>'.$obj->getDestination().'</DataExtValue>
-				</DataExt>';
+		//Customer info
+		$this->_customer_id = $obj[0]->getCustomer_id();
+		$customerdata = $this->getcustomerinfo();
+
+		
+		$ivline = '';
+		foreach($obj as $row){
+			$ivline = $ivline.'
+				<InvoiceLineAdd>
+						<ItemRef>
+							<FullName>Freight Chg</FullName>
+						</ItemRef>
+						<Desc>'.$row->getOrder_number().'</Desc>
+						<Quantity>'.$row->getNet_gallons().'</Quantity>
+						<Rate>'.$row->getBill_rate().'</Rate>
+						<DataExt>
+							<OwnerID>0</OwnerID>
+							<DataExtName>Ship Date</DataExtName>
+							<DataExtValue>'.$row->getDelivery_date().'</DataExtValue>
+						</DataExt>
+						<DataExt>
+							<OwnerID>0</OwnerID>
+							<DataExtName>Origin</DataExtName>
+							<DataExtValue>'.$row->getOrigin_invoice().'</DataExtValue>
+						</DataExt>
+						<DataExt>
+							<OwnerID>0</OwnerID>
+							<DataExtName>Destination</DataExtName>
+							<DataExtValue>'.$row->getDestination_invoice().'</DataExtValue>
+						</DataExt>
+					</InvoiceLineAdd>';
+				if($row->getFuel_surcharge()>0)
+				{
+					$ivline = $ivline.='<InvoiceLineAdd>
+								<ItemRef>
+									<FullName>Fuel Surcharge</FullName>
+								</ItemRef>
+								<RatePercent>'.$row->getFuel_surcharge().'</RatePercent>
+							</InvoiceLineAdd>';
+				}
+			
+			
+		}
+
 		
 		/***Name of QuickBooks template to use****/
 		$qbtemplate = '<TemplateRef>
@@ -62,7 +94,7 @@ public function addInvoice($requestID, $user, $action, $ID, $extra, &$err, $last
 		
 		/*****Check if invoice is to get and email ************/
 		$sendemail='';
-		if($obj->getEmail_invoice()=1)
+		if($obj[0]->getEmail_invoice()==1)
 		{
 			$sendemail='<IsToBeEmailed>true</IsToBeEmailed>';
 		}
@@ -74,37 +106,34 @@ public function addInvoice($requestID, $user, $action, $ID, $extra, &$err, $last
 			<InvoiceAddRq requestID="'.$reqid.'">
 				<InvoiceAdd>
 					<CustomerRef>
-						<FullName>Brian Cryderman</FullName>
+						<FullName>'.$customerdata->getName().'</FullName>
 					</CustomerRef>'.$qbtemplate.'
 					<TxnDate>'.$date.'</TxnDate>
 					<BillAddress>
-						<Addr1>'.$billaddy->getAddr().'</Addr1>
-						<Addr2>'.$billaddy->getAddr2().'</Addr2>
+						<Addr1>'.$billaddy->getName().'</Addr1>
+						<Addr2>'.$billaddy->getAddr().'</Addr2>
+						<Addr3>'.$billaddy->getAddr2().'</Addr3>
 						<City>'.$billaddy->getCity().'</City>
 						<State>'.$billaddy->getState().'</State>
 						<PostalCode>'.$billaddy->getZip().'</PostalCode>
 					</BillAddress>
 					<ShipAddress>
-						<Addr1>'.$shipaddy->getAddr().'</Addr1>
-						<Addr2>'.$shipaddy->getAddr2().'</Addr2>
+						<Addr1>'.$shipaddy->getName().'</Addr1>
+						<Addr2>'.$shipaddy->getAddr().'</Addr2>
+						<Addr3>'.$shipaddy->getAddr2().'</Addr3>
 						<City>'.$shipaddy->getCity().'</City>
 						<State>'.$shipaddy->getState().'</State>
 						<PostalCode>'.$shipaddy->getZip().'</PostalCode>
 					</ShipAddress>
-					<IsToBePrinted>true</IsToBePrinted>'.$sendemail.'
-					<InvoiceLineAdd>
-						<ItemRef>
-							<FullName>Freight Chg</FullName>
-						</ItemRef>
-						<Desc>'.$obj->getOrder_number().'</Desc>
-						<Quantity>'.$obj->getNet_gallons().'</Quantity>
-						<Rate>'.$obj->getBill_rate().'</Rate>						
-					</InvoiceLineAdd>'.$fs.'
+					<IsToBePrinted>true</IsToBePrinted>'
+					.$sendemail
+					.$ivline.
+					'
 				</InvoiceAdd>
 			</InvoiceAddRq>
 		</QBXMLMsgsRq>
 	</QBXML>';
-		
+		$xml;
 		return $xml;
 	}
 	
